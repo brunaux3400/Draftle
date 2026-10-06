@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Draftle</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--bg2:#161617;--card:#1f1f21;--line:#2e2e31;--ink:#fff;--mute:#9a9aa1;--red:#d00;--gold:#ffd23f;--mint:#3ddc84;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 'Barlow',system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,.who,.time,th,.btn,.nav b,.tick{font-family:'Barlow Condensed',Impact,sans-serif;text-transform:uppercase;letter-spacing:.02em}
+h1,h2,h3{margin:0;font-weight:800}
+.nav{position:sticky;top:0;z-index:5;background:#000;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 16px}
+.nav .logo{background:var(--red);color:#fff;font:800 22px 'Barlow Condensed',sans-serif;padding:2px 10px;border-radius:4px;transform:skewX(-8deg)}
+.nav b{font-size:20px;font-weight:700}.nav span{color:var(--mute);margin-left:auto;font-size:14px}
+.tick{background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:5px 16px;white-space:nowrap;overflow:hidden}
+main{max-width:1100px;margin:0 auto;padding:18px 14px 60px}
+.hero h1{font-size:clamp(40px,9vw,76px);line-height:.95}
+.hero h1 span{color:var(--red);display:block}
+.hero p{color:var(--mute);max-width:50ch;margin:10px 0 20px}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.panel h2{font-size:22px;margin-bottom:12px;padding-left:10px;border-left:4px solid var(--red)}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.topic{background:var(--card);border:0;border-bottom:4px solid transparent;border-radius:10px;padding:12px;text-align:left;color:var(--ink);cursor:pointer;font:inherit}
+.topic .e{font-size:28px}.topic b{display:block;font-weight:700}.topic small{color:var(--mute)}
+.topic[aria-pressed=true]{border-bottom-color:var(--red);background:#2a2a2d}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute);font-weight:600}
+input,select,textarea{background:#000;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+textarea{width:100%;min-height:90px}
+.btn{background:var(--red);color:#fff;border:0;border-radius:999px;padding:10px 22px;font-size:17px;font-weight:700;cursor:pointer}
+.btn:active{transform:scale(.97)}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid #555}
+.btn.big{font-size:22px;padding:14px 36px;width:100%}
+.players{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.hidden{display:none!important}
+.clock{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;background:#000;border:1px solid var(--line);border-left:6px solid var(--red);border-radius:10px;padding:14px 18px;margin-bottom:14px}
+.clock .who{font-size:clamp(28px,6vw,48px);font-weight:800;line-height:1}
+.clock small{display:block;color:var(--red);font:700 14px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.time{font-size:60px;font-weight:700;line-height:1;min-width:2.2ch;text-align:center;background:var(--card);border-radius:8px;padding:6px 14px}
+.time.low{background:var(--red);animation:pulse .5s infinite alternate}
+@keyframes pulse{to{transform:scale(1.06)}}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:14px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+.pool{display:flex;flex-direction:column;max-height:420px;overflow:auto;margin-top:10px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);padding:12px 4px;cursor:pointer;font:600 16px inherit;font-family:inherit;text-align:left}
+.item:hover{background:var(--card)}.item i{font:700 12px 'Barlow Condensed';text-transform:uppercase;font-style:normal;color:#fff;background:var(--red);border-radius:4px;padding:2px 8px}
+.board{overflow-x:auto}
+.board table{border-collapse:collapse;width:100%;min-width:520px}
+.board th{font-size:16px;font-weight:700;padding:8px 6px;color:var(--mute);border-bottom:2px solid var(--line)}
+.board th.on{color:#fff;border-bottom-color:var(--red)}
+.board td{height:48px;padding:4px 6px;font-size:13px;font-weight:600;text-align:center;border-bottom:1px solid var(--line)}
+.board td.cur{background:rgba(221,0,0,.12);box-shadow:inset 0 0 0 2px var(--red)}
+.board td.f{background:var(--card);animation:pop .4s}
+.board td small{color:#555}
+@keyframes pop{from{background:var(--red)}}
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.team{background:var(--bg2);border:1px solid var(--line);border-top:4px solid var(--red);border-radius:10px;padding:14px}.team h3{font-size:24px}
+.team ol{margin:8px 0 0;padding-left:22px}
+.msg{color:var(--mute);font-size:14px;margin:8px 0 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><div class="nav"><span class="logo">D</span><b>Draftle</b><span>Live</span></div><div class="tick">Draftle · snake order · pick clock</div><main>
+
+<section id="setup">
+ <div class="hero"><h1>Draft<span style="display:inline">le</span></h1><p>Pick a topic, add your friends, and draft the best of anything. Snake order, pick clock, sound effects, and a community library of topics.</p></div>
+ <div class="panel"><h2>Play online</h2><div class="row"><label>Your name<input id="nick" maxlength="14" placeholder="Nickname"></label><label>Room code<input id="jc" maxlength="4" size="6" placeholder="ABCD" style="text-transform:uppercase"></label><button class="btn" id="join">Join room</button><button class="btn alt" id="qm">Quick match</button></div><p class="msg" id="om">Or pick a topic below and create a room. Friends draft from their own phones.</p></div>
+ <div class="panel"><h2>1. Pick a topic</h2><div class="topics" id="topics"></div>
+  <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--gold);font-weight:800">Create your own topic</summary>
+   <div class="row" style="margin-top:10px"><label>Emoji<input id="ne" value="🍭" size="3" maxlength="4"></label><label style="flex:1">Topic name<input id="nn" placeholder="Best road trip snacks"></label></div>
+   <label style="margin-top:10px">Starter items, one per line (add more mid-draft)<textarea id="ni"></textarea></label>
+   <p class="msg">Saved topics go to the community library for everyone to use.</p>
+   <button class="btn alt" id="nb" style="margin-top:8px">Save topic</button></details></div>
+ <div class="panel"><h2>2. Draft settings</h2><div class="row">
+  <label>Rounds<select id="rd"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>8</option></select></label>
+  <label>Pick clock<select id="tm"><option value="0">Off</option><option value="20">20s</option><option value="45" selected>45s</option><option value="90">90s</option></select></label>
+  <label>Sound<select id="sn"><option value="1">On</option><option value="0">Off</option></select></label>
+  <label>Order<select id="ro"><option value="1">Randomize</option><option value="0">As entered</option></select></label></div></div>
+ <div class="panel"><h2>3. Who's drafting?</h2><div class="players" id="pl"></div><button class="btn alt" id="ap" style="margin-top:10px">+ Add player</button></div>
+ <button class="btn big" id="go">Start the draft (one screen)</button>
+ <button class="btn alt big" id="mk" style="margin-top:10px">Create online room</button>
+</section>
+
+<section id="lobby" class="hidden"><div class="panel"><h2>Room <span id="lc"></span></h2><p class="msg" id="lt"></p><label style="max-width:240px;margin-top:8px">Your name<input id="ln" maxlength="14" placeholder="Type your name"></label><div class="players" id="lp" style="margin-top:10px"></div><div class="row" style="margin-top:12px"><button class="btn" id="ls">Start draft</button><button class="btn alt" id="ll">Leave</button></div></div></section>
+
+<section id="draft" class="hidden">
+ <div class="clock"><div><small id="rnd"></small><div class="who" id="who"></div></div><div class="time" id="time">--</div></div>
+ <div class="grid2">
+  <div class="panel"><h2 id="tt"></h2>
+   <input id="q" placeholder="Search or type an item…" style="width:100%" autocomplete="off">
+   <div class="row" style="margin-top:8px"><button class="btn alt" id="ask">Find with Claude</button><button class="btn alt" id="addc">Add as custom</button></div>
+   <p class="msg" id="sm"></p><div class="pool" id="pool"></div></div>
+  <div class="panel"><h2>Draft board</h2><div class="board" id="board"></div></div>
+ </div>
+ <button class="btn alt" id="quit">End draft</button>
+</section>
+
+<section id="done" class="hidden">
+ <div class="hero"><h1>Final<span>Rosters</span></h1></div>
+ <div class="teams" id="teams"></div>
+ <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><button class="btn alt" id="again">New draft</button></div>
+ <p class="msg" id="dm"></p>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const BASE=[
+ {id:'candy',emoji:'🍫',name:'Best Candy',items:["Reese's Peanut Butter Cups","Snickers","Twix","Skittles","Sour Patch Kids","Kit Kat","M&M's","Starburst","Twizzlers","Milk Duds","Swedish Fish","Jolly Rancher","Hershey's Kisses","Butterfinger","Nerds","Gummy Bears","Mike and Ike","Airheads"]},
+ {id:'pizza',emoji:'🍕',name:'Pizza Toppings',items:["Pepperoni","Sausage","Mushrooms","Pineapple","Bacon","Extra cheese","Black olives","Jalapeños","Onions","Spinach","Ham","Buffalo chicken","Banana peppers","Anchovies","Green peppers","Garlic"]},
+ {id:'fastfood',emoji:'🍔',name:'Fast Food Chains',items:["Chick-fil-A","McDonald's","Chipotle","Wendy's","Taco Bell","In-N-Out","Popeyes","Five Guys","Wawa","Sonic","Burger King","Dunkin'","Shake Shack","Panda Express","Subway","Culver's"]},
+ {id:'cereal',emoji:'🥣',name:'Breakfast Cereal',items:["Cinnamon Toast Crunch","Froot Loops","Lucky Charms","Frosted Flakes","Cap'n Crunch","Honey Nut Cheerios","Cocoa Puffs","Fruity Pebbles","Apple Jacks","Cookie Crisp","Reese's Puffs","Corn Pops","Raisin Bran","Golden Grahams"]}
+];
+let topics=[...BASE],sel=BASE[0],db=null,sample=null,S=null,audio=null,tick=null;
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- sound ---------- */
+function tone(f,t0,d,type='triangle',v=.16){try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=f;const t=audio.currentTime+t0;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(audio.destination);o.start(t);o.stop(t+d)}catch(e){}}
+const on=()=>$('sn').value==='1';
+const sfx={pick(){on()&&[523,659,784,1047].forEach((f,i)=>tone(f,i*.07,.25))},
+ tick(){on()&&tone(900,0,.08,'square',.07)},
+ buzz(){on()&&(tone(140,0,.5,'sawtooth',.2),tone(150,.02,.5,'sawtooth',.2))},
+ horn(){on()&&[392,392,392,523,659,784,1047].forEach((f,i)=>tone(f,i*.14,.4,'sawtooth',.12))}};
+
+/* ---------- topics ---------- */
+function renderTopics(){$('topics').innerHTML=topics.map((t,i)=>`<button class="topic" data-i="${i}" aria-pressed="${t===sel}"><span class="e">${esc(t.emoji)}</span><b>${esc(t.name)}</b><small>${t.items.length} items${t.community?' · community':''}</small></button>`).join('')}
+$('topics').onclick=e=>{const b=e.target.closest('.topic');if(b){sel=topics[b.dataset.i];renderTopics()}};
+$('nb').onclick=async()=>{const name=$('nn').value.trim(),items=[...new Set($('ni').value.split('\n').map(s=>s.trim()).filter(Boolean))];
+ if(!name||items.length<4){alert('Add a topic name and at least 4 items.');return}
+ const t={id:slug(name),emoji:$('ne').value||'⭐',name,items,community:true};
+ topics=topics.filter(x=>x.id!==t.id);topics.push(t);sel=t;renderTopics();
+ if(db){try{await db.doc('topics/'+t.id).set({name:t.name,emoji:t.emoji,items:t.items})}catch(e){}}
+ $('nn').value='';$('ni').value=''};
+(async()=>{renderTopics();try{const c=window.claude;if(!c)return;db=await c.use('db');sample=await c.use('sample');
+ if(db)db.collection('topics').onSnapshot(s=>{const comm=[];s.docs.forEach(d=>{const x=d.data?d.data():d;if(x&&x.name&&Array.isArray(x.items))comm.push({id:d.id,emoji:x.emoji||'⭐',name:x.name,items:x.items.slice(0,300),community:true})});
+  const ids=new Set(comm.map(c=>c.id));topics=[...BASE.filter(b=>!ids.has(b.id)),...comm];if(!topics.includes(sel))sel=topics.find(t=>t.id===sel.id)||topics[0];renderTopics()})}catch(e){}})();
+
+/* ---------- setup ---------- */
+function addPlayer(v=''){const i=$('pl').children.length;if(i>=10)return;const inp=document.createElement('input');inp.placeholder='Player '+(i+1);inp.value=v;inp.maxLength=14;$('pl').appendChild(inp)}
+['Me','','',''].forEach(addPlayer);$('ap').onclick=()=>addPlayer();
+
+/* ---------- draft ---------- */
+const turn=i=>{const n=S.players.length,r=Math.floor(i/n),p=i%n;return{r,p:r%2?n-1-p:p}};
+$('go').onclick=()=>{let ps=[...$('pl').children].map((x,i)=>x.value.trim()||'').filter(Boolean);
+ if(ps.length<2){alert('Add at least 2 players.');return}
+ if($('ro').value==='1')ps.sort(()=>Math.random()-.5);
+ const rounds=+$('rd').value;if(sel.items.length<ps.length*rounds){alert('Not enough items for that many picks. Reduce rounds, or add items to the topic.');return}
+ S={topic:sel,players:ps,rounds,clock:+$('tm').value,pool:sel.items.map(n=>({n})),picks:[],added:[],i:0};
+ $('setup').classList.add('hidden');$('draft').classList.remove('hidden');$('tt').textContent=sel.emoji+' '+sel.name;
+ sfx.horn();startTurn()};
+function startTurn(){clearInterval(tick);const total=S.players.length*S.rounds;
+ if(S.i>=total)return finish();
+ const t=turn(S.i);$('who').textContent=S.players[t.p]+' is on the clock';$('rnd').textContent=`Round ${t.r+1} of ${S.rounds} · Pick ${S.i+1} of ${total}`;
+ if(MP){$('who').textContent=S.players[t.p]+(S.ids[t.p]===myId?' (you)':'')+' is on the clock';drawTime();return render()}
+ S.left=S.clock;drawTime();if(S.clock)tick=setInterval(()=>{S.left--;drawTime();if(S.left<=5&&S.left>0)sfx.tick();if(S.left<=0){clearInterval(tick);sfx.buzz();const a=S.pool[Math.random()*S.pool.length|0];if(a)pick(a.n,true)}},1000);
+ render()}
+function drawTime(){const e=$('time');e.textContent=S.clock?S.left:'∞';e.classList.toggle('low',S.clock&&S.left<=5)}
+function pick(name){if(MP)return mpPick(name);const k=S.pool.findIndex(x=>x.n===name);if(k<0)return;const t=turn(S.i);S.pool.splice(k,1);S.picks.push({n:name,p:t.p,r:t.r});S.i++;sfx.pick();$('q').value='';$('sm').textContent='';startTurn()}
+function render(){const q=$('q').value.trim().toLowerCase();
+ const list=S.pool.filter(x=>x.n.toLowerCase().includes(q)).slice(0,60);
+ $('pool').innerHTML=list.map(x=>`<button class="item" data-n="${esc(x.n)}">${esc(x.n)}<i>${x.new?'new':'draft'}</i></button>`).join('')||'<p class="msg">No matches. Try Find with Claude or add it as custom.</p>';
+ $('ask').classList.toggle('hidden',!sample||!!MP);$('addc').classList.toggle('hidden',!!MP);
+ const n=S.players.length,cur=turn(S.i);let h='<table><tr>'+S.players.map((p,i)=>`<th class="${i===cur.p?'on':''}">${esc(p)}</th>`).join('')+'</tr>';
+ for(let r=0;r<S.rounds;r++){h+='<tr>';for(let p=0;p<n;p++){const k=S.picks.find(x=>x.r===r&&x.p===p);h+=k?`<td class="f">${esc(k.n)}</td>`:`<td class="${r===cur.r&&p===cur.p?'cur':''}"><small>${r%2?'←':'→'}</small></td>`}h+='</tr>'}
+ $('board').innerHTML=h+'</table>'}
+$('q').oninput=render;
+$('pool').onclick=e=>{const b=e.target.closest('.item');if(b)pick(b.dataset.n)};
+$('q').onkeydown=e=>{if(e.key==='Enter'){const f=S.pool.find(x=>x.n.toLowerCase().includes($('q').value.trim().toLowerCase()));if(f&&$('q').value.trim())pick(f.n)}};
+function addItems(arr){let c=0;arr.forEach(n=>{n=String(n).trim();if(n&&!S.pool.some(x=>x.n.toLowerCase()===n.toLowerCase())&&!S.picks.some(x=>x.n.toLowerCase()===n.toLowerCase())){S.pool.push({n,new:1});S.added.push(n);c++}});return c}
+$('addc').onclick=()=>{const v=$('q').value.trim();if(!v)return;addItems([v]);render()};
+$('ask').onclick=async()=>{const v=$('q').value.trim();if(v.length<2){$('sm').textContent='Type a few letters first, like "hersh".';return}
+ $('sm').textContent='Asking Claude…';
+ try{const r=await sample.json(`Topic for a friends' draft: "${S.topic.name}". The user typed "${v}". List up to 10 real, specific items that fit this topic and match what was typed (e.g. product names for a brand prefix). Return ONLY a JSON array of short strings.`,{modelTier:'quick'});
+  const c=addItems(Array.isArray(r)?r.slice(0,12):[]);$('sm').textContent=c?c+' new items added below.':'Nothing new found.';render()}
+ catch(e){$('sm').textContent='Could not fetch suggestions. Use "Add as custom" instead.'}};
+$('quit').onclick=()=>{if(confirm(MP?'Leave the draft?':'End the draft now?')){if(MP){leave();show('setup')}else finish()}};
+
+/* ---------- results ---------- */
+function finish(){clearInterval(tick);sfx.horn();$('draft').classList.add('hidden');$('done').classList.remove('hidden');
+ $('teams').innerHTML=S.players.map((p,i)=>`<div class="team"><h3>${esc(p)}</h3><ol>${S.picks.filter(k=>k.p===i).map(k=>`<li>${esc(k.n)}</li>`).join('')}</ol></div>`).join('');
+ $('pub').classList.toggle('hidden',!(db&&S.added.length))}
+$('copy').onclick=async()=>{const t=S.topic.emoji+' '+S.topic.name+'\n\n'+S.players.map((p,i)=>p+': '+S.picks.filter(k=>k.p===i).map(k=>k.n).join(', ')).join('\n');
+ try{await navigator.clipboard.writeText(t);$('dm').textContent='Copied.'}catch(e){$('dm').textContent='Copy failed. Select and copy the teams manually.'}};
+$('pub').onclick=async()=>{try{const id=S.topic.id||slug(S.topic.name);const items=[...new Set([...S.topic.items,...S.added])].slice(0,300);
+ await db.doc('topics/'+id).set({name:S.topic.name,emoji:S.topic.emoji,items});$('dm').textContent=S.added.length+' items added to the community topic.';$('pub').classList.add('hidden')}catch(e){$('dm').textContent='Could not save to the community library.'}};
+$('again').onclick=()=>{leave();show('setup')};
+/* ---------- online ---------- */
+const myId=Math.random().toString(36).slice(2,10);
+let roomApi=null,R=null,MP=null;
+const SECS=['setup','lobby','draft','done'];
+const show=id=>SECS.forEach(s=>$(s).classList.toggle('hidden',s!==id));
+const nick=()=>($('nick').value.trim()||($('pl').firstChild&&$('pl').firstChild.value.trim())||'Player '+myId.slice(0,2)).slice(0,14);
+const om=t=>{$('om').textContent=t};
+const rcode=()=>Array.from({length:4},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
+const idxOf=(H,i)=>{const n=H.pl.length,p=i%n;return Math.floor(i/n)%2?n-1-p:p};
+function leave(){if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
+async function enter(name,host,quick){
+ try{const api=roomApi||(roomApi=await(window.claude&&window.claude.use('room')));
+  if(!api){om('Online play is not available in this view.');return false}
+  leave();MP={host,quick,ps:[],last:''};
+  R=await api.join(name);R.presence(Object.assign({id:myId,name:nick()},quick?{q:1}:{}));
+  R.onPeers(c=>{MP.peers=c.peers;peersChanged()});
+  show('lobby');$('ln').value=nick();$('lc').textContent=quick?'Quick match':name.replace(/^d-/,'').toUpperCase();$('lt').textContent='Connecting…';return true}
+ catch(e){om('Could not join that room.');return false}}
+function peersChanged(){if(!MP)return;const ps=MP.peers.map(p=>p.presence).filter(p=>p&&p.id);MP.ps=ps;
+ $('lp').innerHTML=ps.map(p=>`<div class="team"><b>${esc(p.name||'Player')}</b>${p.id===myId?' (you)':''}</div>`).join('');
+ if(MP.quick){$('ls').classList.add('hidden');const go=ps.find(p=>p.go&&p.ids&&p.ids.includes(myId));
+  if(go&&!MP.moving){const lead=go.id===myId;MP.moving=1;(async()=>{if(lead)await new Promise(r=>setTimeout(r,2500));
+   if(await enter(go.go,lead)&&lead){MP.cfg={t:topics[Math.random()*topics.length|0].id,r:3,c:30};setTimeout(startOnline,6000)}})();return}
+  return quickLogic(ps)}
+ const hp=ps.find(p=>p.st);
+ if(hp){const j=JSON.stringify(hp.st);if(j!==MP.last){MP.last=j;if(!MP.host)applyState(hp.st)}}
+ else if(MP.on&&!MP.host)$('who').textContent='The host left. Draft ended.';
+ if(MP.host)hostCheck(ps);
+ $('ls').classList.toggle('hidden',!MP.host||!!MP.on);
+ if(!MP.on)$('lt').textContent=MP.host?'Share this code. Start when everyone has joined ('+ps.length+' here).':'Waiting for the host to start…'}
+function quickLogic(ps){const w=ps.filter(p=>p.q);
+ $('lt').textContent=w.length<2&&MP.none?'No one else is queued yet. Create a room instead, or try again later.':w.length+' waiting. A match starts when 2 or more are here.';
+ if(w.map(p=>p.id).sort()[0]===myId&&w.length>=2&&!MP.qt)MP.qt=setTimeout(()=>{if(!MP||!MP.quick)return;const ids=MP.ps.filter(p=>p.q).map(p=>p.id).slice(0,6);if(ids.length<2){MP.qt=0;return}R.presence({go:'d-'+rcode().toLowerCase(),ids})},7000);
+ if(!MP.nt)MP.nt=setTimeout(()=>{if(MP){MP.none=1;quickLogic(MP.ps)}},15000)}
+function startOnline(){if(!MP||!MP.host||MP.on)return;const c=MP.cfg,t=topics.find(x=>x.id===c.t)||sel;
+ const ps=[...MP.ps].sort(()=>Math.random()-.5).slice(0,8);if(ps.length<2){$('lt').textContent='Need at least 2 players.';return}
+ const n=ps.length,r=Math.max(1,Math.min(c.r,Math.floor(t.items.length/n),Math.floor(48/n)));
+ MP.on=1;MP.H={t:t.id,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,14)]),pk:[],l:c.c,d:0};publish();MP.timer=setInterval(hostTick,1000)}
+function publish(){const H=MP.H;R.presence({st:H});const j=JSON.stringify(H);MP.last=j;applyState(JSON.parse(j))}
+function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const here=MP.ps.some(x=>x.id===H.pl[idxOf(H,H.pk.length)][0]);
+ if(H.c)H.l--;if(!here||(H.c&&H.l<=0))return autoPick();publish()}
+function hostCheck(ps){const H=MP.H;if(!H||H.d)return;const i=H.pk.length,x=ps.find(q=>q.id===H.pl[idxOf(H,i)][0]);if(x&&x.want&&x.seq===i)commit(x.want)}
+function commit(name){const H=MP.H,t=topics.find(x=>x.id===H.t);if(!t||!t.items.includes(name)||H.pk.includes(name))return;H.pk.push(name);H.l=H.c;if(H.pk.length>=H.pl.length*H.r)H.d=1;publish()}
+function autoPick(){const H=MP.H,t=topics.find(x=>x.id===H.t),a=t.items.filter(x=>!H.pk.includes(x));if(a.length)commit(a[Math.random()*a.length|0])}
+function applyState(st){const t=topics.find(x=>x.id===st.t);if(!t){$('lt').textContent='Your library is missing this topic.';return}
+ const n=st.pl.length,prev=S?S.picks.length:-1;
+ S={topic:t,players:st.pl.map(x=>x[1]),ids:st.pl.map(x=>x[0]),rounds:st.r,clock:st.c,pool:t.items.filter(x=>!st.pk.includes(x)).map(x=>({n:x})),picks:st.pk.map((x,i)=>{const r=Math.floor(i/n),p=i%n;return{n:x,r,p:r%2?n-1-p:p}}),added:[],i:st.pk.length,left:st.l};
+ if(prev<0){MP.on=1;show('draft');$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
+ if(st.c&&st.l<=5&&st.l>0)sfx.tick();startTurn()}
+function mpPick(name){const t=turn(S.i);if(S.ids[t.p]!==myId){$('sm').textContent='Wait for your turn.';return}
+ if(MP.host)commit(name);else{R.presence({want:name,seq:S.i});$('q').value=''}}
+$('mk').onclick=async()=>{const code=rcode();if(await enter('d-'+code.toLowerCase(),true))MP.cfg={t:sel.id,r:+$('rd').value,c:+$('tm').value}};
+$('join').onclick=()=>{const c=$('jc').value.toLowerCase().replace(/[^a-z0-9]/g,'');if(c.length<3){om('Enter the room code.');return}enter('d-'+c,false)};
+$('qm').onclick=()=>enter('quick',false,true);
+$('ls').onclick=startOnline;$('ll').onclick=()=>{leave();show('setup')};
+$('ln').oninput=()=>{if(R)R.presence({name:($('ln').value.trim()||'Player').slice(0,14)})};
+</script></body></html>
