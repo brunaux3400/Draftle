@@ -69,9 +69,15 @@ textarea{width:100%;min-height:90px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button class="btn alt" id="gb" style="margin-left:auto;padding:4px 16px;font-size:16px">Gallery</button><button class="btn alt hidden" id="pb" style="padding:4px 14px;font-size:15px">Profile</button><button class="btn alt" id="lo" style="padding:4px 14px;font-size:15px">Log out</button></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
-<section id="splash" class="hidden"><div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Log in, create an account, or jump in as a guest.</p></div><div class="panel"><h2>Welcome</h2><div class="row"><label style="flex:1">Email<input id="ae" type="email" autocomplete="email"></label><label style="flex:1">Password<input id="ap_" type="password" autocomplete="current-password"></label></div><label style="margin-top:8px">Username (new accounts only, 3 to 20 letters, numbers or _)<input id="au" maxlength="20"></label><div class="row" style="margin-top:12px"><button class="btn" id="li">Log in</button><button class="btn alt" id="su">Create account</button><button class="btn alt" id="gs">Continue as guest</button></div><p class="msg" id="am"></p><p class="msg">Guests cannot vote or create topics. By continuing you agree to the <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p></div></section>
+<section id="splash" class="hidden"><div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Log in, create an account, or jump in as a guest.</p></div>
+<div class="row" style="margin-bottom:12px"><button class="btn" id="tl">Log in</button><button class="btn alt" id="tc">Create account</button><button class="btn alt hidden" id="sbk">Back to game</button></div>
+<div class="panel" id="a_in"><h2>Log in</h2><label>Username or email<input id="le" autocomplete="username"></label><label style="margin-top:8px">Password<input id="lp_" type="password" autocomplete="current-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="li">Log in</button></div></div>
+<div class="panel hidden" id="a_up"><h2>Create an account</h2><label>Email<input id="ae" type="email" autocomplete="email"></label><label style="margin-top:8px">Username (3 to 20 letters, numbers or _)<input id="au" maxlength="20" autocomplete="username"></label><label style="margin-top:8px">Password<input id="ap_" type="password" autocomplete="new-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="su">Create account</button></div></div>
+<p class="msg" id="am"></p>
+<div class="panel"><div class="row"><button class="btn alt" id="gs">Continue as guest</button></div><p class="msg">Guests cannot vote or create topics. By continuing you agree to the <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p></div></section>
 
 <section id="setup" class="hidden">
+ <div class="panel hidden" id="gbn" style="border-left:4px solid var(--gold)"><b>You're playing as a guest.</b> <span class="msg">Log in or create an account to vote and make topics.</span><div class="row" style="margin-top:10px"><button class="btn" id="gb1">Log in</button><button class="btn alt" id="gb2">Create account</button></div></div>
  <div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Pick a topic, add your friends, and draft the best of anything. Snake order, pick clock, sound effects, and a community library of topics.</p></div>
  <div class="panel"><h2>Play online</h2><div class="row"><label>Your name<input id="nick" maxlength="14" placeholder="Nickname"></label><label>Room code<input id="jc" maxlength="4" size="6" placeholder="ABCD" style="text-transform:uppercase"></label><button class="btn" id="join">Join room</button><button class="btn alt" id="qm">Quick match</button></div><p class="msg" id="om">Or pick a topic below and create a room. Friends draft from their own phones.</p></div>
  <div class="panel"><h2>1. Pick a topic</h2><div class="topics" id="topics"></div><div class="row" style="margin-top:12px"><input id="uc" placeholder="Private topic code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="ub">Unlock topic</button></div>
@@ -104,14 +110,20 @@ textarea{width:100%;min-height:90px}
  <button class="btn alt" id="quit">End draft</button>
 </section>
 
-<section id="profile" class="hidden"><div class="panel"><div class="row" style="align-items:center"><img id="pav" alt="" width="80" height="80" style="border-radius:50%;background:#000;object-fit:cover"><div style="flex:1"><h2 id="pn" style="border:0;padding:0;margin:0"></h2><p class="msg" id="pst"></p><p class="msg" id="prk"></p></div></div><label style="margin-top:10px">Bio<textarea id="pbio" maxlength="200"></textarea></label><div class="row" style="margin-top:8px"><label>Profile picture<input type="file" id="pimg" accept="image/*"></label><button class="btn" id="psv">Save profile</button></div><p class="msg" id="pm"></p></div><div class="panel"><h2>Friends</h2><p class="msg">Your friend code: <b id="fc" style="color:var(--gold);font-size:20px"></b></p><div class="row"><input id="fadd" placeholder="Friend code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="fb">Add friend</button></div><div id="fl" style="margin-top:10px"></div></div><div class="panel"><h2>My drafts</h2><div class="pool" id="md"></div></div><div class="panel hidden" id="pdp"><div id="pd"></div></div><button class="btn alt" id="px">Back</button></section>
+<section id="profile" class="hidden">
+<div class="row" style="margin-bottom:12px"><button class="btn" data-pt="a">Profile</button><button class="btn alt" data-pt="f">Friends</button><button class="btn alt" data-pt="t">My topics</button><button class="btn alt" data-pt="d">My drafts</button></div>
+<div class="ptab" id="tab-a"><div class="panel"><div class="row" style="align-items:center"><img id="pav" alt="" width="80" height="80" style="border-radius:50%;background:#000;object-fit:cover"><div style="flex:1"><h2 id="pn" style="border:0;padding:0;margin:0"></h2><p class="msg" id="pst"></p><p class="msg" id="prk"></p></div></div><label style="margin-top:10px">Bio<textarea id="pbio" maxlength="200"></textarea></label><div class="row" style="margin-top:8px"><label>Profile picture<input type="file" id="pimg" accept="image/*"></label><button class="btn" id="psv">Save profile</button></div><p class="msg" id="pm"></p></div></div>
+<div class="ptab hidden" id="tab-f"><div id="fp"><div class="panel"><h2>Friends</h2><p class="msg">Your friend code: <b id="fc" style="color:var(--gold);font-size:20px"></b></p><div class="row"><input id="fadd" placeholder="Friend code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="fb">Add friend</button></div><p class="msg">Tap a friend to see their profile and public topics.</p><div id="fl" class="pool" style="margin-top:6px"></div></div></div><div class="panel hidden" id="fv"></div></div>
+<div class="ptab hidden" id="tab-t"><div class="panel"><h2>My topics</h2><p class="msg">Switch a topic between public (anyone can play it) and private (needs its code).</p><div class="pool" id="mt"></div></div></div>
+<div class="ptab hidden" id="tab-d"><div class="panel"><h2>My drafts</h2><div class="pool" id="md"></div></div><div class="panel hidden" id="pdp"><div id="pd"></div></div></div>
+<button class="btn alt" id="px">Back</button></section>
 
 <section id="gallery" class="hidden"><div class="hero"><h1>Draft<span>Gallery</span></h1><p>Vote for the best team in each posted draft.</p></div><p class="msg" id="gm"></p><div id="gl"></div><button class="btn alt" id="gx" style="margin-top:6px">Back</button></section>
 
 <section id="done" class="hidden">
  <div class="hero"><h1>Final<span>Rosters</span></h1></div>
  <div class="teams" id="teams"></div>
- <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
+ <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Save to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
 <p class="msg" style="margin-top:30px"><a href="privacy.html" style="color:var(--gold)">Privacy Policy</a></p></main>
@@ -188,7 +200,7 @@ $('quit').onclick=()=>{if(confirm(MP?'Leave the draft?':'End the draft now?')){i
 /* ---------- results ---------- */
 function finish(){clearInterval(tick);sfx.horn();$('draft').classList.add('hidden');$('done').classList.remove('hidden');
  $('teams').innerHTML=S.players.map((p,i)=>`<div class="team"><h3>${esc(p)}</h3><ol>${S.picks.filter(k=>k.p===i).map(k=>`<li>${esc(k.n)}</li>`).join('')}</ol></div>`).join('');
- $('pub').classList.toggle('hidden',!(db&&S.added.length));$('post').classList.toggle('hidden',!(db&&MP))}
+ $('pub').classList.toggle('hidden',!(db&&S.added.length));$('post').classList.toggle('hidden',!(db&&MP));$('pvw').classList.toggle('hidden',!(db&&MP))}
 $('copy').onclick=async()=>{const t=S.topic.emoji+' '+S.topic.name+'\n\n'+S.players.map((p,i)=>p+': '+S.picks.filter(k=>k.p===i).map(k=>k.n).join(', ')).join('\n');
  try{await navigator.clipboard.writeText(t);$('dm').textContent='Copied.'}catch(e){$('dm').textContent='Copy failed. Select and copy the teams manually.'}};
 $('pub').onclick=async()=>{try{const id=S.topic.id||slug(S.topic.name);const items=[...new Set([...S.topic.items,...S.added])].slice(0,300);
@@ -267,7 +279,7 @@ function drawG(){const el=$('gl');if(!db){el.innerHTML='<p class="msg">Online fe
   return `<div class="panel"><h2>${esc(d.e||'')} ${esc(d.t)}</h2><p class="msg">${tot} vote${tot===1?'':'s'} across ${d.tm.length} teams</p><div class="teams">${d.tm.map((t,i)=>{const pc=tot?Math.round(100*c[i]/tot):0;
    return `<div class="team"><h3>${esc(d.pl[i])}</h3><ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="bar"><i style="width:${pc}%"></i></div><p class="msg">${c[i]} vote${c[i]===1?'':'s'}, ${pc}%</p><button class="btn ${my===i?'':'alt'}" data-d="${d.id}" data-i="${i}">${my===i?'Your vote':'Vote for this team'}</button></div>`}).join('')}</div></div>`}).join(''):'<p class="msg">No drafts posted yet. Finish an online draft and post it.</p>'}
 async function loadG(){if(!db)return;try{
- const a=await sb.from('drafts').select('*').order('created_at',{ascending:false}).limit(40);
+ const a=await sb.from('drafts').select('*').eq('visibility','public').order('created_at',{ascending:false}).limit(40);
  GD=(a.data||[]).map(d=>({id:d.id,t:d.topic,e:d.emoji,pl:d.players,tm:d.teams}));const ids=GD.map(d=>d.id);GT={};GM={};
  if(ids.length){const[b,c]=await Promise.all([sb.from('draft_tallies').select('*').in('draft_id',ids),sb.from('votes').select('draft_id,team').in('draft_id',ids)]);
   (b.data||[]).forEach(r=>{(GT[r.draft_id]=GT[r.draft_id]||[])[r.team]=r.votes});(c.data||[]).forEach(r=>{GM[r.draft_id]=r.team})}
@@ -277,9 +289,9 @@ setInterval(()=>{if(!$('gallery').classList.contains('hidden'))loadG()},15000);
 $('gl').onclick=async e=>{const b=e.target.closest('button[data-d]');if(!b||!db)return;if(me.guest){$('gm').textContent='Create a free account to vote. Guests can only look.';return}const id=b.dataset.d,i=+b.dataset.i;GM[id]=i;drawG();
  const r=await sb.from('votes').upsert({draft_id:id,user_id:uid,team:i});$('gm').textContent=r.error?'Could not save your vote.':'';loadG()};
 $('gb').onclick=openGallery;$('gv').onclick=openGallery;$('gx').onclick=()=>show('setup');
-$('post').onclick=async()=>{const r=await sb.from('drafts').insert({id:dId(),topic:S.topic.name,emoji:S.topic.emoji,topic_id:S.topic.id,rounds:S.rounds,picks:S.picks.map(k=>k.n),players:S.players,teams:S.players.map((p,i)=>S.picks.filter(k=>k.p===i).map(k=>k.n))});
- $('dm').textContent=!r.error?'Posted. Find it in the Gallery and share it so people can vote.':r.error.code==='23505'?'This draft is already in the gallery.':'Could not post this draft.';
- if(!r.error||r.error.code==='23505')$('post').classList.add('hidden')};
+$('post').onclick=async()=>{const r=await sb.from('drafts').insert({id:dId(),topic:S.topic.name,emoji:S.topic.emoji,visibility:$('pv').value,topic_id:S.topic.id,rounds:S.rounds,picks:S.picks.map(k=>k.n),players:S.players,teams:S.players.map((p,i)=>S.picks.filter(k=>k.p===i).map(k=>k.n))});
+ $('dm').textContent=!r.error?($('pv').value==='private'?'Saved as private. Only you can see it, in your profile.':'Posted. Find it in the Gallery and share it so people can vote.'):r.error.code==='23505'?'This draft is already in the gallery.':'Could not post this draft.';
+ if(!r.error||r.error.code==='23505'){$('post').classList.add('hidden');$('pvw').classList.add('hidden')}};
 /* ---------- accounts ---------- */
 const AV='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" fill="#2e2e31"/><circle cx="48" cy="38" r="16" fill="#9a9aa1"/><rect x="20" y="60" width="56" height="30" rx="14" fill="#9a9aa1"/></svg>');
 let me={guest:true,username:'Guest'};
@@ -292,10 +304,14 @@ async function boot(){if(!window.supabase||SB_URL.startsWith('YOUR')){show('setu
 async function enterApp(user){uid=user.id;db=sb;roomApi=roomAdapter;
  if(user.is_anonymous){let g=localStorage.getItem('gname');if(!g){g='Guest-'+Math.random().toString(36).slice(2,6);localStorage.setItem('gname',g)}me={guest:true,username:g,id:uid}}
  else{const r=await sb.from('profiles').select('*').eq('id',uid).single();me=Object.assign({guest:false},r.data||{username:'Player'})}
- $('nick').value=me.username;$('nick').readOnly=true;$('pb').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
+ $('nick').value=me.username;$('nick').readOnly=true;$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
  const{data}=await sb.from('topics').select('*').order('created_at',{ascending:false}).limit(100);
  topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup')}
-$('li').onclick=async()=>{am('Logging in…');const r=await sb.auth.signInWithPassword({email:$('ae').value.trim(),password:$('ap_').value});if(r.error)return am(r.error.message);am('');enterApp(r.data.user)};
+$('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id||!pw)return am('Enter your username or email and your password.');am('Logging in…');
+ if(id.includes('@')){const r=await sb.auth.signInWithPassword({email:id,password:pw});if(r.error)return am(r.error.message);am('');return enterApp(r.data.user)}
+ const f=await sb.functions.invoke('login',{body:{identifier:id,password:pw}});
+ if(f.error||!f.data||!f.data.session)return am('Could not log in. Check your username and password, or try your email instead.');
+ const s=await sb.auth.setSession({access_token:f.data.session.access_token,refresh_token:f.data.session.refresh_token});if(s.error)return am(s.error.message);am('');enterApp(s.data.user)};
 $('su').onclick=async()=>{const u=$('au').value.trim();if(!/^[A-Za-z0-9_]{3,20}$/.test(u))return am('Pick a username: 3 to 20 letters, numbers or underscores.');
  if(!(await clean(u)))return am('That username is not allowed.');
  const r=await sb.auth.signUp({email:$('ae').value.trim(),password:$('ap_').value,options:{data:{username:u}}});
@@ -315,17 +331,17 @@ $('ub').onclick=async()=>{const c=$('uc').value.trim();if(!db||c.length<4)return
  if(r.data&&r.data[0]){const t=toT(r.data[0]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=t;renderTopics();$('uc').value=''}else alert('No topic found for that code.')};
 
 /* ---------- profile ---------- */
-let MD=[];
-async function openProfile(){if(me.guest||!db){alert('Create a free account to get a profile.');return}show('profile');
+let MD=[],FR={},FT=[];
+async function openProfile(){if(me.guest||!db){alert('Create a free account to get a profile.');return}show('profile');tabTo('a');loadMyTopics();
  $('pn').textContent=me.username;$('pav').src=me.avatar||AV;$('pbio').value=me.bio||'';$('fc').textContent=me.friend_code||'';$('pdp').classList.add('hidden');
  const fr=await sb.from('friendships').select('friend_id').eq('user_id',uid);const fids=(fr.data||[]).map(f=>f.friend_id);
  const[fl,wr,md]=await Promise.all([sb.from('leaderboard').select('*').in('id',[...fids,uid]),sb.rpc('world_rank',{u:uid}),sb.from('drafts').select('*').eq('created_by',uid).order('created_at',{ascending:false})]);
  const L=(fl.data||[]).sort((a,b)=>b.votes-a.votes||b.drafts-a.drafts),m=L.find(x=>x.id===uid)||{drafts:0,votes:0};
  $('pst').textContent=`${m.drafts} draft${m.drafts===1?'':'s'} posted, ${m.votes} vote${m.votes===1?'':'s'} received`;
  $('prk').textContent=`World rank #${wr.data||'-'}, friend rank #${L.findIndex(x=>x.id===uid)+1} of ${L.length}`;
- $('fl').innerHTML=L.map((x,i)=>`<div class="item" style="cursor:default"><span>#${i+1} <img src="${esc(x.avatar||AV)}" width="24" height="24" style="border-radius:50%;vertical-align:middle"> ${esc(x.username)}${x.id===uid?' (you)':''}</span><i>${x.votes} votes, ${x.drafts} drafts</i></div>`).join('');
- MD=md.data||[];$('md').innerHTML=MD.length?MD.map((d,i)=>`<button class="item" data-i="${i}">${esc(d.emoji||'')} ${esc(d.topic)}<i>${(d.players||[]).length} players</i></button>`).join(''):'<p class="msg">No posted drafts yet.</p>'}
-$('md').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b)return;const d=MD[+b.dataset.i],n=d.players.length,pk=d.picks||[];let h='';
+ FR={};L.forEach(x=>{FR[x.id]=x});$('fl').innerHTML=L.map((x,i)=>`<button class="item" data-f="${x.id}"><span>#${i+1} <img src="${esc(x.avatar||AV)}" width="24" height="24" style="border-radius:50%;vertical-align:middle"> ${esc(x.username)}${x.id===uid?' (you)':''}</span><i>${x.votes} votes, ${x.drafts} drafts</i></button>`).join('');
+ MD=md.data||[];drawMD()}
+$('md').onclick=async e=>{const v=e.target.closest('button[data-dv]');if(v){const r=await sb.from('drafts').update({visibility:v.dataset.to}).eq('id',v.dataset.dv);if(r.error){$('pm').textContent='Could not change visibility.';return}MD.find(x=>x.id===v.dataset.dv).visibility=v.dataset.to;drawMD();return}const b=e.target.closest('button[data-i]');if(!b)return;const d=MD[+b.dataset.i],n=d.players.length,pk=d.picks||[];let h='';
  for(let r=0;r<(d.rounds||0);r++){let l='';for(let p=0;p<n;p++){const i=r*n+p,pl=r%2?n-1-p:p;if(pk[i])l+=`<li>Pick ${i+1}: <b>${esc(d.players[pl])}</b> took ${esc(pk[i])}</li>`}h+=`<h3>Round ${r+1}</h3><ol style="list-style:none;padding:0">${l}</ol>`}
  $('pd').innerHTML=`<h2>${esc(d.emoji||'')} ${esc(d.topic)}</h2>${h||'<p class="msg">No round data was saved for this older draft.</p>'}<button class="btn" id="dy">Draft this topic yourself</button>`;$('pdp').classList.remove('hidden');
  $('dy').onclick=()=>{const t=topics.find(x=>x.id===d.topic_id);if(!t){alert('That topic is not in your library.');return}sel=t;renderTopics();show('setup')};$('pdp').scrollIntoView()};
@@ -334,5 +350,22 @@ $('pimg').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image
 $('psv').onclick=async()=>{const bio=$('pbio').value.trim().slice(0,200);const r=await sb.from('profiles').update({bio,avatar:me.avatar||null}).eq('id',uid);
  if(r.error)$('pm').textContent=/Inappropriate/.test(r.error.message)?'Your bio contains words that are not allowed.':'Could not save.';else{me.bio=bio;$('pm').textContent='Saved.'}};
 $('pb').onclick=openProfile;$('px').onclick=()=>show('setup');
+/* ---------- auth tabs, guest banner, profile tabs ---------- */
+function authTab(t){$('a_in').classList.toggle('hidden',t!=='in');$('a_up').classList.toggle('hidden',t!=='up');$('tl').className='btn'+(t==='in'?'':' alt');$('tc').className='btn'+(t==='up'?'':' alt');am('')}
+$('tl').onclick=()=>authTab('in');$('tc').onclick=()=>authTab('up');
+$('gb1').onclick=()=>{authTab('in');show('splash')};$('gb2').onclick=()=>{authTab('up');show('splash')};$('sbk').onclick=()=>show('setup');
+function tabTo(t){document.querySelectorAll('.ptab').forEach(x=>x.classList.toggle('hidden',x.id!=='tab-'+t));document.querySelectorAll('[data-pt]').forEach(b=>b.className='btn'+(b.dataset.pt===t?'':' alt'));if(t==='f'){$('fp').classList.remove('hidden');$('fv').classList.add('hidden')}}
+document.querySelectorAll('[data-pt]').forEach(b=>b.onclick=()=>tabTo(b.dataset.pt));
+async function loadMyTopics(){const r=await sb.from('topics').select('*').eq('created_by',uid).order('created_at',{ascending:false});const T=r.data||[];
+ $('mt').innerHTML=T.length?T.map(x=>`<div class="item" style="cursor:default;flex-wrap:wrap"><span>${esc(x.emoji||'')} ${esc(x.name)} <small class="msg">${x.items.length} items${x.visibility==='private'?', code '+esc(x.code):''}</small></span><button class="btn alt" data-v="${x.id}" data-to="${x.visibility==='private'?'public':'private'}" style="padding:4px 14px;min-height:0;font-size:15px">${x.visibility==='private'?'Private: make public':'Public: make private'}</button></div>`).join(''):'<p class="msg">You have not created any topics yet.</p>'}
+$('mt').onclick=async e=>{const b=e.target.closest('button[data-v]');if(!b)return;const r=await sb.from('topics').update({visibility:b.dataset.to}).eq('id',b.dataset.v);
+ if(r.error){$('pm').textContent='Could not change visibility.';return}const t=topics.find(x=>x.id===b.dataset.v);if(t)t.vis=b.dataset.to;renderTopics();loadMyTopics()};
+$('fl').onclick=async e=>{const b=e.target.closest('button[data-f]');if(!b)return;const f=FR[b.dataset.f];if(!f)return;
+ const r=await sb.from('topics').select('*').eq('created_by',f.id).eq('visibility','public').order('created_at',{ascending:false});FT=r.data||[];
+ $('fp').classList.add('hidden');$('fv').classList.remove('hidden');
+ $('fv').innerHTML=`<div class="row" style="align-items:center"><img src="${esc(f.avatar||AV)}" width="64" height="64" style="border-radius:50%;object-fit:cover;background:#000"><div><h2 style="border:0;padding:0;margin:0">${esc(f.username)}</h2><p class="msg">${f.drafts} draft${f.drafts===1?'':'s'} posted, ${f.votes} vote${f.votes===1?'':'s'} received</p></div></div><p style="margin-top:10px">${esc(f.bio||'No bio yet.')}</p><h3 style="margin:14px 0 6px">Public topics</h3><div class="pool">${FT.length?FT.map((x,i)=>`<button class="item" data-p="${i}">${esc(x.emoji||'')} ${esc(x.name)}<i>Play</i></button>`).join(''):'<p class="msg">No public topics yet.</p>'}</div><button class="btn alt" id="fvb" style="margin-top:12px">Back to friends</button>`};
+$('fv').onclick=e=>{if(e.target.closest('#fvb')){$('fv').classList.add('hidden');$('fp').classList.remove('hidden');return}
+ const b=e.target.closest('button[data-p]');if(!b)return;const t=toT(FT[+b.dataset.p]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=topics.find(x=>x.id===t.id);renderTopics();show('setup')};
+function drawMD(){$('md').innerHTML=MD.length?MD.map((d,i)=>`<div class="item" style="cursor:default;flex-wrap:wrap;gap:6px"><button class="item" data-i="${i}" style="flex:1;border:0">${esc(d.emoji||'')} ${esc(d.topic)}<i>${d.visibility==='private'?'private':'public'}</i></button><button class="btn alt" data-dv="${d.id}" data-to="${d.visibility==='private'?'public':'private'}" style="padding:4px 14px;min-height:0;font-size:15px">${d.visibility==='private'?'Make public':'Make private'}</button></div>`).join(''):'<p class="msg">No drafts yet.</p>'}
 boot();
 </script></body></html>
