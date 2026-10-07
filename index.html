@@ -2,11 +2,11 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Draft Battle VS</title>
-<meta name="theme-color" content="#000000"><meta name="apple-mobile-web-app-capable" content="yes">
+<script>try{var p=JSON.parse(localStorage.getItem("dbvs_prefs")||"{}");if(p.theme)document.documentElement.dataset.theme=p.theme}catch(e){}</script><meta name="theme-color" content="#000000"><meta name="apple-mobile-web-app-capable" content="yes">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0b0c;--bg2:#161617;--card:#1f1f21;--line:#2e2e31;--ink:#fff;--mute:#9a9aa1;--red:#d00;--gold:#ffd23f;--mint:#3ddc84;
+:root{--field:#000;--sel:#2a2a2d;--line2:#555;--bg:#0b0b0c;--bg2:#161617;--card:#1f1f21;--line:#2e2e31;--ink:#fff;--mute:#9a9aa1;--red:#d00;--gold:#ffd23f;--mint:#3ddc84;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*:before,*:after{box-sizing:inherit}
@@ -66,8 +66,18 @@ textarea{width:100%;min-height:90px}
 @media(max-width:640px){main{padding:14px 10px 50px}.hero h1{font-size:clamp(40px,14vw,64px)}input,select,textarea{font-size:16px}.btn{min-height:46px}
 .topics,.players{grid-template-columns:repeat(2,1fr)}.teams{grid-template-columns:1fr}.clock{padding:12px}.clock .who{font-size:28px}.time{font-size:44px;padding:4px 10px}
 .row>*{flex:1 1 140px}.row .btn{width:100%}.item{padding:14px 6px;min-height:48px}.pool{max-height:50vh}.nav{padding:8px 12px}.nav b{font-size:18px}.tick{display:none}.panel{padding:12px}}
+:root[data-theme=light]{--bg:#f2f3f5;--bg2:#fff;--card:#eceef1;--line:#d5d8de;--ink:#14161a;--mute:#5a606a;--gold:#a35f00;--field:#fff;--sel:#e3e6ea;--line2:#aeb3bc;color-scheme:light}
+input,select,textarea{background:var(--field)}.bar{background:var(--field)}.topic[aria-pressed=true]{background:var(--sel)}.btn.alt{border-color:var(--line2)}
+.nav{color:#fff;flex-wrap:wrap}.clock{color:#fff}.clock .time{background:#1f1f21}.board th.on{color:var(--ink)}
+.links{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.links button,#hb{background:none;border:0;border-bottom:3px solid transparent;color:#fff;font:700 15px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;cursor:pointer}
+.links button.on{border-bottom-color:var(--red)}.links button:hover{color:var(--gold)}
+#hb{display:none;margin-left:auto;font-size:24px;padding:2px 10px}
+@media(max-width:860px){#hb{display:block}.links{display:none;width:100%;flex-direction:column;margin:0;padding:6px 0}.links.open{display:flex}.links button{text-align:left;border-bottom:1px solid #222;padding:12px 4px}}
+.live{border-top-color:var(--red)}.ltag{display:inline-block;background:var(--red);color:#fff;font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;padding:2px 8px;border-radius:3px;margin-bottom:8px}
+.live h3{font-size:28px}.live p{margin:6px 0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
-</style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button class="btn alt" id="gb" style="margin-left:auto;padding:4px 16px;font-size:16px">Gallery</button><button class="btn alt hidden" id="pb" style="padding:4px 14px;font-size:15px">Profile</button><button class="btn alt" id="lo" style="padding:4px 14px;font-size:15px">Log out</button></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
+</style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="create">Create Draft</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
 <section id="splash" class="hidden"><div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Log in, create an account, or jump in as a guest.</p></div>
 <div class="row" style="margin-bottom:12px"><button class="btn" id="tl">Log in</button><button class="btn alt" id="tc">Create account</button><button class="btn alt hidden" id="sbk">Back to game</button></div>
@@ -79,7 +89,7 @@ textarea{width:100%;min-height:90px}
 <section id="setup" class="hidden">
  <div class="panel hidden" id="gbn" style="border-left:4px solid var(--gold)"><b>You're playing as a guest.</b> <span class="msg">Log in or create an account to vote and make topics.</span><div class="row" style="margin-top:10px"><button class="btn" id="gb1">Log in</button><button class="btn alt" id="gb2">Create account</button></div></div>
  <div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Pick a topic, add your friends, and draft the best of anything. Snake order, pick clock, sound effects, and a community library of topics.</p></div>
- <div class="panel"><h2>Play online</h2><div class="row"><label>Your name<input id="nick" maxlength="14" placeholder="Nickname"></label><label>Room code<input id="jc" maxlength="4" size="6" placeholder="ABCD" style="text-transform:uppercase"></label><button class="btn" id="join">Join room</button><button class="btn alt" id="qm">Quick match</button></div><p class="msg" id="om">Or pick a topic below and create a room. Friends draft from their own phones.</p></div>
+ <div class="panel"><h2>Play online</h2><div class="row"><label>Your name<input id="nick" maxlength="14" placeholder="Nickname"></label><label>Room code<input id="jc" maxlength="5" size="7" placeholder="ABCDE" style="text-transform:uppercase"></label><button class="btn" id="join">Join room</button><button class="btn alt hidden" id="qm">Quick match</button></div><p class="msg" id="om">Or pick a topic below and create a room. Friends draft from their own phones.</p></div>
  <div class="panel"><h2>1. Pick a topic</h2><div class="topics" id="topics"></div><div class="row" style="margin-top:12px"><input id="uc" placeholder="Private topic code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="ub">Unlock topic</button></div>
   <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--gold);font-weight:800">Create your own topic</summary>
    <div class="row" style="margin-top:10px"><label>Emoji<input id="ne" value="🍭" size="3" maxlength="4"></label><label style="flex:1">Topic name<input id="nn" placeholder="Best road trip snacks"></label></div>
@@ -89,10 +99,10 @@ textarea{width:100%;min-height:90px}
  <div class="panel"><h2>2. Draft settings</h2><div class="row">
   <label>Rounds<select id="rd"><option>3</option><option selected>4</option><option>5</option><option>6</option><option>8</option></select></label>
   <label>Pick clock<select id="tm"><option value="0">Off</option><option value="20">20s</option><option value="45" selected>45s</option><option value="90">90s</option></select></label>
-  <label>Sound<select id="sn"><option value="1">On</option><option value="0">Off</option></select></label>
   <label>Order<select id="ro"><option value="1">Randomize</option><option value="0">As entered</option></select></label></div></div>
  <div class="panel"><h2>3. Who's drafting?</h2><div class="players" id="pl"></div><button class="btn alt" id="ap" style="margin-top:10px">+ Add player</button></div>
  <button class="btn big" id="go">Start the draft (one screen)</button>
+ <label style="margin-top:10px;max-width:340px">Room visibility<select id="rv"><option value="public">Public: listed in Live Drafts</option><option value="private">Private: join by code only</option></select></label>
  <button class="btn alt big" id="mk" style="margin-top:10px">Create online room</button>
 </section>
 
@@ -117,6 +127,15 @@ textarea{width:100%;min-height:90px}
 <div class="ptab hidden" id="tab-t"><div class="panel"><h2>My topics</h2><p class="msg">Switch a topic between public (anyone can play it) and private (needs its code).</p><div class="pool" id="mt"></div></div></div>
 <div class="ptab hidden" id="tab-d"><div class="panel"><h2>My drafts</h2><div class="pool" id="md"></div></div><div class="panel hidden" id="pdp"><div id="pd"></div></div></div>
 <button class="btn alt" id="px">Back</button></section>
+
+<section id="live" class="hidden"><div class="hero"><h1><span style="display:inline">Live</span> Drafts</h1><p>Public rooms happening now. Join a lobby or watch a draft in progress.</p></div>
+<div class="row" style="margin-bottom:14px"><button class="btn" data-lf="all">All</button><button class="btn alt" data-lf="lobby">Waiting for players</button><button class="btn alt" data-lf="live">Live now</button><label>Sort<select id="lsort"><option value="players">Most players</option><option value="new">Newest</option><option value="soon">Starting soon</option></select></label></div><div class="teams" id="lg"></div></section>
+
+<section id="settings" class="hidden"><div class="hero"><h1 id="s-h">Settings</h1></div>
+<div class="panel"><h2 id="s-app">Appearance</h2><div class="row"><button class="btn" data-th="dark">Dark</button><button class="btn alt" data-th="light">Light</button></div></div>
+<div class="panel"><h2 id="s-lang">Language</h2><select id="lang"><option value="en">English</option><option value="es">Español</option><option value="it">Italiano</option></select><p class="msg">Only the app's interface is translated. Topics, names and chat stay as written.</p></div>
+<div class="panel"><h2 id="s-snd">Draft Sounds</h2><div class="row"><button class="btn" data-sd="1">On</button><button class="btn alt" data-sd="0">Off</button></div></div>
+<div class="panel"><h2 id="s-acc">Account</h2><p class="msg" id="sacc"></p><div class="row"><button class="btn alt" id="lo">Log out</button></div></div></section>
 
 <section id="gallery" class="hidden"><div class="hero"><h1>Draft<span>Gallery</span></h1><p>Vote for the best team in each posted draft.</p></div><p class="msg" id="gm"></p><div id="gl"></div><button class="btn alt" id="gx" style="margin-top:6px">Back</button></section>
 
@@ -143,7 +162,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 
 /* ---------- sound ---------- */
 function tone(f,t0,d,type='triangle',v=.16){try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=f;const t=audio.currentTime+t0;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(audio.destination);o.start(t);o.stop(t+d)}catch(e){}}
-const on=()=>$('sn').value==='1';
+const on=()=>prefs.sound;
 const sfx={pick(){on()&&[523,659,784,1047].forEach((f,i)=>tone(f,i*.07,.25))},
  tick(){on()&&tone(900,0,.08,'square',.07)},
  buzz(){on()&&(tone(140,0,.5,'sawtooth',.2),tone(150,.02,.5,'sawtooth',.2))},
@@ -156,13 +175,14 @@ $('topics').onclick=e=>{const b=e.target.closest('.topic');if(b){sel=topics[b.da
 renderTopics();
 
 /* ---------- setup ---------- */
-function addPlayer(v=''){const i=$('pl').children.length;if(i>=10)return;const inp=document.createElement('input');inp.placeholder='Player '+(i+1);inp.value=v;inp.maxLength=14;$('pl').appendChild(inp)}
+function addPlayer(v=''){const i=$('pl').children.length;if(i>=12)return;const inp=document.createElement('input');inp.placeholder='Player '+(i+1);inp.value=v;inp.maxLength=14;$('pl').appendChild(inp)}
 ['Me','','',''].forEach(addPlayer);$('ap').onclick=()=>addPlayer();
 
 /* ---------- draft ---------- */
 const turn=i=>{const n=S.players.length,r=Math.floor(i/n),p=i%n;return{r,p:r%2?n-1-p:p}};
-$('go').onclick=()=>{let ps=[...$('pl').children].map((x,i)=>x.value.trim()||'').filter(Boolean);
+$('go').onclick=async()=>{let ps=[...$('pl').children].map((x,i)=>x.value.trim()||'').filter(Boolean);
  if(ps.length<2){alert('Add at least 2 players.');return}
+ if(db&&!(await clean(ps.join(' ')))){alert('One of the player names is not allowed.');return}
  if($('ro').value==='1')ps.sort(()=>Math.random()-.5);
  const rounds=+$('rd').value;if(sel.items.length<ps.length*rounds){alert('Not enough items for that many picks. Reduce rounds, or add items to the topic.');return}
  S={topic:sel,players:ps,rounds,clock:+$('tm').value,pool:sel.items.map(n=>({n})),picks:[],added:[],i:0};
@@ -170,8 +190,8 @@ $('go').onclick=()=>{let ps=[...$('pl').children].map((x,i)=>x.value.trim()||'')
  sfx.horn();startTurn()};
 function startTurn(){clearInterval(tick);const total=S.players.length*S.rounds;
  if(S.i>=total)return finish();
- const t=turn(S.i);$('who').textContent=S.players[t.p]+' is on the clock';$('rnd').textContent=`Round ${t.r+1} of ${S.rounds} · Pick ${S.i+1} of ${total}`;
- if(MP){$('who').textContent=S.players[t.p]+(S.ids[t.p]===myId?' (you)':'')+' is on the clock';drawTime();return render()}
+ const t=turn(S.i);$('who').textContent=S.players[t.p]+' '+tr('onClock');$('rnd').textContent=`${tr('round')} ${t.r+1} / ${S.rounds} · ${tr('pick')} ${S.i+1} / ${total}`;
+ if(MP){$('who').textContent=S.players[t.p]+(S.ids[t.p]===myId?' (you)':'')+' '+tr('onClock');drawTime();return render()}
  S.left=S.clock;drawTime();if(S.clock)tick=setInterval(()=>{S.left--;drawTime();if(S.left<=5&&S.left>0)sfx.tick();if(S.left<=0){clearInterval(tick);sfx.buzz();const a=S.pool[Math.random()*S.pool.length|0];if(a)pick(a.n,true)}},1000);
  render()}
 function drawTime(){const e=$('time');e.textContent=S.clock?S.left:'∞';e.classList.toggle('low',S.clock&&S.left<=5)}
@@ -209,18 +229,19 @@ $('again').onclick=()=>{leave();show('setup')};
 /* ---------- online ---------- */
 const myId=Math.random().toString(36).slice(2,10);
 let roomApi=null,R=null,MP=null;
-const SECS=['splash','setup','lobby','draft','done','gallery','profile'];
-const show=id=>SECS.forEach(s=>$(s).classList.toggle('hidden',s!==id));
+const SECS=['splash','setup','lobby','draft','done','gallery','profile','live','settings'];
+const NAVMAP={setup:'home',live:'live',gallery:'comm',profile:'prof',settings:'set'};
+const show=id=>{SECS.forEach(s=>$(s).classList.toggle('hidden',s!==id));if(id!=='live')stopLive();document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on',b.dataset.n===NAVMAP[id]))};
 const nick=()=>($('nick').value.trim()||($('pl').firstChild&&$('pl').firstChild.value.trim())||'Player '+myId.slice(0,2)).slice(0,14);
 const om=t=>{$('om').textContent=t};
-const rcode=()=>Array.from({length:4},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
+const rcode=()=>Array.from({length:5},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
 const idxOf=(H,i)=>{const n=H.pl.length,p=i%n;return Math.floor(i/n)%2?n-1-p:p};
-function leave(){if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
-async function enter(name,host,quick){
+function leave(){if(MP&&MP.code&&db&&!MP.spec)sb.rpc('leave_room',{p_code:MP.code});if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
+async function enter(name,host,quick,spec){
  try{const api=roomApi;
   if(!api){om('Online play is not set up on this site yet.');return false}
-  leave();MP={host,quick,ps:[],last:''};
-  R=await api.join(name);R.presence(Object.assign({id:myId,name:nick()},quick?{q:1}:{}));
+  leave();MP={host,quick,spec,code:name.replace(/^d-/,'').toUpperCase(),ps:[],last:''};
+  R=await api.join(name,spec);if(!spec)R.presence(Object.assign({id:myId,name:nick()},quick?{q:1}:{}));
   R.onPeers(c=>{MP.peers=c.peers;peersChanged()});
   show('lobby');$('ln').value=nick();$('lc').textContent=quick?'Quick match':name.replace(/^d-/,'').toUpperCase();$('lt').textContent='Connecting…';return true}
  catch(e){om('Could not join that room.');return false}}
@@ -241,15 +262,15 @@ function quickLogic(ps){const w=ps.filter(p=>p.q);
  if(w.map(p=>p.id).sort()[0]===myId&&w.length>=2&&!MP.qt)MP.qt=setTimeout(()=>{if(!MP||!MP.quick)return;const ids=MP.ps.filter(p=>p.q).map(p=>p.id).slice(0,6);if(ids.length<2){MP.qt=0;return}R.presence({go:'d-'+rcode().toLowerCase(),ids})},7000);
  if(!MP.nt)MP.nt=setTimeout(()=>{if(MP){MP.none=1;quickLogic(MP.ps)}},15000)}
 function startOnline(){if(!MP||!MP.host||MP.on)return;const c=MP.cfg,t=topics.find(x=>x.id===c.t)||sel;
- const ps=[...MP.ps].sort(()=>Math.random()-.5).slice(0,8);if(ps.length<2){$('lt').textContent='Need at least 2 players.';return}
+ const ps=[...MP.ps].sort(()=>Math.random()-.5).slice(0,12);if(ps.length<2){$('lt').textContent='Need at least 2 players.';return}
  const n=ps.length,r=Math.max(1,Math.min(c.r,Math.floor(t.items.length/n),Math.floor(48/n)));
- MP.on=1;MP.H={t:t.id,k:t.vis==='private'?t.code:undefined,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,14)]),pk:[],l:c.c,d:0};publish();MP.timer=setInterval(hostTick,1000)}
+ MP.on=1;MP.H={t:t.id,k:t.vis==='private'?t.code:undefined,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,14)]),pk:[],l:c.c,d:0};if(MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'live'});publish();MP.timer=setInterval(hostTick,1000)}
 function publish(){const H=MP.H;R.presence({st:H});const j=JSON.stringify(H);MP.last=j;applyState(JSON.parse(j))}
 function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const here=MP.ps.some(x=>x.id===H.pl[idxOf(H,H.pk.length)][0]);
  if(H.c)H.l--;if(!here||(H.c&&H.l<=0))return autoPick();publish()}
 async function addCustom(v){if(!(await clean(v)))return;const H=MP.H;if(!H||H.d)return;const t=topics.find(x=>x.id===H.t);H.x=H.x||[];const all=[...t.items,...H.x,...H.pk].map(s=>s.toLowerCase());if(all.includes(v.toLowerCase())||H.x.length>=20)return;H.x.push(v);publish()}
 function hostCheck(ps){const H=MP.H;if(!H||H.d)return;MP.seen=MP.seen||{};ps.forEach(p=>{if(p.add&&p.aseq!==MP.seen[p.id]){MP.seen[p.id]=p.aseq;addCustom(String(p.add).slice(0,40))}});const i=H.pk.length,x=ps.find(q=>q.id===H.pl[idxOf(H,i)][0]);if(x&&x.want&&x.seq===i)commit(x.want)}
-function commit(name){const H=MP.H,t=topics.find(x=>x.id===H.t);if(!t||!(t.items.includes(name)||(H.x||[]).includes(name))||H.pk.includes(name))return;H.pk.push(name);H.l=H.c;if(H.pk.length>=H.pl.length*H.r)H.d=1;publish()}
+function commit(name){const H=MP.H,t=topics.find(x=>x.id===H.t);if(!t||!(t.items.includes(name)||(H.x||[]).includes(name))||H.pk.includes(name))return;H.pk.push(name);H.l=H.c;if(H.pk.length>=H.pl.length*H.r){H.d=1;if(MP.cfg&&MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'done'})}publish()}
 function autoPick(){const H=MP.H,t=topics.find(x=>x.id===H.t),a=t.items.concat(H.x||[]).filter(x=>!H.pk.includes(x));if(a.length)commit(a[Math.random()*a.length|0])}
 function applyState(st){const t=topics.find(x=>x.id===st.t);if(!t){if(st.k&&!MP.fetching){MP.fetching=1;sb.rpc('topic_by_code',{c:st.k}).then(r=>{if(r.data&&r.data[0]){topics.push(toT(r.data[0]));MP.last='';peersChanged()}})}$('lt').textContent='Loading topic…';return}
  const n=st.pl.length,prev=S?S.picks.length:-1;
@@ -258,19 +279,17 @@ function applyState(st){const t=topics.find(x=>x.id===st.t);if(!t){if(st.k&&!MP.
  if(st.c&&st.l<=5&&st.l>0)sfx.tick();startTurn()}
 function mpPick(name){const t=turn(S.i);if(S.ids[t.p]!==myId){$('sm').textContent='Wait for your turn.';return}
  if(MP.host)commit(name);else{R.presence({want:name,seq:S.i});$('q').value=''}}
-$('mk').onclick=async()=>{const code=rcode();if(await enter('d-'+code.toLowerCase(),true))MP.cfg={t:sel.id,r:+$('rd').value,c:+$('tm').value}};
-$('join').onclick=()=>{const c=$('jc').value.toLowerCase().replace(/[^a-z0-9]/g,'');if(c.length<3){om('Enter the room code.');return}enter('d-'+c,false)};
 $('qm').onclick=()=>enter('quick',false,true);
 $('ls').onclick=startOnline;$('ll').onclick=()=>{leave();show('setup')};
-$('ln').oninput=()=>{if(R)R.presence({name:($('ln').value.trim()||'Player').slice(0,14)})};
+$('ln').oninput=async()=>{const v=($('ln').value.trim()||'Player').slice(0,14);if(R&&!(MP&&MP.spec)&&(await clean(v)))R.presence({name:v})};
 /* ---------- online backend (Supabase) ---------- */
 let sb=null,uid=null,GD=[],GT={},GM={};
-const roomAdapter={async join(name){
- const ch=sb.channel(name,{config:{presence:{key:myId}}});let mine={},hs=[];
+const roomAdapter={async join(name,spec){
+ const ch=sb.channel(name,{config:{presence:{key:myId},private:true}});let mine={},hs=[];
  const emit=()=>{const st=ch.presenceState();hs.forEach(h=>h({peers:Object.values(st).map(a=>({presence:a[a.length-1]}))}))};
  ch.on('presence',{event:'sync'},emit);
  await new Promise((res,rej)=>ch.subscribe(s=>{if(s==='SUBSCRIBED')res();else if(s==='CHANNEL_ERROR'||s==='TIMED_OUT')rej(new Error(s))}));
- return{presence(p){Object.keys(p).forEach(k=>{if(p[k]===null)delete mine[k];else mine[k]=p[k]});return ch.track(mine)},onPeers(h){hs.push(h);emit()},leave(){return sb.removeChannel(ch)}}}};
+ return{presence(p){if(spec)return;Object.keys(p).forEach(k=>{if(p[k]===null)delete mine[k];else mine[k]=p[k]});return ch.track(mine)},onPeers(h){hs.push(h);emit()},leave(){return sb.removeChannel(ch)}}}};
 /* ---------- gallery ---------- */
 const dId=()=>{let x=5381;const s=S.topic.id+'|'+S.players.join(',')+'|'+S.picks.map(k=>k.n).join(',');for(let i=0;i<s.length;i++)x=((x<<5)+x+s.charCodeAt(i))>>>0;return 'd'+x.toString(36)};
 const tally=d=>d.tm.map((_,i)=>(GT[d.id]||[])[i]||0);
@@ -288,7 +307,7 @@ function openGallery(){show('gallery');drawG();loadG()}
 setInterval(()=>{if(!$('gallery').classList.contains('hidden'))loadG()},15000);
 $('gl').onclick=async e=>{const b=e.target.closest('button[data-d]');if(!b||!db)return;if(me.guest){$('gm').textContent='Create a free account to vote. Guests can only look.';return}const id=b.dataset.d,i=+b.dataset.i;GM[id]=i;drawG();
  const r=await sb.from('votes').upsert({draft_id:id,user_id:uid,team:i});$('gm').textContent=r.error?'Could not save your vote.':'';loadG()};
-$('gb').onclick=openGallery;$('gv').onclick=openGallery;$('gx').onclick=()=>show('setup');
+$('gv').onclick=openGallery;$('gx').onclick=()=>show('setup');
 $('post').onclick=async()=>{const r=await sb.from('drafts').insert({id:dId(),topic:S.topic.name,emoji:S.topic.emoji,visibility:$('pv').value,topic_id:S.topic.id,rounds:S.rounds,picks:S.picks.map(k=>k.n),players:S.players,teams:S.players.map((p,i)=>S.picks.filter(k=>k.p===i).map(k=>k.n))});
  $('dm').textContent=!r.error?($('pv').value==='private'?'Saved as private. Only you can see it, in your profile.':'Posted. Find it in the Gallery and share it so people can vote.'):r.error.code==='23505'?'This draft is already in the gallery.':'Could not post this draft.';
  if(!r.error||r.error.code==='23505'){$('post').classList.add('hidden');$('pvw').classList.add('hidden')}};
@@ -304,7 +323,7 @@ async function boot(){if(!window.supabase||SB_URL.startsWith('YOUR')){show('setu
 async function enterApp(user){uid=user.id;db=sb;roomApi=roomAdapter;
  if(user.is_anonymous){let g=localStorage.getItem('gname');if(!g){g='Guest-'+Math.random().toString(36).slice(2,6);localStorage.setItem('gname',g)}me={guest:true,username:g,id:uid}}
  else{const r=await sb.from('profiles').select('*').eq('id',uid).single();me=Object.assign({guest:false},r.data||{username:'Player'})}
- $('nick').value=me.username;$('nick').readOnly=true;$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
+ await loadPrefs();$('nick').value=me.username;$('nick').readOnly=true;$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('nfr').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
  const{data}=await sb.from('topics').select('*').order('created_at',{ascending:false}).limit(100);
  topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup')}
 $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id||!pw)return am('Enter your username or email and your password.');am('Logging in…');
@@ -349,7 +368,7 @@ $('fb').onclick=async()=>{const r=await sb.rpc('add_friend',{c:$('fadd').value.t
 $('pimg').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d'),s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,96,96);me.avatar=c.toDataURL('image/jpeg',.7);$('pav').src=me.avatar};im.src=URL.createObjectURL(f)};
 $('psv').onclick=async()=>{const bio=$('pbio').value.trim().slice(0,200);const r=await sb.from('profiles').update({bio,avatar:me.avatar||null}).eq('id',uid);
  if(r.error)$('pm').textContent=/Inappropriate/.test(r.error.message)?'Your bio contains words that are not allowed.':'Could not save.';else{me.bio=bio;$('pm').textContent='Saved.'}};
-$('pb').onclick=openProfile;$('px').onclick=()=>show('setup');
+$('px').onclick=()=>show('setup');
 /* ---------- auth tabs, guest banner, profile tabs ---------- */
 function authTab(t){$('a_in').classList.toggle('hidden',t!=='in');$('a_up').classList.toggle('hidden',t!=='up');$('tl').className='btn'+(t==='in'?'':' alt');$('tc').className='btn'+(t==='up'?'':' alt');am('')}
 $('tl').onclick=()=>authTab('in');$('tc').onclick=()=>authTab('up');
@@ -367,5 +386,59 @@ $('fl').onclick=async e=>{const b=e.target.closest('button[data-f]');if(!b)retur
 $('fv').onclick=e=>{if(e.target.closest('#fvb')){$('fv').classList.add('hidden');$('fp').classList.remove('hidden');return}
  const b=e.target.closest('button[data-p]');if(!b)return;const t=toT(FT[+b.dataset.p]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=topics.find(x=>x.id===t.id);renderTopics();show('setup')};
 function drawMD(){$('md').innerHTML=MD.length?MD.map((d,i)=>`<div class="item" style="cursor:default;flex-wrap:wrap;gap:6px"><button class="item" data-i="${i}" style="flex:1;border:0">${esc(d.emoji||'')} ${esc(d.topic)}<i>${d.visibility==='private'?'private':'public'}</i></button><button class="btn alt" data-dv="${d.id}" data-to="${d.visibility==='private'?'public':'private'}" style="padding:4px 14px;min-height:0;font-size:15px">${d.visibility==='private'?'Make public':'Make private'}</button></div>`).join(''):'<p class="msg">No drafts yet.</p>'}
+/* ---------- phase 1: settings, i18n, navigation, live drafts ---------- */
+const PK='dbvs_prefs';let prefs={theme:'dark',lang:'en',sound:true};
+try{Object.assign(prefs,JSON.parse(localStorage.getItem(PK)||'{}'))}catch(e){}
+const I18N={
+en:{home:'Home',live:'Live Drafts',create:'Create Draft',comm:'Community',friends:'Friends',profile:'Profile',settings:'Settings',login:'Log in',createAcc:'Create account',guest:'Continue as guest',back:'Back',joinRoom:'Join room',createRoom:'Create online room',startOne:'Start the draft (one screen)',startDraft:'Start draft',leave:'Leave',unlock:'Unlock topic',saveTopic:'Save topic',addPlayer:'+ Add player',addCustom:'Add as custom',endDraft:'End draft',copy:'Copy results',post:'Save to gallery',viewGallery:'View gallery',newDraft:'New draft',saveProfile:'Save profile',addFriend:'Add friend',playOnline:'Play online',pickTopic:'1. Pick a topic',draftSettings:'2. Draft settings',whoDrafting:"3. Who's drafting?",onClock:'is on the clock',round:'Round',pick:'Pick',myTopics:'My topics',myDrafts:'My drafts',liveTag:'LIVE DRAFT',hostedBy:'Hosted by',lobbyOpen:'Lobby open',full:'FULL',inProgress:'Draft underway',public:'Public',private:'Private',join:'JOIN',view:'VIEW',noLive:'No public drafts right now. Start one from Create Draft.',filterAll:'All',filterLobby:'Waiting for players',filterLive:'Live now',sortPlayers:'Most players',sortNew:'Newest',sortSoon:'Starting soon',liveTitle:'Live Drafts',appearance:'Appearance',dark:'Dark',light:'Light',language:'Language',sound:'Draft Sounds',on:'On',off:'Off',account:'Account',logout:'Log out',players:'Players'},
+es:{home:'Inicio',live:'Drafts en vivo',create:'Crear draft',comm:'Comunidad',friends:'Amigos',profile:'Perfil',settings:'Ajustes',login:'Iniciar sesión',createAcc:'Crear cuenta',guest:'Continuar como invitado',back:'Atrás',joinRoom:'Unirse a la sala',createRoom:'Crear sala en línea',startOne:'Empezar el draft (una pantalla)',startDraft:'Empezar draft',leave:'Salir',unlock:'Desbloquear tema',saveTopic:'Guardar tema',addPlayer:'+ Añadir jugador',addCustom:'Añadir personalizado',endDraft:'Terminar draft',copy:'Copiar resultados',post:'Guardar en la galería',viewGallery:'Ver galería',newDraft:'Nuevo draft',saveProfile:'Guardar perfil',addFriend:'Añadir amigo',playOnline:'Jugar en línea',pickTopic:'1. Elige un tema',draftSettings:'2. Ajustes del draft',whoDrafting:'3. ¿Quién participa?',onClock:'está en turno',round:'Ronda',pick:'Selección',myTopics:'Mis temas',myDrafts:'Mis drafts',liveTag:'DRAFT EN VIVO',hostedBy:'Organiza',lobbyOpen:'Sala abierta',full:'LLENA',inProgress:'Draft en curso',public:'Público',private:'Privado',join:'UNIRSE',view:'VER',noLive:'No hay drafts públicos ahora. Crea uno desde Crear draft.',filterAll:'Todos',filterLobby:'Esperando jugadores',filterLive:'En vivo ahora',sortPlayers:'Más jugadores',sortNew:'Más recientes',sortSoon:'Empieza pronto',liveTitle:'Drafts en vivo',appearance:'Apariencia',dark:'Oscuro',light:'Claro',language:'Idioma',sound:'Sonidos del draft',on:'Activado',off:'Desactivado',account:'Cuenta',logout:'Cerrar sesión',players:'Jugadores'},
+it:{home:'Home',live:'Draft dal vivo',create:'Crea draft',comm:'Community',friends:'Amici',profile:'Profilo',settings:'Impostazioni',login:'Accedi',createAcc:'Crea account',guest:'Continua come ospite',back:'Indietro',joinRoom:'Entra nella stanza',createRoom:'Crea stanza online',startOne:'Inizia il draft (un solo schermo)',startDraft:'Inizia il draft',leave:'Esci',unlock:'Sblocca argomento',saveTopic:'Salva argomento',addPlayer:'+ Aggiungi giocatore',addCustom:'Aggiungi personalizzato',endDraft:'Termina draft',copy:'Copia risultati',post:'Salva nella galleria',viewGallery:'Vedi galleria',newDraft:'Nuovo draft',saveProfile:'Salva profilo',addFriend:'Aggiungi amico',playOnline:'Gioca online',pickTopic:'1. Scegli un argomento',draftSettings:'2. Impostazioni del draft',whoDrafting:'3. Chi partecipa?',onClock:'è al turno',round:'Round',pick:'Scelta',myTopics:'I miei argomenti',myDrafts:'I miei draft',liveTag:'DRAFT LIVE',hostedBy:'Organizzato da',lobbyOpen:'Lobby aperta',full:'PIENA',inProgress:'Draft in corso',public:'Pubblico',private:'Privato',join:'ENTRA',view:'GUARDA',noLive:'Nessun draft pubblico al momento. Creane uno da Crea draft.',filterAll:'Tutti',filterLobby:'In attesa di giocatori',filterLive:'In diretta',sortPlayers:'Più giocatori',sortNew:'Più recenti',sortSoon:'Inizia presto',liveTitle:'Draft dal vivo',appearance:'Aspetto',dark:'Scuro',light:'Chiaro',language:'Lingua',sound:'Suoni del draft',on:'Attivo',off:'Disattivo',account:'Account',logout:'Esci',players:'Giocatori'}};
+const tr=k=>(I18N[prefs.lang]&&I18N[prefs.lang][k])||I18N.en[k]||k;
+const TMAP=[['[data-n=home]','home'],['[data-n=live]','live'],['[data-n=create]','create'],['[data-n=comm]','comm'],['[data-n=fr]','friends'],['[data-n=prof]','profile'],['[data-n=set]','settings'],
+['#tl','login'],['#li','login'],['#gb1','login'],['#tc','createAcc'],['#su','createAcc'],['#gb2','createAcc'],['#gs','guest'],['#sbk','back'],['#gx','back'],['#px','back'],['#join','joinRoom'],['#mk','createRoom'],['#go','startOne'],['#ls','startDraft'],['#ll','leave'],['#ub','unlock'],['#nb','saveTopic'],['#ap','addPlayer'],['#addc','addCustom'],['#quit','endDraft'],['#copy','copy'],['#post','post'],['#gv','viewGallery'],['#again','newDraft'],['#psv','saveProfile'],['#fb','addFriend'],
+['[data-pt=f]','friends'],['[data-pt=a]','profile'],['[data-pt=t]','myTopics'],['[data-pt=d]','myDrafts'],['[data-lf=all]','filterAll'],['[data-lf=lobby]','filterLobby'],['[data-lf=live]','filterLive'],['[data-th=dark]','dark'],['[data-th=light]','light'],['[data-sd="1"]','on'],['[data-sd="0"]','off'],
+['#a_in h2','login'],['#a_up h2','createAcc'],['#l-h','liveTitle'],['#s-app','appearance'],['#s-lang','language'],['#s-snd','sound'],['#s-acc','account'],['#s-h','settings']];
+function applyLang(){TMAP.forEach(([s,k])=>{const e=document.querySelector(s);if(e)e.textContent=tr(k)});
+ [['#setup .panel h2','playOnline',1],['#setup .panel h2','pickTopic',2],['#setup .panel h2','draftSettings',3],['#setup .panel h2','whoDrafting',4]].forEach(([s,k,i])=>{const e=document.querySelectorAll(s)[i-1+($('gbn')?0:0)];if(e)e.textContent=tr(k)});
+ [...$('lsort').options].forEach((o,i)=>o.textContent=tr(['sortPlayers','sortNew','sortSoon'][i]));
+ if(me)$('lo').textContent=me.guest?tr('createAcc'):tr('logout');document.documentElement.lang=prefs.lang;
+ if(!$('live').classList.contains('hidden'))drawLive();if(S&&!$('draft').classList.contains('hidden'))startTurn()}
+function applyPrefs(){document.documentElement.dataset.theme=prefs.theme;applyLang();paintSet()}
+async function savePrefs(){try{localStorage.setItem(PK,JSON.stringify(prefs))}catch(e){}if(db&&!me.guest)await sb.from('user_prefs').upsert({user_id:uid,theme:prefs.theme,lang:prefs.lang,sound:prefs.sound,updated_at:new Date().toISOString()})}
+async function loadPrefs(){if(me.guest){applyPrefs();return}const r=await sb.from('user_prefs').select('*').eq('user_id',uid).maybeSingle();
+ if(r.data){prefs={theme:r.data.theme,lang:r.data.lang,sound:r.data.sound};try{localStorage.setItem(PK,JSON.stringify(prefs))}catch(e){}}else savePrefs();applyPrefs()}
+function paintSet(){document.querySelectorAll('[data-th]').forEach(b=>b.className='btn'+(b.dataset.th===prefs.theme?'':' alt'));document.querySelectorAll('[data-sd]').forEach(b=>b.className='btn'+((b.dataset.sd==='1')===prefs.sound?'':' alt'));$('lang').value=prefs.lang}
+function openSettings(){show('settings');$('sacc').textContent=me.guest?'Guest ('+me.username+')':'@'+me.username;paintSet()}
+document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{prefs.theme=b.dataset.th;applyPrefs();savePrefs()});
+document.querySelectorAll('[data-sd]').forEach(b=>b.onclick=()=>{prefs.sound=b.dataset.sd==='1';paintSet();savePrefs();if(prefs.sound)sfx.pick()});
+$('lang').onchange=()=>{prefs.lang=$('lang').value;applyPrefs();savePrefs()};
+
+const NAVK={home:()=>{if(MP&&!confirm('Leave the current room?'))return;leave();show('setup');window.scrollTo(0,0)},live:()=>openLive(),create:()=>{show('setup');$('topics').scrollIntoView()},comm:()=>openGallery(),fr:()=>{openProfile();tabTo('f')},prof:()=>openProfile(),set:()=>openSettings()};
+$('navl').onclick=e=>{const b=e.target.closest('button[data-n]');if(!b)return;$('navl').classList.remove('open');NAVK[b.dataset.n]()};
+$('hb').onclick=()=>$('navl').classList.toggle('open');
+
+let LR=[],LF='all',lch=null;
+function stopLive(){if(lch&&sb){sb.removeChannel(lch);lch=null}}
+async function loadLive(){const r=await sb.from('rooms').select('*').eq('visibility','public').in('status',['lobby','live']).gt('created_at',new Date(Date.now()-2*3600e3).toISOString());LR=r.data||[];drawLive()}
+async function openLive(){show('live');if(!db){$('lg').innerHTML='<p class="msg">Online play is not set up on this site yet.</p>';return}
+ await loadLive();stopLive();lch=sb.channel('rooms-dir').on('postgres_changes',{event:'*',schema:'public',table:'rooms'},loadLive).subscribe()}
+function drawLive(){let L=LR.filter(r=>LF==='all'||(LF==='lobby'?r.status==='lobby':r.status==='live'));const s=$('lsort').value;
+ L.sort(s==='new'?(a,b)=>b.created_at.localeCompare(a.created_at):s==='soon'?(a,b)=>(a.status==='lobby'?0:1)-(b.status==='lobby'?0:1)||b.players-a.players:(a,b)=>b.players-a.players);
+ $('lg').innerHTML=L.length?L.map(r=>{const full=r.players>=r.max_players,open=r.status==='lobby'&&!full;
+  return `<div class="team live"><span class="ltag">${tr('liveTag')}</span><h3>${esc(r.topic_emoji||'')} ${esc(r.topic_name)}</h3><p class="msg">${tr('hostedBy')} @${esc(r.host_name)}</p><p><b>👥 ${r.players} / ${r.max_players}</b></p><p class="msg">${r.status==='live'?'🔴 '+tr('inProgress'):full?'🔴 '+tr('full'):'🟢 '+tr('lobbyOpen')} · ${tr('public')}</p><button class="btn ${open?'':'alt'}" data-j="${r.code}" data-o="${open?1:0}">${open?tr('join'):tr('view')}</button></div>`}).join(''):`<p class="msg">${tr('noLive')}</p>`}
+document.querySelectorAll('[data-lf]').forEach(b=>b.onclick=()=>{LF=b.dataset.lf;document.querySelectorAll('[data-lf]').forEach(x=>x.className='btn'+(x===b?'':' alt'));drawLive()});
+$('lsort').onchange=drawLive;
+$('lg').onclick=e=>{const b=e.target.closest('button[data-j]');if(b)joinRoom(b.dataset.j,b.dataset.o!=='1')};
+async function joinRoom(code,spec){code=code.toUpperCase();if(!db){om('Online play is not set up on this site yet.');return}
+ if(!spec){const nm=nick();if(!(await clean(nm))){alert('That name is not allowed.');return}const r=await sb.rpc('join_room',{p_code:code,p_name:nm});if(r.error){om(r.error.message);alert(r.error.message);return}}
+ enter('d-'+code.toLowerCase(),false,false,spec)}
+$('mk').onclick=async()=>{if(!db){om('Online play is not set up on this site yet.');return}
+ const nm=nick();if(!(await clean(nm+' '+sel.name))){om('That name is not allowed.');return}
+ const code=rcode(),r=await sb.rpc('create_room',{p_code:code,p_topic:sel.name,p_emoji:sel.emoji,p_vis:$('rv').value,p_name:nm});
+ if(r.error){om(r.error.message);return}
+ if(await enter('d-'+code.toLowerCase(),true))MP.cfg={t:sel.id,r:+$('rd').value,c:+$('tm').value,code}};
+$('join').onclick=()=>{const c=$('jc').value.toUpperCase().replace(/[^A-Z]/g,'');if(c.length!==5){om('Enter the 5-letter room code.');return}joinRoom(c,false)};
+addEventListener('pagehide',()=>{if(MP&&MP.code&&db&&!MP.spec)sb.rpc('leave_room',{p_code:MP.code})});
+applyPrefs();
 boot();
 </script></body></html>
