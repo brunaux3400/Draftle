@@ -161,7 +161,7 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
  <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
-<p class="msg" style="margin-top:30px"><a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.10</p></main><div id="toasts"></div>
+<p class="msg" style="margin-top:30px"><a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.11<br>Created by Anthony, from New York</p></main><div id="toasts"></div>
 <script>
 /* Paste your Supabase project values here (Project Settings > API). The anon key is safe to publish. */
 const SB_URL='https://pqhhrblrfjjswfalluze.supabase.co',SB_KEY='sb_publishable_JxzDwhXGUwJtC1QqueUeYA_5ck7uor8';
@@ -341,10 +341,11 @@ async function enterApp(user){uid=user.id;myId=uid;db=sb;roomApi=roomAdapter;
  const{data}=await sb.from('topics').select('*').order('created_at',{ascending:false}).limit(100);
  topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup');loadTopicSocial();startSocialRT()}
 $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id||!pw)return am('Enter your username or email and your password.');am('Logging in…');
- if(id.includes('@')){const r=await sb.auth.signInWithPassword({email:id,password:pw});if(r.error)return am(r.error.message);am('');return enterApp(r.data.user)}
- const f=await sb.functions.invoke('login',{body:{identifier:id,password:pw}});
- if(f.error||!f.data||!f.data.session)return am('Could not log in. Check your username and password, or try your email instead.');
- const s=await sb.auth.setSession({access_token:f.data.session.access_token,refresh_token:f.data.session.refresh_token});if(s.error)return am(s.error.message);am('');enterApp(s.data.user)};
+ if(id.includes('@')){const r=await sb.auth.signInWithPassword({email:id,password:pw});if(r.error)return am(r.error.message);am('');try{await enterApp(r.data.user)}catch(x){am('Logged in, but the app could not load: '+x.message)}return}
+ const e=await sb.rpc('login_email',{p_username:id,p_password:pw});
+ if(e.error)return am(e.error.message);if(!e.data)return am('Invalid username or password.');
+ const r=await sb.auth.signInWithPassword({email:e.data,password:pw});if(r.error)return am('Invalid username or password.');am('');
+ try{await enterApp(r.data.user)}catch(x){am('Logged in, but the app could not load: '+x.message)}};
 $('su').onclick=async()=>{const u=$('au').value.trim(),em=$('ae').value.trim(),pw=$('ap_').value;
  if(!/^[A-Za-z0-9_]{3,20}$/.test(u))return am('Pick a username: 3 to 20 letters, numbers or underscores.');
  if(!em.includes('@'))return am('Enter a valid email address.');if(pw.length<6)return am('Password must be at least 6 characters.');
@@ -352,7 +353,7 @@ $('su').onclick=async()=>{const u=$('au').value.trim(),em=$('ae').value.trim(),p
  const r=await sb.auth.signUp({email:em,password:pw,options:{data:{username:u}}});
  if(r.error)return am(/already|registered/i.test(r.error.message)?'That email already has an account. Log in or reset your password.':/rate limit/i.test(r.error.message)?'Too many sign-ups right now. Please wait a few minutes and try again.':/Database error/i.test(r.error.message)?'That username is taken or not allowed.':r.error.message);
  let s=r.data.session?r.data:null;if(!s){const x=await sb.auth.signInWithPassword({email:em,password:pw});if(x.data&&x.data.session)s=x.data;else if(x.error&&/confirm/i.test(x.error.message))return am('Account created, but email confirmation is still on for this site. The owner needs to turn it off in Supabase.')}
- if(s)enterApp(s.user||s.session.user);else am('Account created. Log in with your email and password.')};
+ if(s){try{await enterApp(s.user||s.session.user)}catch(x){am('Account created, but the app could not load: '+x.message)}}else am('Account created. Log in with your email and password.')};
 $('gs').onclick=async()=>{if(!confirm('Guest mode:\n\n• You will NOT be able to vote or create topics\n• You get a random username and no profile\n\nYou can create a free account anytime to unlock these. Continue as a guest?'))return;
  const r=await sb.auth.signInAnonymously();if(r.error)return am(r.error.message);enterApp(r.data.user)};
 $('lo').onclick=async()=>{if(sb)await sb.auth.signOut();localStorage.removeItem('gname');location.reload()};
