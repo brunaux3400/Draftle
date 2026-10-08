@@ -77,16 +77,19 @@ input,select,textarea{background:var(--field)}.bar{background:var(--field)}.topi
 .live{border-top-color:var(--red)}.ltag{display:inline-block;background:var(--red);color:#fff;font:800 12px 'Barlow Condensed',sans-serif;letter-spacing:.1em;padding:2px 8px;border-radius:3px;margin-bottom:8px}
 .live h3{font-size:28px}.live p{margin:6px 0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
-</style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="create">Create Draft</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
+</style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
 <section id="splash" class="hidden"><div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Log in, create an account, or jump in as a guest.</p></div>
 <div class="row" style="margin-bottom:12px"><button class="btn" id="tl">Log in</button><button class="btn alt" id="tc">Create account</button><button class="btn alt hidden" id="sbk">Back to game</button></div>
-<div class="panel" id="a_in"><h2>Log in</h2><label>Username or email<input id="le" autocomplete="username"></label><label style="margin-top:8px">Password<input id="lp_" type="password" autocomplete="current-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="li">Log in</button></div></div>
+<div class="panel" id="a_in"><h2>Log in</h2><label>Username or email<input id="le" autocomplete="username"></label><label style="margin-top:8px">Password<input id="lp_" type="password" autocomplete="current-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="li">Log in</button><button class="btn alt" id="fpw">Forgot password?</button></div></div>
 <div class="panel hidden" id="a_up"><h2>Create an account</h2><label>Email<input id="ae" type="email" autocomplete="email"></label><label style="margin-top:8px">Username (3 to 20 letters, numbers or _)<input id="au" maxlength="20" autocomplete="username"></label><label style="margin-top:8px">Password<input id="ap_" type="password" autocomplete="new-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="su">Create account</button></div></div>
-<p class="msg" id="am"></p>
+<div class="panel hidden" id="a_fp"><h2>Reset password</h2><label>Email<input id="fe" type="email" autocomplete="email"></label><div class="row" style="margin-top:12px"><button class="btn" id="fsend">Send reset link</button><button class="btn alt" id="fback">Back</button></div></div>
+<div class="panel hidden" id="a_rs"><h2>Choose a new password</h2><label>New password<input id="np_" type="password" autocomplete="new-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="rsave">Save password</button></div></div>
+<label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="sp"> Show password</label><p class="msg" id="am"></p>
 <div class="panel"><div class="row"><button class="btn alt" id="gs">Continue as guest</button></div><p class="msg">Guests cannot vote or create topics. By continuing you agree to the <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p></div></section>
 
 <section id="setup" class="hidden">
+ <div class="panel hidden" id="rjb" style="border-left:4px solid var(--red)"><b>You were in a draft.</b> <button class="btn" id="rjn" style="margin-left:8px">Rejoin</button></div>
  <div class="panel hidden" id="gbn" style="border-left:4px solid var(--gold)"><b>You're playing as a guest.</b> <span class="msg">Log in or create an account to vote and make topics.</span><div class="row" style="margin-top:10px"><button class="btn" id="gb1">Log in</button><button class="btn alt" id="gb2">Create account</button></div></div>
  <div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Pick a topic, add your friends, and draft the best of anything. Snake order, pick clock, sound effects, and a community library of topics.</p></div>
  <div class="panel"><h2>Play online</h2><div class="row"><label>Your name<input id="nick" maxlength="14" placeholder="Nickname"></label><label>Room code<input id="jc" maxlength="5" size="7" placeholder="ABCDE" style="text-transform:uppercase"></label><button class="btn" id="join">Join room</button><button class="btn alt hidden" id="qm">Quick match</button></div><p class="msg" id="om">Or pick a topic below and create a room. Friends draft from their own phones.</p></div>
@@ -123,7 +126,9 @@ input,select,textarea{background:var(--field)}.bar{background:var(--field)}.topi
 <section id="profile" class="hidden">
 <div class="row" style="margin-bottom:12px"><button class="btn" data-pt="a">Profile</button><button class="btn alt" data-pt="f">Friends</button><button class="btn alt" data-pt="t">My topics</button><button class="btn alt" data-pt="d">My drafts</button></div>
 <div class="ptab" id="tab-a"><div class="panel"><div class="row" style="align-items:center"><img id="pav" alt="" width="80" height="80" style="border-radius:50%;background:#000;object-fit:cover"><div style="flex:1"><h2 id="pn" style="border:0;padding:0;margin:0"></h2><p class="msg" id="pst"></p><p class="msg" id="prk"></p></div></div><label style="margin-top:10px">Bio<textarea id="pbio" maxlength="200"></textarea></label><div class="row" style="margin-top:8px"><label>Profile picture<input type="file" id="pimg" accept="image/*"></label><button class="btn" id="psv">Save profile</button></div><p class="msg" id="pm"></p></div></div>
-<div class="ptab hidden" id="tab-f"><div id="fp"><div class="panel"><h2>Friends</h2><p class="msg">Your friend code: <b id="fc" style="color:var(--gold);font-size:20px"></b></p><div class="row"><input id="fadd" placeholder="Friend code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="fb">Add friend</button></div><p class="msg">Tap a friend to see their profile and public topics.</p><div id="fl" class="pool" style="margin-top:6px"></div></div></div><div class="panel hidden" id="fv"></div></div>
+<div class="ptab hidden" id="tab-f"><div id="fp"><div class="panel"><h2>Friends</h2><p class="msg">Your friend code: <b id="fc" style="color:var(--gold);font-size:20px"></b></p><div class="row"><input id="fadd" placeholder="Friend code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="fb">Add friend</button></div><div class="row" style="margin-top:8px"><input id="fu" placeholder="Add by username" maxlength="20"><button class="btn alt" id="fub">Send request</button></div><p class="msg" id="fm"></p>
+<h3 style="margin:14px 0 4px">Requests</h3><div id="frq" class="pool"></div><h3 style="margin:14px 0 4px">Followers</h3><div id="ffo" class="pool"></div>
+<h3 style="margin:14px 0 4px">Following</h3><p class="msg">Tap a friend to see their profile and public topics.</p><div id="fl" class="pool" style="margin-top:6px"></div></div></div><div class="panel hidden" id="fv"></div></div>
 <div class="ptab hidden" id="tab-t"><div class="panel"><h2>My topics</h2><p class="msg">Switch a topic between public (anyone can play it) and private (needs its code).</p><div class="pool" id="mt"></div></div></div>
 <div class="ptab hidden" id="tab-d"><div class="panel"><h2>My drafts</h2><div class="pool" id="md"></div></div><div class="panel hidden" id="pdp"><div id="pd"></div></div></div>
 <button class="btn alt" id="px">Back</button></section>
@@ -227,7 +232,7 @@ $('pub').onclick=async()=>{try{const id=S.topic.id||slug(S.topic.name);const ite
  await sb.from('topics').insert({id:slug(S.topic.name)+'-'+Math.random().toString(36).slice(2,5),name:S.topic.name+' (extended)',emoji:S.topic.emoji,items});$('dm').textContent=S.added.length+' items added to the community topic.';$('pub').classList.add('hidden')}catch(e){$('dm').textContent='Could not save to the community library.'}};
 $('again').onclick=()=>{leave();show('setup')};
 /* ---------- online ---------- */
-const myId=Math.random().toString(36).slice(2,10);
+let myId=Math.random().toString(36).slice(2,10);
 let roomApi=null,R=null,MP=null;
 const SECS=['splash','setup','lobby','draft','done','gallery','profile','live','settings'];
 const NAVMAP={setup:'home',live:'live',gallery:'comm',profile:'prof',settings:'set'};
@@ -236,24 +241,24 @@ const nick=()=>($('nick').value.trim()||($('pl').firstChild&&$('pl').firstChild.
 const om=t=>{$('om').textContent=t};
 const rcode=()=>Array.from({length:5},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
 const idxOf=(H,i)=>{const n=H.pl.length,p=i%n;return Math.floor(i/n)%2?n-1-p:p};
-function leave(){if(MP&&MP.code&&db&&!MP.spec)sb.rpc('leave_room',{p_code:MP.code});if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
+function leave(){try{localStorage.removeItem('dbvs_room')}catch(e){}if(MP&&MP.code&&db&&!MP.spec)sb.rpc('leave_room',{p_code:MP.code});if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
 async function enter(name,host,quick,spec){
  try{const api=roomApi;
   if(!api){om('Online play is not set up on this site yet.');return false}
   leave();MP={host,quick,spec,code:name.replace(/^d-/,'').toUpperCase(),ps:[],last:''};
   R=await api.join(name,spec);if(!spec)R.presence(Object.assign({id:myId,name:nick()},quick?{q:1}:{}));
   R.onPeers(c=>{MP.peers=c.peers;peersChanged()});
-  show('lobby');$('ln').value=nick();$('lc').textContent=quick?'Quick match':name.replace(/^d-/,'').toUpperCase();$('lt').textContent='Connecting…';return true}
+  if(!spec)try{localStorage.setItem('dbvs_room',MP.code)}catch(e){}show('lobby');$('ln').value=nick();$('lc').textContent=quick?'Quick match':name.replace(/^d-/,'').toUpperCase();$('lt').textContent='Connecting…';return true}
  catch(e){om('Could not join that room.');return false}}
-function peersChanged(){if(!MP)return;const ps=MP.peers.map(p=>p.presence).filter(p=>p&&p.id);MP.ps=ps;
+function peersChanged(){if(!MP)return;const ps=MP.peers.map(p=>p.presence).filter(p=>p&&p.id);MP.ps=ps;MP.seen2=MP.seen2||{};ps.forEach(p=>{MP.seen2[p.id]=Date.now()});
  $('lp').innerHTML=ps.map(p=>`<div class="team"><b>${esc(p.name||'Player')}</b>${p.id===myId?' (you)':''}</div>`).join('');
  if(MP.quick){$('ls').classList.add('hidden');const go=ps.find(p=>p.go&&p.ids&&p.ids.includes(myId));
   if(go&&!MP.moving){const lead=go.id===myId;MP.moving=1;(async()=>{if(lead)await new Promise(r=>setTimeout(r,2500));
    if(await enter(go.go,lead)&&lead){MP.cfg={t:topics[Math.random()*topics.length|0].id,r:3,c:30};setTimeout(startOnline,6000)}})();return}
   return quickLogic(ps)}
  const hp=ps.find(p=>p.st);
- if(hp){const j=JSON.stringify(hp.st);if(j!==MP.last){MP.last=j;if(!MP.host)applyState(hp.st)}}
- else if(MP.on&&!MP.host)$('who').textContent='The host left. Draft ended.';
+ if(hp){MP.noHost=0;const j=JSON.stringify(hp.st);if(j!==MP.last){MP.last=j;if(!MP.host)applyState(hp.st)}}
+ else if(MP.on&&!MP.host){MP.noHost=MP.noHost||Date.now();setTimeout(()=>{if(MP&&MP.noHost&&Date.now()-MP.noHost>=20000)$('who').textContent='Lost contact with the host. Trying to reconnect…'},20500)}
  if(MP.host)hostCheck(ps);
  $('ls').classList.toggle('hidden',!MP.host||!!MP.on);
  if(!MP.on)$('lt').textContent=MP.host?'Share this code. Start when everyone has joined ('+ps.length+' here).':'Waiting for the host to start…'}
@@ -266,7 +271,7 @@ function startOnline(){if(!MP||!MP.host||MP.on)return;const c=MP.cfg,t=topics.fi
  const n=ps.length,r=Math.max(1,Math.min(c.r,Math.floor(t.items.length/n),Math.floor(48/n)));
  MP.on=1;MP.H={t:t.id,k:t.vis==='private'?t.code:undefined,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,14)]),pk:[],l:c.c,d:0};if(MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'live'});publish();MP.timer=setInterval(hostTick,1000)}
 function publish(){const H=MP.H;R.presence({st:H});const j=JSON.stringify(H);MP.last=j;applyState(JSON.parse(j))}
-function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const here=MP.ps.some(x=>x.id===H.pl[idxOf(H,H.pk.length)][0]);
+function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const cid=H.pl[idxOf(H,H.pk.length)][0];const here=MP.ps.some(x=>x.id===cid)||Date.now()-((MP.seen2||{})[cid]||0)<25000;
  if(H.c)H.l--;if(!here||(H.c&&H.l<=0))return autoPick();publish()}
 async function addCustom(v){if(!(await clean(v)))return;const H=MP.H;if(!H||H.d)return;const t=topics.find(x=>x.id===H.t);H.x=H.x||[];const all=[...t.items,...H.x,...H.pk].map(s=>s.toLowerCase());if(all.includes(v.toLowerCase())||H.x.length>=20)return;H.x.push(v);publish()}
 function hostCheck(ps){const H=MP.H;if(!H||H.d)return;MP.seen=MP.seen||{};ps.forEach(p=>{if(p.add&&p.aseq!==MP.seen[p.id]){MP.seen[p.id]=p.aseq;addCustom(String(p.add).slice(0,40))}});const i=H.pk.length,x=ps.find(q=>q.id===H.pl[idxOf(H,i)][0]);if(x&&x.want&&x.seq===i)commit(x.want)}
@@ -288,7 +293,7 @@ const roomAdapter={async join(name,spec){
  const ch=sb.channel(name,{config:{presence:{key:myId},private:true}});let mine={},hs=[];
  const emit=()=>{const st=ch.presenceState();hs.forEach(h=>h({peers:Object.values(st).map(a=>({presence:a[a.length-1]}))}))};
  ch.on('presence',{event:'sync'},emit);
- await new Promise((res,rej)=>ch.subscribe(s=>{if(s==='SUBSCRIBED')res();else if(s==='CHANNEL_ERROR'||s==='TIMED_OUT')rej(new Error(s))}));
+ let ready=0;await new Promise((res,rej)=>ch.subscribe(s=>{if(s==='SUBSCRIBED'){if(!ready){ready=1;res()}else if(!spec&&Object.keys(mine).length)ch.track(mine)}else if(!ready&&(s==='CHANNEL_ERROR'||s==='TIMED_OUT'))rej(new Error(s))}));
  return{presence(p){if(spec)return;Object.keys(p).forEach(k=>{if(p[k]===null)delete mine[k];else mine[k]=p[k]});return ch.track(mine)},onPeers(h){hs.push(h);emit()},leave(){return sb.removeChannel(ch)}}}};
 /* ---------- gallery ---------- */
 const dId=()=>{let x=5381;const s=S.topic.id+'|'+S.players.join(',')+'|'+S.picks.map(k=>k.n).join(',');for(let i=0;i<s.length;i++)x=((x<<5)+x+s.charCodeAt(i))>>>0;return 'd'+x.toString(36)};
@@ -318,12 +323,12 @@ const toT=x=>({id:x.id,emoji:x.emoji||'⭐',name:x.name,items:x.items.slice(0,30
 const clean=async t=>{if(!sb)return true;const r=await sb.rpc('is_clean',{t});return r.data!==false};
 const am=t=>{$('am').textContent=t};
 async function boot(){if(!window.supabase||SB_URL.startsWith('YOUR')){show('setup');return}
- try{sb=window.supabase.createClient(SB_URL,SB_KEY);const{data:{session}}=await sb.auth.getSession();if(session)await enterApp(session.user);else show('splash')}
+ try{sb=window.supabase.createClient(SB_URL,SB_KEY);if(/type=recovery/.test(location.hash)){await new Promise(r=>setTimeout(r,600));show('splash');authTab('rs');return}const{data:{session}}=await sb.auth.getSession();if(session)await enterApp(session.user);else show('splash')}
  catch(e){console.error(e);show('setup');om('Online features could not connect.')}}
-async function enterApp(user){uid=user.id;db=sb;roomApi=roomAdapter;
+async function enterApp(user){uid=user.id;myId=uid;db=sb;roomApi=roomAdapter;
  if(user.is_anonymous){let g=localStorage.getItem('gname');if(!g){g='Guest-'+Math.random().toString(36).slice(2,6);localStorage.setItem('gname',g)}me={guest:true,username:g,id:uid}}
  else{const r=await sb.from('profiles').select('*').eq('id',uid).single();me=Object.assign({guest:false},r.data||{username:'Player'})}
- await loadPrefs();$('nick').value=me.username;$('nick').readOnly=true;$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('nfr').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
+ await loadPrefs();try{const rc=localStorage.getItem('dbvs_room');$('rjb').classList.toggle('hidden',!rc);if(rc)$('rjn').textContent='Rejoin '+rc}catch(e){}$('nick').value=me.username;$('nick').readOnly=true;$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('nfr').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
  const{data}=await sb.from('topics').select('*').order('created_at',{ascending:false}).limit(100);
  topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup')}
 $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id||!pw)return am('Enter your username or email and your password.');am('Logging in…');
@@ -331,11 +336,14 @@ $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id
  const f=await sb.functions.invoke('login',{body:{identifier:id,password:pw}});
  if(f.error||!f.data||!f.data.session)return am('Could not log in. Check your username and password, or try your email instead.');
  const s=await sb.auth.setSession({access_token:f.data.session.access_token,refresh_token:f.data.session.refresh_token});if(s.error)return am(s.error.message);am('');enterApp(s.data.user)};
-$('su').onclick=async()=>{const u=$('au').value.trim();if(!/^[A-Za-z0-9_]{3,20}$/.test(u))return am('Pick a username: 3 to 20 letters, numbers or underscores.');
- if(!(await clean(u)))return am('That username is not allowed.');
- const r=await sb.auth.signUp({email:$('ae').value.trim(),password:$('ap_').value,options:{data:{username:u}}});
- if(r.error)return am(/Database error/i.test(r.error.message)?'That username is taken or not allowed.':r.error.message);
- if(r.data.session)enterApp(r.data.user);else am('Check your email to confirm your account, then log in.')};
+$('su').onclick=async()=>{const u=$('au').value.trim(),em=$('ae').value.trim(),pw=$('ap_').value;
+ if(!/^[A-Za-z0-9_]{3,20}$/.test(u))return am('Pick a username: 3 to 20 letters, numbers or underscores.');
+ if(!em.includes('@'))return am('Enter a valid email address.');if(pw.length<6)return am('Password must be at least 6 characters.');
+ if(!(await clean(u)))return am('That username is not allowed.');am('Creating your account…');
+ const r=await sb.auth.signUp({email:em,password:pw,options:{data:{username:u}}});
+ if(r.error)return am(/already|registered/i.test(r.error.message)?'That email already has an account. Log in or reset your password.':/Database error/i.test(r.error.message)?'That username is taken or not allowed.':r.error.message);
+ const s=r.data.session?r.data:await sb.auth.signInWithPassword({email:em,password:pw}).then(x=>x.data&&x.data.session?x.data:null);
+ if(s)enterApp(s.user||s.session.user);else am('Account created. Log in with your email and password.')};
 $('gs').onclick=async()=>{if(!confirm('Guest mode:\n\n• You will NOT be able to vote or create topics\n• You get a random username and no profile\n\nYou can create a free account anytime to unlock these. Continue as a guest?'))return;
  const r=await sb.auth.signInAnonymously();if(r.error)return am(r.error.message);enterApp(r.data.user)};
 $('lo').onclick=async()=>{if(sb)await sb.auth.signOut();localStorage.removeItem('gname');location.reload()};
@@ -351,7 +359,7 @@ $('ub').onclick=async()=>{const c=$('uc').value.trim();if(!db||c.length<4)return
 
 /* ---------- profile ---------- */
 let MD=[],FR={},FT=[];
-async function openProfile(){if(me.guest||!db){alert('Create a free account to get a profile.');return}show('profile');tabTo('a');loadMyTopics();
+async function openProfile(){if(me.guest||!db){alert('Create a free account to get a profile.');return}show('profile');tabTo('a');loadMyTopics();loadSocial();
  $('pn').textContent=me.username;$('pav').src=me.avatar||AV;$('pbio').value=me.bio||'';$('fc').textContent=me.friend_code||'';$('pdp').classList.add('hidden');
  const fr=await sb.from('friendships').select('friend_id').eq('user_id',uid);const fids=(fr.data||[]).map(f=>f.friend_id);
  const[fl,wr,md]=await Promise.all([sb.from('leaderboard').select('*').in('id',[...fids,uid]),sb.rpc('world_rank',{u:uid}),sb.from('drafts').select('*').eq('created_by',uid).order('created_at',{ascending:false})]);
@@ -364,13 +372,13 @@ $('md').onclick=async e=>{const v=e.target.closest('button[data-dv]');if(v){cons
  for(let r=0;r<(d.rounds||0);r++){let l='';for(let p=0;p<n;p++){const i=r*n+p,pl=r%2?n-1-p:p;if(pk[i])l+=`<li>Pick ${i+1}: <b>${esc(d.players[pl])}</b> took ${esc(pk[i])}</li>`}h+=`<h3>Round ${r+1}</h3><ol style="list-style:none;padding:0">${l}</ol>`}
  $('pd').innerHTML=`<h2>${esc(d.emoji||'')} ${esc(d.topic)}</h2>${h||'<p class="msg">No round data was saved for this older draft.</p>'}<button class="btn" id="dy">Draft this topic yourself</button>`;$('pdp').classList.remove('hidden');
  $('dy').onclick=()=>{const t=topics.find(x=>x.id===d.topic_id);if(!t){alert('That topic is not in your library.');return}sel=t;renderTopics();show('setup')};$('pdp').scrollIntoView()};
-$('fb').onclick=async()=>{const r=await sb.rpc('add_friend',{c:$('fadd').value.trim()});$('pm').textContent={ok:'Friend added.',not_found:'No one has that friend code.',self:'That is your own code.'}[r.data]||'Could not add friend.';$('fadd').value='';openProfile()};
+$('fb').onclick=async()=>{const r=await sb.rpc('add_friend',{c:$('fadd').value.trim()});$('fm').textContent={ok:'Friend added.',not_found:'No one has that friend code.',self:'That is your own code.'}[r.data]||'Could not add friend.';$('fadd').value='';openProfile()};
 $('pimg').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d'),s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,96,96);me.avatar=c.toDataURL('image/jpeg',.7);$('pav').src=me.avatar};im.src=URL.createObjectURL(f)};
 $('psv').onclick=async()=>{const bio=$('pbio').value.trim().slice(0,200);const r=await sb.from('profiles').update({bio,avatar:me.avatar||null}).eq('id',uid);
  if(r.error)$('pm').textContent=/Inappropriate/.test(r.error.message)?'Your bio contains words that are not allowed.':'Could not save.';else{me.bio=bio;$('pm').textContent='Saved.'}};
 $('px').onclick=()=>show('setup');
 /* ---------- auth tabs, guest banner, profile tabs ---------- */
-function authTab(t){$('a_in').classList.toggle('hidden',t!=='in');$('a_up').classList.toggle('hidden',t!=='up');$('tl').className='btn'+(t==='in'?'':' alt');$('tc').className='btn'+(t==='up'?'':' alt');am('')}
+function authTab(t){$('a_in').classList.toggle('hidden',t!=='in');$('a_up').classList.toggle('hidden',t!=='up');$('a_fp').classList.toggle('hidden',t!=='fp');$('a_rs').classList.toggle('hidden',t!=='rs');$('tl').className='btn'+(t==='in'?'':' alt');$('tc').className='btn'+(t==='up'?'':' alt');am('')}
 $('tl').onclick=()=>authTab('in');$('tc').onclick=()=>authTab('up');
 $('gb1').onclick=()=>{authTab('in');show('splash')};$('gb2').onclick=()=>{authTab('up');show('splash')};$('sbk').onclick=()=>show('setup');
 function tabTo(t){document.querySelectorAll('.ptab').forEach(x=>x.classList.toggle('hidden',x.id!=='tab-'+t));document.querySelectorAll('[data-pt]').forEach(b=>b.className='btn'+(b.dataset.pt===t?'':' alt'));if(t==='f'){$('fp').classList.remove('hidden');$('fv').classList.add('hidden')}}
@@ -430,7 +438,7 @@ document.querySelectorAll('[data-lf]').forEach(b=>b.onclick=()=>{LF=b.dataset.lf
 $('lsort').onchange=drawLive;
 $('lg').onclick=e=>{const b=e.target.closest('button[data-j]');if(b)joinRoom(b.dataset.j,b.dataset.o!=='1')};
 async function joinRoom(code,spec){code=code.toUpperCase();if(!db){om('Online play is not set up on this site yet.');return}
- if(!spec){const nm=nick();if(!(await clean(nm))){alert('That name is not allowed.');return}const r=await sb.rpc('join_room',{p_code:code,p_name:nm});if(r.error){om(r.error.message);alert(r.error.message);return}}
+ if(!spec){const nm=nick();if(!(await clean(nm))){alert('That name is not allowed.');return}const r=await sb.rpc('join_room',{p_code:code,p_name:nm});if(r.error){om(r.error.message);alert(r.error.message);try{localStorage.removeItem('dbvs_room')}catch(e){}$('rjb').classList.add('hidden');return}}
  enter('d-'+code.toLowerCase(),false,false,spec)}
 $('mk').onclick=async()=>{if(!db){om('Online play is not set up on this site yet.');return}
  const nm=nick();if(!(await clean(nm+' '+sel.name))){om('That name is not allowed.');return}
@@ -438,7 +446,22 @@ $('mk').onclick=async()=>{if(!db){om('Online play is not set up on this site yet
  if(r.error){om(r.error.message);return}
  if(await enter('d-'+code.toLowerCase(),true))MP.cfg={t:sel.id,r:+$('rd').value,c:+$('tm').value,code}};
 $('join').onclick=()=>{const c=$('jc').value.toUpperCase().replace(/[^A-Z]/g,'');if(c.length!==5){om('Enter the 5-letter room code.');return}joinRoom(c,false)};
-addEventListener('pagehide',()=>{if(MP&&MP.code&&db&&!MP.spec)sb.rpc('leave_room',{p_code:MP.code})});
 applyPrefs();
+/* ---------- password reset, friend requests ---------- */
+$('fpw').onclick=()=>authTab('fp');$('fback').onclick=()=>authTab('in');
+$('fsend').onclick=async()=>{const e=$('fe').value.trim();if(!e.includes('@'))return am('Enter your email.');const r=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});am(r.error?r.error.message:'If that email has an account, a reset link is on its way.')};
+$('rsave').onclick=async()=>{const p=$('np_').value;if(p.length<6)return am('Password must be at least 6 characters.');const r=await sb.auth.updateUser({password:p});if(r.error)return am(r.error.message);am('');history.replaceState(null,'',location.pathname);enterApp(r.data.user)};
+$('sp').onchange=()=>['lp_','ap_','np_'].forEach(i=>{$(i).type=$('sp').checked?'text':'password'});
+$('rjn').onclick=()=>{try{joinRoom(localStorage.getItem('dbvs_room')||'',false)}catch(e){}};
+async function loadSocial(){const[rq,fo,fw]=await Promise.all([sb.from('friend_requests').select('*').eq('status','pending'),sb.from('friendships').select('user_id').eq('friend_id',uid),sb.from('friendships').select('friend_id').eq('user_id',uid)]);
+ const R2=rq.data||[],inc=R2.filter(x=>x.to_id===uid),out=R2.filter(x=>x.from_id===uid),fol=(fo.data||[]).map(x=>x.user_id),mine=(fw.data||[]).map(x=>x.friend_id);
+ const ids=[...new Set([...inc.map(x=>x.from_id),...out.map(x=>x.to_id),...fol])];
+ const U={};if(ids.length)((await sb.from('leaderboard').select('id,username').in('id',ids)).data||[]).forEach(x=>{U[x.id]=x});
+ const nm=id=>esc((U[id]||{}).username||'user'),sm='padding:4px 14px;min-height:0;font-size:15px';
+ $('frq').innerHTML=(inc.map(x=>`<div class="item" style="cursor:default;flex-wrap:wrap"><span>@${nm(x.from_id)} wants to be friends</span><span><button class="btn" data-ra="${x.id}" data-y="1" style="${sm}">Approve</button> <button class="btn alt" data-ra="${x.id}" data-y="0" style="${sm}">Deny</button></span></div>`).join('')+out.map(x=>`<div class="item" style="cursor:default"><span>You asked @${nm(x.to_id)}</span><i>pending</i></div>`).join(''))||'<p class="msg">No pending requests.</p>';
+ $('ffo').innerHTML=fol.length?fol.map(id=>`<div class="item" style="cursor:default;flex-wrap:wrap"><span>@${nm(id)}</span>${mine.includes(id)?'<i>friends</i>':`<button class="btn alt" data-fb="${id}" style="${sm}">Follow back</button>`}</div>`).join(''):'<p class="msg">No followers yet.</p>'}
+$('frq').onclick=async e=>{const b=e.target.closest('button[data-ra]');if(!b)return;const r=await sb.rpc('respond_friend_request',{p_id:b.dataset.ra,p_accept:b.dataset.y==='1'});$('fm').textContent=r.error?r.error.message:(b.dataset.y==='1'?'Approved. They now follow you. Use Follow back to follow them too.':'Request denied.');loadSocial()};
+$('ffo').onclick=async e=>{const b=e.target.closest('button[data-fb]');if(!b)return;const r=await sb.rpc('follow_back',{p_user:b.dataset.fb});$('fm').textContent=r.error?r.error.message:'You are now following them back.';openProfile();tabTo('f')};
+$('fub').onclick=async()=>{const u=$('fu').value.trim();if(!u)return;const r=await sb.rpc('send_friend_request',{p_username:u});$('fm').textContent=r.error?r.error.message:({sent:'Request sent.',already:'You are already friends.',pending:'A request is already pending.',not_found:'No one has that username.',self:'That is your own username.'}[r.data]||'Done.');$('fu').value='';loadSocial()};
 boot();
 </script></body></html>
