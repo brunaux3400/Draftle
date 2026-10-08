@@ -108,6 +108,29 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
 }
 .cwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}.cw{background:var(--card);border:2px solid transparent;border-radius:12px;padding:10px;text-align:left;color:var(--ink);cursor:pointer;font:inherit}.cw.on{border-color:var(--red)}.cw.lock{opacity:.55}.cw .sw{display:flex;height:26px;border-radius:6px;overflow:hidden;margin-bottom:8px}.cw .sw i{flex:1}.cw small{display:block;color:var(--mute)}
 .btn:not(.alt),.nav .logo,.tick,.ltag,.item i,.tact button.on,.time.low{color:var(--onred,#fff)}.xpbar i{background:linear-gradient(90deg,var(--red),var(--gold))}
+
+/* ---- page transitions ---- */
+@keyframes reveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes edge{0%{left:-30vw;opacity:1}88%{opacity:1}100%{left:112vw;opacity:0}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+section:not(.hidden){animation:reveal .55s cubic-bezier(.65,0,.35,1)}
+section:not(.hidden)>*{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+section:not(.hidden)>*:nth-child(1){animation-delay:.10s}section:not(.hidden)>*:nth-child(2){animation-delay:.16s}section:not(.hidden)>*:nth-child(3){animation-delay:.22s}
+section:not(.hidden)>*:nth-child(4){animation-delay:.28s}section:not(.hidden)>*:nth-child(5){animation-delay:.34s}section:not(.hidden)>*:nth-child(6){animation-delay:.40s}
+section:not(.hidden)>*:nth-child(n+7){animation-delay:.46s}
+.ptab:not(.hidden){animation:fadeUp .28s ease both}
+#wipe{position:fixed;top:0;bottom:0;left:-30vw;width:22vw;z-index:40;pointer-events:none;opacity:0;transform:skewX(-14deg);
+ background:linear-gradient(90deg,transparent,var(--red) 38%,var(--red) 70%,var(--gold) 70.5%,var(--gold) 74%,transparent 74.5%)}
+#wipe.go{animation:edge .55s cubic-bezier(.65,0,.35,1)}
+.toast{animation:dropIn .3s cubic-bezier(.2,.8,.2,1)}
+#rpm:not(.hidden){animation:fadeUp .2s ease both}#rpm:not(.hidden) .panel{animation:popIn .25s cubic-bezier(.2,.8,.2,1)}
+body{transition:background-color .35s,color .35s}
+.topic,.cw,.team,.item,.btn{transition:transform .18s ease,box-shadow .18s ease,background-color .2s ease,border-color .2s ease,color .2s ease}
+@media(hover:hover){.topic:hover,.cw:hover,.team:hover{transform:translateY(-3px);box-shadow:0 10px 24px #0006}.btn:not(:active):hover{transform:translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){#wipe{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav><button class="btn alt" id="lo2" style="margin-left:8px;padding:4px 14px;font-size:15px;color:#fff;border-color:#555">Log out</button></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
@@ -189,13 +212,13 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
  <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
-<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.16<br>Created by Anthony, from New York</p></main><div id="toasts"></div>
+<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.17<br>Created by Anthony, from New York</p></main><div id="wipe"></div><div id="toasts"></div>
 <div id="rpm" class="hidden" style="position:fixed;inset:0;z-index:60;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px"><div class="panel" style="max-width:440px;width:100%;margin:0"><h2>Report</h2><p class="msg" id="rpt"></p><label>Reason<select id="rpr"><option>Hate or harassment</option><option>Sexual or explicit content</option><option>Violence or threats</option><option>Spam or scam</option><option>Other</option></select></label><label style="margin-top:8px">Details (optional)<textarea id="rpd" maxlength="500"></textarea></label><div class="row" style="margin-top:12px"><button class="btn" id="rps">Send report</button><button class="btn alt" id="rpc">Cancel</button></div></div></div>
 <nav id="tabbar"><button data-n="home"><span>🏠</span><em>Home</em></button><button data-n="live"><span>📡</span><em>Live</em></button><button data-n="comm"><span>🏆</span><em>Community</em></button><button data-n="prof" id="tpb" class="hidden"><span>👤</span><em>Profile</em></button><button data-n="set"><span>⚙️</span><em>Settings</em></button></nav>
 <script>
 /* Paste your Supabase project values here (Project Settings > API). The anon key is safe to publish. */
 const SB_URL='https://pqhhrblrfjjswfalluze.supabase.co',SB_KEY='sb_publishable_JxzDwhXGUwJtC1QqueUeYA_5ck7uor8';
-const SUPPORT_EMAIL='ajbdrummer@yahoo.com';   // put your support email here (App Store asks for contact information)
+const SUPPORT_EMAIL='';   // put your support email here (App Store asks for contact information)
 const $=id=>document.getElementById(id);
 const BASE=[
  {id:'candy',emoji:'🍫',name:'Best Candy',items:["Reese's Peanut Butter Cups","Snickers","Twix","Skittles","Sour Patch Kids","Kit Kat","M&M's","Starburst","Twizzlers","Milk Duds","Swedish Fish","Jolly Rancher","Hershey's Kisses","Butterfinger","Nerds","Gummy Bears","Mike and Ike","Airheads"]},
@@ -279,7 +302,7 @@ let myId=Math.random().toString(36).slice(2,10);
 let roomApi=null,R=null,MP=null;
 const SECS=['splash','setup','lobby','draft','done','gallery','profile','live','settings','user'];
 const NAVMAP={setup:'home',live:'live',gallery:'comm',user:'comm',profile:'prof',settings:'set'};
-const show=id=>{$('tabbar').classList.toggle('hidden',id==='splash');if(id!=='lobby')stopInvite();SECS.forEach(s=>$(s).classList.toggle('hidden',s!==id));document.querySelector('.nav').classList.toggle('hidden',id==='splash');document.querySelector('.tick').classList.toggle('hidden',id==='splash');if(id!=='live')stopLive();document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on',b.dataset.n===NAVMAP[id]))};
+const show=id=>{const prev=SECS.find(s=>!$(s).classList.contains('hidden'));$('tabbar').classList.toggle('hidden',id==='splash');if(id!=='lobby')stopInvite();SECS.forEach(s=>$(s).classList.toggle('hidden',s!==id));document.querySelector('.nav').classList.toggle('hidden',id==='splash');document.querySelector('.tick').classList.toggle('hidden',id==='splash');if(id!=='live')stopLive();document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on',b.dataset.n===NAVMAP[id]));if(prev&&prev!==id){window.scrollTo(0,0);const wp=$('wipe');wp.classList.remove('go');void wp.offsetWidth;wp.classList.add('go')}};
 const nick=()=>((db&&me&&me.username)||$('nick').value.trim()||'Player '+myId.slice(0,2)).slice(0,20);
 const om=t=>{$('om').textContent=t};
 const rcode=()=>Array.from({length:5},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
