@@ -106,17 +106,19 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
  .toast{margin:0 4px}#toasts{top:calc(env(safe-area-inset-top,0px) + 54px)}
  .clock{top:calc(env(safe-area-inset-top,0px) + 50px)}
 }
+.cwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}.cw{background:var(--card);border:2px solid transparent;border-radius:12px;padding:10px;text-align:left;color:var(--ink);cursor:pointer;font:inherit}.cw.on{border-color:var(--red)}.cw.lock{opacity:.55}.cw .sw{display:flex;height:26px;border-radius:6px;overflow:hidden;margin-bottom:8px}.cw .sw i{flex:1}.cw small{display:block;color:var(--mute)}
+.btn:not(.alt),.nav .logo,.tick,.ltag,.item i,.tact button.on,.time.low{color:var(--onred,#fff)}.xpbar i{background:linear-gradient(90deg,var(--red),var(--gold))}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav><button class="btn alt" id="lo2" style="margin-left:8px;padding:4px 14px;font-size:15px;color:#fff;border-color:#555">Log out</button></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
 <section id="splash" class="hidden"><div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Log in, create an account, or jump in as a guest.</p></div>
 <div class="row" style="margin-bottom:12px"><button class="btn" id="tl">Log in</button><button class="btn alt" id="tc">Create account</button><button class="btn alt hidden" id="sbk">Back to game</button></div>
 <div class="panel" id="a_in"><h2>Log in</h2><label>Username or email<input id="le" autocomplete="username"></label><label style="margin-top:8px">Password<input id="lp_" type="password" autocomplete="current-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="li">Log in</button><button class="btn alt" id="fpw">Forgot password?</button></div></div>
-<div class="panel hidden" id="a_up"><h2>Create an account</h2><label>Email<input id="ae" type="email" autocomplete="email"></label><label style="margin-top:8px">Username (3 to 20 letters, numbers or _)<input id="au" maxlength="20" autocomplete="username"></label><label style="margin-top:8px">Password<input id="ap_" type="password" autocomplete="new-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="su">Create account</button></div></div>
+<div class="panel hidden" id="a_up"><h2>Create an account</h2><label>Email<input id="ae" type="email" autocomplete="email"></label><label style="margin-top:8px">Username (3 to 20 letters, numbers or _)<input id="au" maxlength="20" autocomplete="username"></label><label style="margin-top:8px">Password<input id="ap_" type="password" autocomplete="new-password"></label><label style="flex-direction:row;align-items:flex-start;gap:8px;margin-top:12px"><input type="checkbox" id="agt" style="margin-top:3px;min-height:0"> <span>I agree to the <a href="terms.html" style="color:var(--gold)">Terms of Use</a> and <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>, including no tolerance for objectionable content or abusive users.</span></label><div class="row" style="margin-top:12px"><button class="btn" id="su">Create account</button></div></div>
 <div class="panel hidden" id="a_fp"><h2>Reset password</h2><label>Email<input id="fe" type="email" autocomplete="email"></label><div class="row" style="margin-top:12px"><button class="btn" id="fsend">Send reset link</button><button class="btn alt" id="fback">Back</button></div></div>
 <div class="panel hidden" id="a_rs"><h2>Choose a new password</h2><label>New password<input id="np_" type="password" autocomplete="new-password"></label><div class="row" style="margin-top:12px"><button class="btn" id="rsave">Save password</button></div></div>
 <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="sp"> Show password</label><p class="msg" id="am"></p>
-<div class="panel"><div class="row"><button class="btn alt" id="gs">Continue as guest</button></div><p class="msg">Guests cannot vote or create topics. By continuing you agree to the <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p></div></section>
+<div class="panel"><div class="row"><button class="btn alt" id="gs">Continue as guest</button></div><p class="msg">Guests cannot vote or create topics. By continuing you agree to the <a href="terms.html" style="color:var(--gold)">Terms of Use</a> and <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p></div></section>
 
 <section id="setup" class="hidden">
  <div class="panel hidden" id="rjb" style="border-left:4px solid var(--red)"><b>You were in a draft.</b> <button class="btn" id="rjn" style="margin-left:8px">Rejoin</button></div>
@@ -173,9 +175,11 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
 <div class="panel"><h2 id="s-app">Appearance</h2><div class="row"><button class="btn" data-th="dark">Dark</button><button class="btn alt" data-th="light">Light</button></div></div>
 <div class="panel"><h2 id="s-lang">Language</h2><select id="lang"><option value="en">English</option><option value="es">Español</option><option value="it">Italiano</option></select><p class="msg">Only the app's interface is translated. Topics, names and chat stay as written.</p></div>
 <div class="panel"><h2 id="s-snd">Draft Sounds</h2><div class="row"><button class="btn" data-sd="1">On</button><button class="btn alt" data-sd="0">Off</button></div></div>
+<div class="panel"><h2>Color themes</h2><p class="msg" id="cwi"></p><div class="cwgrid" id="cwg"></div></div>
+<div class="panel"><h2>Safety</h2><p class="msg">Blocked users can't see your topics, drafts or rooms, and you can't see theirs. To report something, tap 🚩 on a topic or draft, or open a person's profile.</p><div class="pool" id="blk"></div><p class="msg" id="sup"></p><p class="msg"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a></p></div>
 <div class="panel"><h2 id="s-acc">Account</h2><p class="msg" id="sacc"></p><div class="row"><button class="btn alt" id="lo">Log out</button><button class="btn alt hidden" id="del">Delete my account</button></div></div></section>
 
-<section id="user" class="hidden"><div class="panel"><div class="row" style="align-items:center"><img id="uav" alt="" width="80" height="80" style="border-radius:50%;object-fit:cover;background:#000"><div style="flex:1"><h2 id="un" style="border:0;padding:0;margin:0"></h2><p class="msg" id="ust"></p></div></div><div id="uxp"></div><p id="ubio" style="margin-top:10px"></p><div class="row" style="margin-top:8px"><button class="btn alt hidden" id="uadd">Add friend</button></div><p class="msg" id="um"></p><h3 style="margin:14px 0 6px">Public topics</h3><div class="pool" id="ut"></div></div><button class="btn alt" id="ux" style="margin-top:6px">Back</button></section>
+<section id="user" class="hidden"><div class="panel"><div class="row" style="align-items:center"><img id="uav" alt="" width="80" height="80" style="border-radius:50%;object-fit:cover;background:#000"><div style="flex:1"><h2 id="un" style="border:0;padding:0;margin:0"></h2><p class="msg" id="ust"></p></div></div><div id="uxp"></div><p id="ubio" style="margin-top:10px"></p><div class="row" style="margin-top:8px"><button class="btn alt hidden" id="uadd">Add friend</button><button class="btn alt hidden" id="urp">Report user</button><button class="btn alt hidden" id="ubl">Block user</button></div><p class="msg" id="um"></p><h3 style="margin:14px 0 6px">Public topics</h3><div class="pool" id="ut"></div></div><button class="btn alt" id="ux" style="margin-top:6px">Back</button></section>
 
 <section id="gallery" class="hidden"><div class="hero"><h1>Draft<span>Gallery</span></h1><p>Vote for the best team in each posted draft.</p></div><p class="msg" id="gm"></p><div id="gl"></div><button class="btn alt" id="gx" style="margin-top:6px">Back</button></section>
 
@@ -185,11 +189,13 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
  <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
-<p class="msg" style="margin-top:30px"><a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.14<br>Created by Anthony, from New York</p></main><div id="toasts"></div>
+<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.16<br>Created by Anthony, from New York</p></main><div id="toasts"></div>
+<div id="rpm" class="hidden" style="position:fixed;inset:0;z-index:60;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px"><div class="panel" style="max-width:440px;width:100%;margin:0"><h2>Report</h2><p class="msg" id="rpt"></p><label>Reason<select id="rpr"><option>Hate or harassment</option><option>Sexual or explicit content</option><option>Violence or threats</option><option>Spam or scam</option><option>Other</option></select></label><label style="margin-top:8px">Details (optional)<textarea id="rpd" maxlength="500"></textarea></label><div class="row" style="margin-top:12px"><button class="btn" id="rps">Send report</button><button class="btn alt" id="rpc">Cancel</button></div></div></div>
 <nav id="tabbar"><button data-n="home"><span>🏠</span><em>Home</em></button><button data-n="live"><span>📡</span><em>Live</em></button><button data-n="comm"><span>🏆</span><em>Community</em></button><button data-n="prof" id="tpb" class="hidden"><span>👤</span><em>Profile</em></button><button data-n="set"><span>⚙️</span><em>Settings</em></button></nav>
 <script>
 /* Paste your Supabase project values here (Project Settings > API). The anon key is safe to publish. */
 const SB_URL='https://pqhhrblrfjjswfalluze.supabase.co',SB_KEY='sb_publishable_JxzDwhXGUwJtC1QqueUeYA_5ck7uor8';
+const SUPPORT_EMAIL='';   // put your support email here (App Store asks for contact information)
 const $=id=>document.getElementById(id);
 const BASE=[
  {id:'candy',emoji:'🍫',name:'Best Candy',items:["Reese's Peanut Butter Cups","Snickers","Twix","Skittles","Sour Patch Kids","Kit Kat","M&M's","Starburst","Twizzlers","Milk Duds","Swedish Fish","Jolly Rancher","Hershey's Kisses","Butterfinger","Nerds","Gummy Bears","Mike and Ike","Airheads"]},
@@ -288,7 +294,7 @@ async function enter(name,host,quick,spec){
   if(!spec)try{localStorage.setItem('dbvs_room',MP.code)}catch(e){}show('lobby');$('inb').classList.add('hidden');$('invp').classList.add('hidden');$('lcfg').classList.add('hidden');$('lti').classList.toggle('hidden',!!host);$('ln').value=nick();$('lc').textContent=quick?'Quick match':name.replace(/^d-/,'').toUpperCase();$('lt').textContent='Connecting…';return true}
  catch(e){om('Could not join that room.');return false}}
 function peersChanged(){if(!MP)return;const ps=MP.peers.map(p=>p.presence).filter(p=>p&&p.id);MP.ps=ps;MP.seen2=MP.seen2||{};ps.forEach(p=>{MP.seen2[p.id]=Date.now()});
- $('lp').innerHTML=ps.map(p=>`<div class="team"><b>${esc(p.name||'Player')}</b>${p.id===myId?' (you)':''}</div>`).join('');
+ $('lp').innerHTML=ps.map(p=>`<div class="team"><b>${esc(p.name||'Player')}</b>${p.id===myId?' (you)':`<div style="margin-top:6px;font-size:13px"><span class="ulink" data-rpu="${esc(p.id)}">Report</span> · <span class="ulink" data-blk="${esc(p.id)}" data-nm="${esc(p.name||'player')}">Block</span></div>`}</div>`).join('');
  if(MP.quick){$('ls').classList.add('hidden');const go=ps.find(p=>p.go&&p.ids&&p.ids.includes(myId));
   if(go&&!MP.moving){const lead=go.id===myId;MP.moving=1;(async()=>{if(lead)await new Promise(r=>setTimeout(r,2500));
    if(await enter(go.go,lead)&&lead){MP.cfg={t:topics[Math.random()*topics.length|0].id,r:3,c:30};setTimeout(startOnline,6000)}})();return}
@@ -334,7 +340,7 @@ const dId=()=>{let x=5381;const s=S.topic.id+'|'+S.players.join(',')+'|'+S.picks
 const tally=d=>d.tm.map((_,i)=>(GT[d.id]||[])[i]||0);
 function drawG(){const el=$('gl');if(!db){el.innerHTML='<p class="msg">Online features are not set up on this site yet.</p>';return}
  el.innerHTML=GD.length?GD.map(d=>{const c=tally(d),tot=c.reduce((a,b)=>a+b,0),my=GM[d.id];
-  return `<div class="panel"><h2>${esc(d.e||'')} ${esc(d.t)}</h2><p class="msg">${d.by&&UN[d.by]?`Posted by <span class="ulink" data-u="${d.by}">@${esc(UN[d.by].username)}</span> ${UN[d.by].badge||''} · `:''}${tot} vote${tot===1?'':'s'} across ${d.tm.length} teams</p><div class="teams">${d.tm.map((t,i)=>{const pc=tot?Math.round(100*c[i]/tot):0;
+  return `<div class="panel"><h2>${esc(d.e||'')} ${esc(d.t)}</h2><p class="msg">${d.by&&UN[d.by]?`Posted by <span class="ulink" data-u="${d.by}">@${esc(UN[d.by].username)}</span> ${UN[d.by].badge||''} · `:''}${tot} vote${tot===1?'':'s'} across ${d.tm.length} teams · <span class="ulink" data-rpd="${d.id}">🚩 Report</span></p><div class="teams">${d.tm.map((t,i)=>{const pc=tot?Math.round(100*c[i]/tot):0;
    return `<div class="team"><h3>${UNM[d.pl[i]]?`<span class="ulink" data-u="${UNM[d.pl[i]]}">${esc(d.pl[i])}</span>`:esc(d.pl[i])}</h3><ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="bar"><i style="width:${pc}%"></i></div><p class="msg">${c[i]} vote${c[i]===1?'':'s'}, ${pc}%</p><button class="btn ${my===i?'':'alt'}" data-d="${d.id}" data-i="${i}">${my===i?'Your vote':'Vote for this team'}</button></div>`}).join('')}</div></div>`}).join(''):'<p class="msg">No drafts posted yet. Finish an online draft and post it.</p>'}
 async function loadG(){if(!db)return;try{
  const a=await sb.from('drafts').select('*').eq('visibility','public').order('created_at',{ascending:false}).limit(40);
@@ -347,7 +353,7 @@ async function loadG(){if(!db)return;try{
  drawG()}catch(e){$('gm').textContent='Could not load the gallery.'}}
 function openGallery(){show('gallery');drawG();loadG()}
 setInterval(()=>{if(!$('gallery').classList.contains('hidden'))loadG()},15000);
-$('gl').onclick=async e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.dataset.u);return}const b=e.target.closest('button[data-d]');if(!b||!db)return;if(me.guest){$('gm').textContent='Create a free account to vote. Guests can only look.';return}const id=b.dataset.d,i=+b.dataset.i,had=GM[id]!==undefined;GM[id]=i;drawG();
+$('gl').onclick=async e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.dataset.u);return}const rd=e.target.closest('[data-rpd]');if(rd){openReport('draft',rd.dataset.rpd,'this draft');return}const b=e.target.closest('button[data-d]');if(!b||!db)return;if(me.guest){$('gm').textContent='Create a free account to vote. Guests can only look.';return}const id=b.dataset.d,i=+b.dataset.i,had=GM[id]!==undefined;GM[id]=i;drawG();
  const r=await sb.from('votes').upsert({draft_id:id,user_id:uid,team:i});$('gm').textContent=r.error?'Could not save your vote.':'';if(!r.error&&!had)toast('+1 XP for voting!',4);loadG()};
 $('gv').onclick=openGallery;$('gx').onclick=()=>show('setup');
 $('post').onclick=async()=>{const r=await sb.from('drafts').insert({id:dId(),topic:S.topic.name,emoji:S.topic.emoji,visibility:$('pv').value,topic_id:S.topic.id,rounds:S.rounds,picks:S.picks.map(k=>k.n),players:S.players,teams:S.players.map((p,i)=>S.picks.filter(k=>k.p===i).map(k=>k.n))});
@@ -367,7 +373,7 @@ async function enterApp(user){uid=user.id;myId=uid;db=sb;roomApi=roomAdapter;
  else{const r=await sb.from('profiles').select('*').eq('id',uid).single();me=Object.assign({guest:false},r.data||{username:'Player'})}
  await loadPrefs();try{const rc=localStorage.getItem('dbvs_room');$('rjb').classList.toggle('hidden',!rc);if(rc)$('rjn').textContent='Rejoin '+rc}catch(e){}$('nick').value=me.username;$('nick').readOnly=true;$('lo2').textContent=me.guest?'Log in':'Log out';{const f0=$('pl').firstChild;if(f0&&(!f0.value||f0.value==='Me'))f0.value=me.username}$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('tpb').classList.toggle('hidden',me.guest);$('nfr').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
  const{data}=await sb.from('topics').select('*').order('created_at',{ascending:false}).limit(100);
- topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup');loadTopicSocial();startSocialRT();loadPlays()}
+ topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup');loadTopicSocial();startSocialRT();loadPlays();loadBlocks();loadLevel()}
 $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id||!pw)return am('Enter your username or email and your password.');am('Logging in…');
  if(id.includes('@')){const r=await sb.auth.signInWithPassword({email:id,password:pw});if(r.error)return am(/not confirmed/i.test(r.error.message)?'This account was never confirmed. The site owner can fix it (version 1.12 update).':/invalid login/i.test(r.error.message)?'Wrong email or password. If you signed up twice with this email, use the password from your FIRST sign-up.':r.error.message);am('');try{await enterApp(r.data.user)}catch(x){am('Logged in, but the app could not load: '+x.message)}return}
  const e=await sb.rpc('login_email',{p_username:id,p_password:pw});
@@ -376,7 +382,7 @@ $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id
  try{await enterApp(r.data.user)}catch(x){am('Logged in, but the app could not load: '+x.message)}};
 $('su').onclick=async()=>{const u=$('au').value.trim(),em=$('ae').value.trim(),pw=$('ap_').value;
  if(!/^[A-Za-z0-9_]{3,20}$/.test(u))return am('Pick a username: 3 to 20 letters, numbers or underscores.');
- if(!em.includes('@'))return am('Enter a valid email address.');if(pw.length<6)return am('Password must be at least 6 characters.');
+ if(!$('agt').checked)return am('Please agree to the Terms of Use to create an account.');if(!em.includes('@'))return am('Enter a valid email address.');if(pw.length<6)return am('Password must be at least 6 characters.');
  if(!(await clean(u)))return am('That username is not allowed.');am('Creating your account…');
  const r=await sb.auth.signUp({email:em,password:pw,options:{data:{username:u}}});
  if(r.error)return am(/already|registered/i.test(r.error.message)?'That email already has an account. Log in or reset your password.':/rate limit/i.test(r.error.message)?'Too many sign-ups right now. Please wait a few minutes and try again.':/Database error/i.test(r.error.message)?'That username is taken or not allowed.':r.error.message);
@@ -433,7 +439,7 @@ $('fv').onclick=async e=>{if(e.target.closest('#frm')){if(!confirm('Remove this 
  const b=e.target.closest('button[data-p]');if(!b)return;const t=toT(FT[+b.dataset.p]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=topics.find(x=>x.id===t.id);renderTopics();show('setup')};
 function drawMD(){$('md').innerHTML=MD.length?MD.map((d,i)=>`<div class="item" style="cursor:default;flex-wrap:wrap;gap:6px"><button class="item" data-i="${i}" style="flex:1;border:0">${esc(d.emoji||'')} ${esc(d.topic)}<i>${d.visibility==='private'?'private':'public'}</i></button><button class="btn alt" data-dv="${d.id}" data-to="${d.visibility==='private'?'public':'private'}" style="padding:4px 14px;min-height:0;font-size:15px">${d.visibility==='private'?'Make public':'Make private'}</button></div>`).join(''):'<p class="msg">No drafts yet.</p>'}
 /* ---------- phase 1: settings, i18n, navigation, live drafts ---------- */
-const PK='dbvs_prefs';let prefs={theme:'dark',lang:'en',sound:true};
+const PK='dbvs_prefs';let prefs={theme:'dark',lang:'en',sound:true,colorway:'classic'};
 try{Object.assign(prefs,JSON.parse(localStorage.getItem(PK)||'{}'))}catch(e){}
 const I18N={
 en:{home:'Home',live:'Live Drafts',create:'Create Draft',comm:'Community',friends:'Friends',profile:'Profile',settings:'Settings',login:'Log in',createAcc:'Create account',guest:'Continue as guest',back:'Back',joinRoom:'Join room',createRoom:'Create online room',startOne:'Start the draft (one screen)',startDraft:'Start draft',leave:'Leave',unlock:'Unlock topic',saveTopic:'Save topic',addPlayer:'+ Add player',addCustom:'Add as custom',endDraft:'End draft',copy:'Copy results',post:'Post to gallery',viewGallery:'View gallery',newDraft:'New draft',saveProfile:'Save profile',addFriend:'Add friend',playOnline:'Play online',pickTopic:'1. Pick a topic',draftSettings:'2. Draft settings',whoDrafting:"3. Who's drafting?",onClock:'is on the clock',round:'Round',pick:'Pick',myTopics:'My topics',myDrafts:'My drafts',liveTag:'LIVE DRAFT',hostedBy:'Hosted by',lobbyOpen:'Lobby open',full:'FULL',inProgress:'Draft underway',public:'Public',private:'Private',join:'JOIN',view:'VIEW',noLive:'No public drafts right now. Start one from Create Draft.',filterAll:'All',filterLobby:'Waiting for players',filterLive:'Live now',sortPlayers:'Most players',sortNew:'Newest',sortSoon:'Starting soon',liveTitle:'Live Drafts',appearance:'Appearance',dark:'Dark',light:'Light',language:'Language',sound:'Draft Sounds',on:'On',off:'Off',account:'Account',logout:'Log out',tabLive:'Live',bookmarks:'Bookmarks',players:'Players'},
@@ -449,12 +455,13 @@ function applyLang(){TMAP.forEach(([s,k])=>{const e=document.querySelector(s);if
  [...$('lsort').options].forEach((o,i)=>o.textContent=tr(['sortPlayers','sortNew','sortSoon'][i]));
  if(me)$('lo').textContent=me.guest?tr('createAcc'):tr('logout');document.documentElement.lang=prefs.lang;
  if(!$('live').classList.contains('hidden'))drawLive();if(S&&!$('draft').classList.contains('hidden'))startTurn()}
-function applyPrefs(){document.documentElement.dataset.theme=prefs.theme;applyLang();paintSet()}
-async function savePrefs(){try{localStorage.setItem(PK,JSON.stringify(prefs))}catch(e){}if(db&&!me.guest)await sb.from('user_prefs').upsert({user_id:uid,theme:prefs.theme,lang:prefs.lang,sound:prefs.sound,updated_at:new Date().toISOString()})}
+function applyPrefs(){document.documentElement.dataset.theme=prefs.theme;if(typeof applyColorway==='function')applyColorway();applyLang();paintSet();if(typeof paintThemes==='function'&&$('cwg'))paintThemes()}
+async function savePrefs(){try{localStorage.setItem(PK,JSON.stringify(prefs))}catch(e){}if(db&&!me.guest){const base={user_id:uid,theme:prefs.theme,lang:prefs.lang,sound:prefs.sound,updated_at:new Date().toISOString()};
+ const r=await sb.from('user_prefs').upsert(Object.assign({colorway:prefs.colorway},base));if(r&&r.error)await sb.from('user_prefs').upsert(base)}}
 async function loadPrefs(){if(me.guest){applyPrefs();return}const r=await sb.from('user_prefs').select('*').eq('user_id',uid).maybeSingle();
- if(r.data){prefs={theme:r.data.theme,lang:r.data.lang,sound:r.data.sound};try{localStorage.setItem(PK,JSON.stringify(prefs))}catch(e){}}else savePrefs();applyPrefs()}
+ if(r.data){prefs={theme:r.data.theme,lang:r.data.lang,sound:r.data.sound,colorway:r.data.colorway||'classic'};try{localStorage.setItem(PK,JSON.stringify(prefs))}catch(e){}}else savePrefs();applyPrefs()}
 function paintSet(){document.querySelectorAll('[data-th]').forEach(b=>b.className='btn'+(b.dataset.th===prefs.theme?'':' alt'));document.querySelectorAll('[data-sd]').forEach(b=>b.className='btn'+((b.dataset.sd==='1')===prefs.sound?'':' alt'));$('lang').value=prefs.lang}
-function openSettings(){show('settings');$('del').classList.toggle('hidden',me.guest);$('sacc').textContent=me.guest?'Guest ('+me.username+')':'@'+me.username;paintSet()}
+function openSettings(){show('settings');loadLevel();drawBlocked();$('del').classList.toggle('hidden',me.guest);$('sacc').textContent=me.guest?'Guest ('+me.username+')':'@'+me.username;paintSet()}
 document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{prefs.theme=b.dataset.th;applyPrefs();savePrefs()});
 document.querySelectorAll('[data-sd]').forEach(b=>b.onclick=()=>{prefs.sound=b.dataset.sd==='1';paintSet();savePrefs();if(prefs.sound)sfx.pick()});
 $('lang').onchange=()=>{prefs.lang=$('lang').value;applyPrefs();savePrefs()};
@@ -555,7 +562,7 @@ $('inb').onclick=openInvite;
 setInterval(()=>{if(!$('live').classList.contains('hidden'))drawLive()},20000);
 /* ---------- v1.13: popular + recent topics, play counts, public profiles ---------- */
 let UBACK='setup',UT=[],UN={},UNM={};
-function tileHtml(t){const n=PLAYS[t.id];return `<div class="tw"><button class="topic" data-i="${topics.indexOf(t)}" aria-pressed="${t===sel}"><span class="e">${esc(t.emoji)}</span><b>${esc(t.name)}</b><small>${t.items.length} items${t.vis==='private'?' · private 🔒':t.community?' · community':''}${n?' · ▶ '+Number(n).toLocaleString()+' plays':''}</small></button>${t.community&&t.vis!=='private'?`<div class="tact"><button data-lk="${esc(t.id)}" class="${MYL.has(t.id)?'on':''}">♥ ${LK[t.id]||0}</button><button data-bm="${esc(t.id)}" class="${MYB.has(t.id)?'on':''}">🔖</button></div>`:''}</div>`}
+function tileHtml(t){const n=PLAYS[t.id];return `<div class="tw"><button class="topic" data-i="${topics.indexOf(t)}" aria-pressed="${t===sel}"><span class="e">${esc(t.emoji)}</span><b>${esc(t.name)}</b><small>${t.items.length} items${t.vis==='private'?' · private 🔒':t.community?' · community':''}${n?' · ▶ '+Number(n).toLocaleString()+' plays':''}</small></button>${t.community&&t.vis!=='private'?`<div class="tact"><button data-lk="${esc(t.id)}" class="${MYL.has(t.id)?'on':''}">♥ ${LK[t.id]||0}</button><button data-bm="${esc(t.id)}" class="${MYB.has(t.id)?'on':''}">🔖</button><button data-rp="${esc(t.id)}" title="Report">🚩</button></div>`:''}</div>`}
 function renderPanes(){const f=ids=>ids.map(id=>topics.find(t=>t.id===id)).filter(Boolean).slice(0,6);const r=f(RECENT),p=f(POPU);
  $('prec').innerHTML=r.length?r.map(tileHtml).join(''):'<p class="msg">Nothing yet. Topics you play show up here.</p>';
  $('ppop').innerHTML=p.length?p.map(tileHtml).join(''):'<p class="msg">Popular topics show up as people play.</p>'}
@@ -567,14 +574,14 @@ async function loadPlays(){if(!db)return;
  const c=await sb.from('topic_play_counts').select('*').in('topic_id',topics.map(t=>t.id));(c.data||[]).forEach(x=>{PLAYS[x.topic_id]=x.plays});renderTopics()}
 function notePlay(t){if(!t)return;RECENT=[t.id,...RECENT.filter(x=>x!==t.id)].slice(0,8);try{localStorage.setItem('dbvs_recent',JSON.stringify(RECENT))}catch(e){}
  if(db){PLAYS[t.id]=(PLAYS[t.id]||0)+1;sb.rpc('record_play',{p_topic:t.id})}renderTopics()}
-function topicsClick(e){const a=e.target.closest('button[data-lk],button[data-bm]');if(a){topicAct(a);return}const b=e.target.closest('.topic');if(b){sel=topics[b.dataset.i];renderTopics()}}
+function topicsClick(e){const rp=e.target.closest('button[data-rp]');if(rp){openReport('topic',rp.dataset.rp,'this topic');return}const a=e.target.closest('button[data-lk],button[data-bm]');if(a){topicAct(a);return}const b=e.target.closest('.topic');if(b){sel=topics[b.dataset.i];renderTopics()}}
 ['topics','prec','ppop'].forEach(i=>{$(i).onclick=topicsClick});
-async function openUser(id){UBACK=$('gallery').classList.contains('hidden')?'setup':'gallery';show('user');$('um').textContent='';$('ut').innerHTML='';
+async function openUser(id){UVIEW=id;UBACK=$('gallery').classList.contains('hidden')?'setup':'gallery';show('user');$('um').textContent='';$('ut').innerHTML='';
  const[l,t]=await Promise.all([sb.from('leaderboard').select('*').eq('id',id),sb.from('topics').select('*').eq('created_by',id).eq('visibility','public').order('created_at',{ascending:false})]);
  const u=(l.data||[])[0];if(!u){$('un').textContent='User not found';return}
  $('un').textContent='@'+u.username+' '+(u.badge||'🥉');$('uav').src=u.avatar||AV;$('ubio').textContent=u.bio||'No bio yet.';
  $('ust').textContent=`${u.drafts} draft${u.drafts===1?'':'s'} posted, ${u.votes} vote${u.votes===1?'':'s'} received`;$('uxp').innerHTML=friendXp(u);
- $('uadd').classList.toggle('hidden',me.guest||id===uid);$('uadd').dataset.n=u.username;
+ $('uadd').classList.toggle('hidden',me.guest||id===uid);$('uadd').dataset.n=u.username;$('urp').classList.toggle('hidden',id===uid);$('ubl').classList.toggle('hidden',id===uid);$('ubl').textContent=BLK.has(id)?'Unblock user':'Block user';
  UT=(t.data||[]).filter(x=>Array.isArray(x.items));$('ut').innerHTML=UT.length?UT.map((x,i)=>`<button class="item" data-p="${i}">${esc(x.emoji||'')} ${esc(x.name)}<i>Play</i></button>`).join(''):'<p class="msg">No public topics yet.</p>'}
 $('ut').onclick=e=>{const b=e.target.closest('button[data-p]');if(!b)return;const t=toT(UT[+b.dataset.p]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=topics.find(x=>x.id===t.id);renderTopics();show('setup')};
 $('uadd').onclick=async()=>{const r=await sb.rpc('send_friend_request',{p_username:$('uadd').dataset.n});$('um').textContent=r.error?r.error.message:({sent:'Friend request sent.',already:'You are already friends.',pending:'A request is already pending.',not_found:'No one has that username.',self:'That is you.'}[r.data]||'Done.')};
@@ -583,5 +590,66 @@ $('lo2').onclick=()=>$('lo').click();
 $('del').onclick=async()=>{if(!db||me.guest)return;if(!confirm('Delete your account? This permanently removes your profile, drafts, topics and votes. It cannot be undone.'))return;if(prompt('Type DELETE to confirm.')!=='DELETE')return;
  const r=await sb.rpc('delete_my_account');if(r.error){alert('Could not delete your account: '+r.error.message);return}await sb.auth.signOut();try{localStorage.clear()}catch(e){}location.reload()};
 if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)&&!window.Capacitor)navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ---------- v1.16: reporting, blocking, color themes ---------- */
+let UVIEW=null,BLK=new Set(),RPT={},MYLV=1,CWL={};
+var CW=[ // id, name, unlock level, accent, highlight, bg, bg2, card, line, dark text on accent
+['classic','Classic Red',1,'#dd0000','#ffd23f','#0b0b0c','#161617','#1f1f21','#2e2e31',0],
+['ocean','Ocean Blue',1,'#1e90ff','#7fd1ff','#07101c','#0e1b2e','#14263f','#1f3556',0],
+['forest','Forest Green',1,'#1fa35a','#a6f0a0','#07120c','#0d1d14','#132a1d','#1d3a2a',0],
+['sunset','Sunset Orange',2,'#ff6a1a','#ffc04d','#140b06','#1f130b','#2b1b10','#43291a',0],
+['royal','Royal Purple',3,'#8a4dff','#d3b8ff','#0d0a18','#171229','#211a3b','#33295a',0],
+['hotpink','Hot Pink',4,'#ff2d8a','#ffb3d6','#170a11','#241019','#321626','#4f2340',0],
+['teal','Teal Wave',5,'#14b8a6','#8ff3e6','#061312','#0c1f1d','#122c29','#1c4440',0],
+['lime','Lime Zest',6,'#7ed321','#e4ff7a','#0c1205','#151e09','#1e2b0d','#2f4313',1],
+['midnight','Midnight Navy',7,'#3b6cff','#9fb6ff','#04060f','#090d1c','#0f1630','#19244a',0],
+['crimson','Crimson Night',8,'#c1121f','#ff8a8a','#0f0506','#190a0c','#240f12','#3c171c',0],
+['mint','Mint Fresh',9,'#3ddc97','#c8ffe6','#06110d','#0b1c15','#11281e','#1a3d2e',1],
+['amber','Amber Gold',10,'#f5a300','#ffe08a','#120d03','#1d1506','#2a1f0a','#43310f',1],
+['sky','Sky Cyan',11,'#00b8ff','#a8ecff','#04101a','#0a1b2b','#102740','#193a5e',1],
+['magenta','Magenta Pulse',12,'#d62bd6','#f6a8f6','#130614','#1e0b20','#2b102e','#451a49',0],
+['slate','Slate Steel',14,'#8aa0b8','#dbe6f2','#0a0d11','#12171d','#1b222b','#2b3541',1],
+['cola','Cherry Cola',15,'#b3261e','#ffb4a0','#100807','#1a0e0c','#261512','#3e231e',0],
+['indigo','Electric Indigo',16,'#5b3df5','#b9aaff','#0a0818','#120f2b','#1b1642','#2c2466',0],
+['lava','Lava',18,'#ff3b00','#ffb000','#120503','#1e0a05','#2c100a','#471a10',0],
+['aurora','Aurora',20,'#00e5a0','#6aa8ff','#050f12','#0a1b20','#102a31','#19444e',1],
+['emerald','Emerald Pro',22,'#00a86b','#ffd27a','#05110c','#0a1d15','#10291f','#194233',0],
+['rose','Rose Quartz',24,'#f48fb1','#ffe0ec','#150c10','#201219','#2d1a24','#472b3b',1],
+['arcade','Neon Arcade',26,'#00ffcc','#ff2bd6','#05050f','#0b0b1d','#12122e','#22225a',1],
+['obsidian','Obsidian Gold',28,'#d4af37','#fff1b8','#050505','#0d0d0d','#161616','#2a2a2a',1],
+['diamond','Diamond Ice',30,'#7dd3fc','#ffffff','#060a10','#0d141f','#141f31','#223552',1]];
+function applyColorway(){if(!CW)return;const c=CW.find(x=>x[0]===prefs.colorway)||CW[0],s=document.documentElement.style,dark=prefs.theme!=='light';
+ s.setProperty('--red',c[3]);s.setProperty('--onred',c[9]?'#0b0b0c':'#fff');
+ [['--gold',4],['--bg',5],['--bg2',6],['--card',7],['--line',8]].forEach(([k,i])=>dark?s.setProperty(k,c[i]):s.removeProperty(k))}
+const cwNeed=c=>CWL[c[0]]!=null?CWL[c[0]]:c[2];
+function paintThemes(){if(!CW)return;const open=CW.filter(c=>cwNeed(c)<=MYLV).length;
+ $('cwi').textContent=`You are Level ${MYLV}. ${open} of ${CW.length} color themes unlocked. Level up by voting and getting votes on your drafts.`;
+ $('cwg').innerHTML=[...CW].sort((a,b)=>cwNeed(a)-cwNeed(b)).map(c=>{const lock=cwNeed(c)>MYLV;return `<button class="cw ${c[0]===prefs.colorway?'on':''} ${lock?'lock':''}" data-cw="${c[0]}"><div class="sw"><i style="background:${c[3]}"></i><i style="background:${c[4]}"></i><i style="background:${c[5]}"></i></div><b>${esc(c[1])}</b><small>${lock?'🔒 Level '+cwNeed(c):c[0]===prefs.colorway?'✓ In use':'Unlocked'}</small></button>`}).join('')}
+$('cwg').onclick=e=>{const b=e.target.closest('[data-cw]');if(!b)return;const c=CW.find(x=>x[0]===b.dataset.cw);if(!c)return;
+ if(cwNeed(c)>MYLV){toast(`🔒 ${esc(c[1])} unlocks at Level ${cwNeed(c)}. You are Level ${MYLV}.`,4);return}
+ prefs.colorway=c[0];applyPrefs();savePrefs()};
+async function loadLevel(){MYLV=1;if(!db||me.guest){paintThemes();return}
+ const [l,c]=await Promise.all([sb.from('leaderboard').select('level').eq('id',uid),sb.from('colorways').select('id,min_level')]);
+ MYLV=((l.data||[])[0]||{}).level||1;(c.data||[]).forEach(x=>{CWL[x.id]=x.min_level});paintThemes()}
+// reporting
+function openReport(type,id,label){RPT={type,id};$('rpt').textContent='Reporting '+label+'. Reports go to the site owner, who reviews them within 24 hours.';$('rpd').value='';$('rpm').classList.remove('hidden')}
+$('rpc').onclick=()=>$('rpm').classList.add('hidden');
+$('rps').onclick=async()=>{if(!db){alert('Reporting needs an internet connection to the server.');return}
+ const r=await sb.rpc('report_content',{p_type:RPT.type,p_id:RPT.id,p_reason:$('rpr').value,p_details:$('rpd').value});$('rpm').classList.add('hidden');
+ toast(r.error?'Could not send the report. Try again.':'Thanks. Your report was sent and will be reviewed within 24 hours.',5)};
+// blocking
+async function loadBlocks(){BLK=new Set();if(!db)return;const r=await sb.from('blocks').select('blocked_id').eq('blocker_id',uid);(r.data||[]).forEach(x=>BLK.add(x.blocked_id))}
+async function toggleBlock(id,name){if(BLK.has(id)){const r=await sb.rpc('unblock_user',{p_user:id});if(!r.error){BLK.delete(id);toast('Unblocked '+esc(name||'user')+'.',3)}}
+ else{if(!confirm('Block '+(name||'this user')+'? You will no longer see each other\'s topics, drafts or rooms, and you will be removed from each other\'s friends.'))return;
+  const r=await sb.rpc('block_user',{p_user:id});if(!r.error){BLK.add(id);toast('Blocked '+esc(name||'user')+'.',3)}else toast('Could not block this user.',4)}
+ drawBlocked();if(UVIEW===id)$('ubl').textContent=BLK.has(id)?'Unblock user':'Block user'}
+$('urp').onclick=()=>openReport('user',UVIEW,'this user');
+$('ubl').onclick=()=>toggleBlock(UVIEW,($('un').textContent||'').replace(/^@/,'').split(' ')[0]);
+$('lp').onclick=e=>{const r=e.target.closest('[data-rpu]');if(r){openReport('user',r.dataset.rpu,'this player');return}const b=e.target.closest('[data-blk]');if(b)toggleBlock(b.dataset.blk,b.dataset.nm)};
+async function drawBlocked(){if(!$('blk'))return;const ids=[...BLK];if(!ids.length){$('blk').innerHTML='<p class="msg">You have not blocked anyone.</p>';return}
+ const u=(await sb.from('leaderboard').select('id,username').in('id',ids)).data||[];const nm={};u.forEach(x=>{nm[x.id]=x.username});
+ $('blk').innerHTML=ids.map(id=>`<div class="item" style="cursor:default"><span>@${esc(nm[id]||'user')}</span><button class="btn alt" data-ub="${id}" style="padding:4px 14px;min-height:0;font-size:15px">Unblock</button></div>`).join('')}
+$('blk').onclick=e=>{const b=e.target.closest('[data-ub]');if(b)toggleBlock(b.dataset.ub,'user')};
+if(SUPPORT_EMAIL){$('sup').innerHTML=`Need help or want to report a problem? <a href="mailto:${esc(SUPPORT_EMAIL)}" style="color:var(--gold)">${esc(SUPPORT_EMAIL)}</a>`}
+applyPrefs();
 boot();
 </script></body></html>
