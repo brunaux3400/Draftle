@@ -85,8 +85,9 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
 #toasts{position:fixed;top:calc(env(safe-area-inset-top,0px) + 56px);left:50%;transform:translateX(-50%);z-index:50;width:min(92vw,380px);display:flex;flex-direction:column;gap:10px}
 .toast{background:#111;color:#fff;border:1px solid #333;border-radius:10px;overflow:hidden;box-shadow:0 8px 24px #0008}.toast .tb{height:5px;background:var(--red);animation:tb 20s linear forwards}@keyframes tb{from{width:100%}to{width:0}}.toast .tx{padding:12px 14px}.toast .row{margin-top:10px}.toast .btn.alt{color:#fff}
 .tact{display:flex;gap:6px;margin-top:4px}.tact button{background:none;border:1px solid var(--line2);color:var(--ink);border-radius:999px;padding:2px 10px;cursor:pointer;font:600 14px inherit}.tact button.on{background:var(--red);border-color:var(--red);color:#fff}
+.ulink{color:var(--gold);cursor:pointer;text-decoration:underline}.panes{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:800px){.panes{grid-template-columns:1fr}}.panes h3{margin:0 0 8px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
-</style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
+</style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav><button class="btn alt" id="lo2" style="margin-left:8px;padding:4px 14px;font-size:15px;color:#fff;border-color:#555">Log out</button></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
 <section id="splash" class="hidden"><div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Log in, create an account, or jump in as a guest.</p></div>
 <div class="row" style="margin-bottom:12px"><button class="btn" id="tl">Log in</button><button class="btn alt" id="tc">Create account</button><button class="btn alt hidden" id="sbk">Back to game</button></div>
@@ -102,7 +103,8 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
  <div class="panel hidden" id="gbn" style="border-left:4px solid var(--gold)"><b>You're playing as a guest.</b> <span class="msg">Log in or create an account to vote and make topics.</span><div class="row" style="margin-top:10px"><button class="btn" id="gb1">Log in</button><button class="btn alt" id="gb2">Create account</button></div></div>
  <div class="hero"><h1>Draft Battle<span>VS</span></h1><p>Pick a topic, add your friends, and draft the best of anything. Snake order, pick clock, sound effects, and a community library of topics.</p></div>
  <div class="panel"><h2>Play online</h2><div class="row"><label>Your name<input id="nick" maxlength="14" placeholder="Nickname"></label><label>Room code<input id="jc" maxlength="5" size="7" placeholder="ABCDE" style="text-transform:uppercase"></label><button class="btn" id="join">Join room</button><button class="btn alt hidden" id="qm">Quick match</button></div><p class="msg" id="om">Or pick a topic below and create a room. Friends draft from their own phones.</p></div>
- <div class="panel"><h2>1. Pick a topic</h2><div class="topics" id="topics"></div><div class="row" style="margin-top:12px"><input id="uc" placeholder="Private topic code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="ub">Unlock topic</button></div>
+ <div class="panel"><h2>1. Pick a topic</h2><div class="panes"><div><h3>Recently played</h3><div class="topics" id="prec"></div></div><div><h3>Most popular</h3><div class="topics" id="ppop"></div></div></div>
+  <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--gold);font-weight:800">All topics</summary><div class="topics" id="topics" style="margin-top:10px"></div></details><div class="row" style="margin-top:12px"><input id="uc" placeholder="Private topic code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="ub">Unlock topic</button></div>
   <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--gold);font-weight:800">Create your own topic</summary>
    <div class="row" style="margin-top:10px"><label>Emoji<input id="ne" value="🍭" size="3" maxlength="4"></label><label style="flex:1">Topic name<input id="nn" placeholder="Best road trip snacks"></label></div>
    <label style="margin-top:10px">Starter items, one per line (add more mid-draft)<textarea id="ni"></textarea></label>
@@ -119,7 +121,7 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
 </section>
 
 <section id="lobby" class="hidden"><div class="panel"><h2>Room <span id="lc"></span></h2><p class="msg" id="lt"></p><p class="msg" id="lti"></p><div class="row hidden" id="lcfg" style="margin-top:8px"><label>Topic<select id="lts"></select></label><label>Rounds<select id="lrd"><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option></select></label><label>Pick clock<select id="ltm"><option value="0">Off</option><option value="20">20s</option><option value="45">45s</option><option value="90">90s</option></select></label></div>
-<label style="max-width:240px;margin-top:8px">Your name<input id="ln" maxlength="14" placeholder="Type your name"></label><div class="players" id="lp" style="margin-top:10px"></div><div class="row" style="margin-top:12px"><button class="btn" id="ls">Start draft</button><button class="btn alt hidden" id="inb">Invite friends</button><button class="btn alt" id="ll">Leave</button></div><div class="hidden" id="invp" style="margin-top:12px"><h3>Invite friends</h3><div id="invl" class="pool"></div></div></div></section>
+<label style="max-width:240px;margin-top:8px">Your name (your username)<input id="ln" readonly></label><div class="players" id="lp" style="margin-top:10px"></div><div class="row" style="margin-top:12px"><button class="btn" id="ls">Start draft</button><button class="btn alt hidden" id="inb">Invite friends</button><button class="btn alt" id="ll">Leave</button></div><div class="hidden" id="invp" style="margin-top:12px"><h3>Invite friends</h3><div id="invl" class="pool"></div></div></div></section>
 
 <section id="draft" class="hidden">
  <div class="clock"><div><small id="rnd"></small><div class="who" id="who"></div></div><div class="time" id="time">--</div></div>
@@ -153,6 +155,8 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
 <div class="panel"><h2 id="s-snd">Draft Sounds</h2><div class="row"><button class="btn" data-sd="1">On</button><button class="btn alt" data-sd="0">Off</button></div></div>
 <div class="panel"><h2 id="s-acc">Account</h2><p class="msg" id="sacc"></p><div class="row"><button class="btn alt" id="lo">Log out</button></div></div></section>
 
+<section id="user" class="hidden"><div class="panel"><div class="row" style="align-items:center"><img id="uav" alt="" width="80" height="80" style="border-radius:50%;object-fit:cover;background:#000"><div style="flex:1"><h2 id="un" style="border:0;padding:0;margin:0"></h2><p class="msg" id="ust"></p></div></div><div id="uxp"></div><p id="ubio" style="margin-top:10px"></p><div class="row" style="margin-top:8px"><button class="btn alt hidden" id="uadd">Add friend</button></div><p class="msg" id="um"></p><h3 style="margin:14px 0 6px">Public topics</h3><div class="pool" id="ut"></div></div><button class="btn alt" id="ux" style="margin-top:6px">Back</button></section>
+
 <section id="gallery" class="hidden"><div class="hero"><h1>Draft<span>Gallery</span></h1><p>Vote for the best team in each posted draft.</p></div><p class="msg" id="gm"></p><div id="gl"></div><button class="btn alt" id="gx" style="margin-top:6px">Back</button></section>
 
 <section id="done" class="hidden">
@@ -161,7 +165,7 @@ html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}body{mi
  <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
-<p class="msg" style="margin-top:30px"><a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.12<br>Created by Anthony, from New York</p></main><div id="toasts"></div>
+<p class="msg" style="margin-top:30px"><a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.13<br>Created by Anthony, from New York</p></main><div id="toasts"></div>
 <script>
 /* Paste your Supabase project values here (Project Settings > API). The anon key is safe to publish. */
 const SB_URL='https://pqhhrblrfjjswfalluze.supabase.co',SB_KEY='sb_publishable_JxzDwhXGUwJtC1QqueUeYA_5ck7uor8';
@@ -185,9 +189,8 @@ const sfx={pick(){on()&&[523,659,784,1047].forEach((f,i)=>tone(f,i*.07,.25))},
  horn(){on()&&[392,392,392,523,659,784,1047].forEach((f,i)=>tone(f,i*.14,.4,'sawtooth',.12))}};
 
 /* ---------- topics ---------- */
-let LK={},MYL=new Set(),MYB=new Set();
-function renderTopics(){$('topics').innerHTML=topics.map((t,i)=>`<div class="tw"><button class="topic" data-i="${i}" aria-pressed="${t===sel}"><span class="e">${esc(t.emoji)}</span><b>${esc(t.name)}</b><small>${t.items.length} items${t.vis==='private'?' · private 🔒':t.community?' · community':''}</small></button>${t.community&&t.vis!=='private'?`<div class="tact"><button data-lk="${esc(t.id)}" class="${MYL.has(t.id)?'on':''}">♥ ${LK[t.id]||0}</button><button data-bm="${esc(t.id)}" class="${MYB.has(t.id)?'on':''}">🔖</button></div>`:''}</div>`).join('')}
-$('topics').onclick=e=>{const a=e.target.closest('button[data-lk],button[data-bm]');if(a){topicAct(a);return}const b=e.target.closest('.topic');if(b){sel=topics[b.dataset.i];renderTopics()}};
+let LK={},MYL=new Set(),MYB=new Set(),RECENT=[],POPU=[],PLAYS={};try{RECENT=JSON.parse(localStorage.getItem('dbvs_recent')||'[]')}catch(e){}
+function renderTopics(){$('topics').innerHTML=topics.map(tileHtml).join('');renderPanes()}
 
 renderTopics();
 
@@ -203,7 +206,7 @@ $('go').onclick=async()=>{let ps=[...$('pl').children].map((x,i)=>x.value.trim()
  if($('ro').value==='1')ps.sort(()=>Math.random()-.5);
  const rounds=+$('rd').value;if(sel.items.length<ps.length*rounds){alert('Not enough items for that many picks. Reduce rounds, or add items to the topic.');return}
  S={topic:sel,players:ps,rounds,clock:+$('tm').value,pool:sel.items.map(n=>({n})),picks:[],added:[],i:0};
- $('setup').classList.add('hidden');$('draft').classList.remove('hidden');$('tt').textContent=sel.emoji+' '+sel.name;
+ notePlay(sel);$('setup').classList.add('hidden');$('draft').classList.remove('hidden');$('tt').textContent=sel.emoji+' '+sel.name;
  sfx.horn();startTurn()};
 function startTurn(){clearInterval(tick);const total=S.players.length*S.rounds;
  if(S.i>=total)return finish();
@@ -246,10 +249,10 @@ $('again').onclick=()=>{leave();show('setup')};
 /* ---------- online ---------- */
 let myId=Math.random().toString(36).slice(2,10);
 let roomApi=null,R=null,MP=null;
-const SECS=['splash','setup','lobby','draft','done','gallery','profile','live','settings'];
-const NAVMAP={setup:'home',live:'live',gallery:'comm',profile:'prof',settings:'set'};
+const SECS=['splash','setup','lobby','draft','done','gallery','profile','live','settings','user'];
+const NAVMAP={setup:'home',live:'live',gallery:'comm',user:'comm',profile:'prof',settings:'set'};
 const show=id=>{if(id!=='lobby')stopInvite();SECS.forEach(s=>$(s).classList.toggle('hidden',s!==id));document.querySelector('.nav').classList.toggle('hidden',id==='splash');document.querySelector('.tick').classList.toggle('hidden',id==='splash');if(id!=='live')stopLive();document.querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on',b.dataset.n===NAVMAP[id]))};
-const nick=()=>($('nick').value.trim()||($('pl').firstChild&&$('pl').firstChild.value.trim())||'Player '+myId.slice(0,2)).slice(0,14);
+const nick=()=>((db&&me&&me.username)||$('nick').value.trim()||'Player '+myId.slice(0,2)).slice(0,20);
 const om=t=>{$('om').textContent=t};
 const rcode=()=>Array.from({length:5},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
 const idxOf=(H,i)=>{const n=H.pl.length,p=i%n;return Math.floor(i/n)%2?n-1-p:p};
@@ -278,7 +281,7 @@ function quickLogic(ps){const w=ps.filter(p=>p.q);
 function startOnline(){if(!MP||!MP.host||MP.on)return;const c=MP.cfg,t=topics.find(x=>x.id===c.t)||sel;
  const ps=[...MP.ps].sort(()=>Math.random()-.5).slice(0,12);if(ps.length<2){$('lt').textContent='Need at least 2 players.';return}
  const n=ps.length,r=Math.max(1,Math.min(c.r,Math.floor(t.items.length/n),Math.floor(48/n)));
- MP.on=1;MP.H={t:t.id,k:t.vis==='private'?t.code:undefined,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,14)]),pk:[],l:c.c,d:0};if(MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'live'});publish();MP.timer=setInterval(hostTick,1000)}
+ MP.on=1;MP.H={t:t.id,k:t.vis==='private'?t.code:undefined,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,20)]),pk:[],l:c.c,d:0};if(MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'live'});publish();MP.timer=setInterval(hostTick,1000)}
 function publish(){const H=MP.H;R.send('st',H);const j=JSON.stringify(H);MP.last=j;applyState(JSON.parse(j))}
 function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const cid=H.pl[idxOf(H,H.pk.length)][0];const here=MP.ps.some(x=>x.id===cid)||Date.now()-((MP.seen2||{})[cid]||0)<25000;
  if(H.c)H.l--;if(!here||(H.c&&H.l<=0))return autoPick();publish()}
@@ -289,7 +292,7 @@ function autoPick(){const H=MP.H,t=topics.find(x=>x.id===H.t),a=t.items.concat(H
 function applyState(st){const t=topics.find(x=>x.id===st.t);if(!t){if(st.k&&!MP.fetching){MP.fetching=1;sb.rpc('topic_by_code',{c:st.k}).then(r=>{if(r.data&&r.data[0]){topics.push(toT(r.data[0]));MP.last='';peersChanged()}})}$('lt').textContent='Loading topic…';return}
  const n=st.pl.length,prev=S?S.picks.length:-1;
  S={topic:t,players:st.pl.map(x=>x[1]),ids:st.pl.map(x=>x[0]),rounds:st.r,clock:st.c,pool:t.items.concat(st.x||[]).filter(x=>!st.pk.includes(x)).map(x=>({n:x})),picks:st.pk.map((x,i)=>{const r=Math.floor(i/n),p=i%n;return{n:x,r,p:r%2?n-1-p:p}}),added:[],i:st.pk.length,left:st.l};
- if(prev<0){MP.on=1;show('draft');$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
+ if(prev<0){MP.on=1;if(!MP.spec)notePlay(t);show('draft');$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
  if(st.c&&st.l<=5&&st.l>0)sfx.tick();startTurn()}
 function mpPick(name){const t=turn(S.i);if(S.ids[t.p]!==myId){$('sm').textContent='Wait for your turn.';return}
  if(MP.host)commit(name);else{R.send('want',{id:myId,want:name,seq:S.i});$('q').value=''}}
@@ -309,18 +312,21 @@ const dId=()=>{let x=5381;const s=S.topic.id+'|'+S.players.join(',')+'|'+S.picks
 const tally=d=>d.tm.map((_,i)=>(GT[d.id]||[])[i]||0);
 function drawG(){const el=$('gl');if(!db){el.innerHTML='<p class="msg">Online features are not set up on this site yet.</p>';return}
  el.innerHTML=GD.length?GD.map(d=>{const c=tally(d),tot=c.reduce((a,b)=>a+b,0),my=GM[d.id];
-  return `<div class="panel"><h2>${esc(d.e||'')} ${esc(d.t)}</h2><p class="msg">${tot} vote${tot===1?'':'s'} across ${d.tm.length} teams</p><div class="teams">${d.tm.map((t,i)=>{const pc=tot?Math.round(100*c[i]/tot):0;
-   return `<div class="team"><h3>${esc(d.pl[i])}</h3><ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="bar"><i style="width:${pc}%"></i></div><p class="msg">${c[i]} vote${c[i]===1?'':'s'}, ${pc}%</p><button class="btn ${my===i?'':'alt'}" data-d="${d.id}" data-i="${i}">${my===i?'Your vote':'Vote for this team'}</button></div>`}).join('')}</div></div>`}).join(''):'<p class="msg">No drafts posted yet. Finish an online draft and post it.</p>'}
+  return `<div class="panel"><h2>${esc(d.e||'')} ${esc(d.t)}</h2><p class="msg">${d.by&&UN[d.by]?`Posted by <span class="ulink" data-u="${d.by}">@${esc(UN[d.by].username)}</span> ${UN[d.by].badge||''} · `:''}${tot} vote${tot===1?'':'s'} across ${d.tm.length} teams</p><div class="teams">${d.tm.map((t,i)=>{const pc=tot?Math.round(100*c[i]/tot):0;
+   return `<div class="team"><h3>${UNM[d.pl[i]]?`<span class="ulink" data-u="${UNM[d.pl[i]]}">${esc(d.pl[i])}</span>`:esc(d.pl[i])}</h3><ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="bar"><i style="width:${pc}%"></i></div><p class="msg">${c[i]} vote${c[i]===1?'':'s'}, ${pc}%</p><button class="btn ${my===i?'':'alt'}" data-d="${d.id}" data-i="${i}">${my===i?'Your vote':'Vote for this team'}</button></div>`}).join('')}</div></div>`}).join(''):'<p class="msg">No drafts posted yet. Finish an online draft and post it.</p>'}
 async function loadG(){if(!db)return;try{
  const a=await sb.from('drafts').select('*').eq('visibility','public').order('created_at',{ascending:false}).limit(40);
- GD=(a.data||[]).map(d=>({id:d.id,t:d.topic,e:d.emoji,pl:d.players,tm:d.teams}));const ids=GD.map(d=>d.id);GT={};GM={};
+ GD=(a.data||[]).map(d=>({id:d.id,t:d.topic,e:d.emoji,pl:d.players,tm:d.teams,by:d.created_by}));const ids=GD.map(d=>d.id);GT={};GM={};
+ UN={};UNM={};{const by=[...new Set(GD.map(d=>d.by).filter(Boolean))],nm=[...new Set(GD.flatMap(d=>d.pl))].slice(0,100);
+  const u1=by.length?((await sb.from('leaderboard').select('id,username,badge').in('id',by)).data||[]):[];u1.forEach(x=>{UN[x.id]=x;UNM[x.username]=x.id});
+  const u2=nm.length?((await sb.from('leaderboard').select('id,username').in('username',nm)).data||[]):[];u2.forEach(x=>{UNM[x.username]=x.id})}
  if(ids.length){const[b,c]=await Promise.all([sb.from('draft_tallies').select('*').in('draft_id',ids),sb.from('votes').select('draft_id,team').in('draft_id',ids)]);
   (b.data||[]).forEach(r=>{(GT[r.draft_id]=GT[r.draft_id]||[])[r.team]=r.votes});(c.data||[]).forEach(r=>{GM[r.draft_id]=r.team})}
  drawG()}catch(e){$('gm').textContent='Could not load the gallery.'}}
 function openGallery(){show('gallery');drawG();loadG()}
 setInterval(()=>{if(!$('gallery').classList.contains('hidden'))loadG()},15000);
-$('gl').onclick=async e=>{const b=e.target.closest('button[data-d]');if(!b||!db)return;if(me.guest){$('gm').textContent='Create a free account to vote. Guests can only look.';return}const id=b.dataset.d,i=+b.dataset.i;GM[id]=i;drawG();
- const r=await sb.from('votes').upsert({draft_id:id,user_id:uid,team:i});$('gm').textContent=r.error?'Could not save your vote.':'';loadG()};
+$('gl').onclick=async e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.dataset.u);return}const b=e.target.closest('button[data-d]');if(!b||!db)return;if(me.guest){$('gm').textContent='Create a free account to vote. Guests can only look.';return}const id=b.dataset.d,i=+b.dataset.i,had=GM[id]!==undefined;GM[id]=i;drawG();
+ const r=await sb.from('votes').upsert({draft_id:id,user_id:uid,team:i});$('gm').textContent=r.error?'Could not save your vote.':'';if(!r.error&&!had)toast('+1 XP for voting!',4);loadG()};
 $('gv').onclick=openGallery;$('gx').onclick=()=>show('setup');
 $('post').onclick=async()=>{const r=await sb.from('drafts').insert({id:dId(),topic:S.topic.name,emoji:S.topic.emoji,visibility:$('pv').value,topic_id:S.topic.id,rounds:S.rounds,picks:S.picks.map(k=>k.n),players:S.players,teams:S.players.map((p,i)=>S.picks.filter(k=>k.p===i).map(k=>k.n))});
  $('dm').textContent=!r.error?($('pv').value==='private'?'Saved as private. Only you can see it, in your profile.':'Posted. Find it in the Gallery and share it so people can vote.'):r.error.code==='23505'?'This draft is already in the gallery.':'Could not post this draft.';
@@ -337,9 +343,9 @@ async function boot(){if(!window.supabase||SB_URL.startsWith('YOUR')){show('setu
 async function enterApp(user){uid=user.id;myId=uid;db=sb;roomApi=roomAdapter;
  if(user.is_anonymous){let g=localStorage.getItem('gname');if(!g){g='Guest-'+Math.random().toString(36).slice(2,6);localStorage.setItem('gname',g)}me={guest:true,username:g,id:uid}}
  else{const r=await sb.from('profiles').select('*').eq('id',uid).single();me=Object.assign({guest:false},r.data||{username:'Player'})}
- await loadPrefs();try{const rc=localStorage.getItem('dbvs_room');$('rjb').classList.toggle('hidden',!rc);if(rc)$('rjn').textContent='Rejoin '+rc}catch(e){}$('nick').value=me.username;$('nick').readOnly=true;$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('nfr').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
+ await loadPrefs();try{const rc=localStorage.getItem('dbvs_room');$('rjb').classList.toggle('hidden',!rc);if(rc)$('rjn').textContent='Rejoin '+rc}catch(e){}$('nick').value=me.username;$('nick').readOnly=true;$('lo2').textContent=me.guest?'Log in':'Log out';{const f0=$('pl').firstChild;if(f0&&(!f0.value||f0.value==='Me'))f0.value=me.username}$('gbn').classList.toggle('hidden',!me.guest);$('sbk').classList.toggle('hidden',!me.guest);$('pb').classList.toggle('hidden',me.guest);$('nfr').classList.toggle('hidden',me.guest);$('lo').textContent=me.guest?'Create account':'Log out';
  const{data}=await sb.from('topics').select('*').order('created_at',{ascending:false}).limit(100);
- topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup');loadTopicSocial();startSocialRT()}
+ topics=[...BASE,...(data||[]).filter(x=>Array.isArray(x.items)).map(toT)];sel=BASE[0];renderTopics();show('setup');loadTopicSocial();startSocialRT();loadPlays()}
 $('li').onclick=async()=>{const id=$('le').value.trim(),pw=$('lp_').value;if(!id||!pw)return am('Enter your username or email and your password.');am('Logging in…');
  if(id.includes('@')){const r=await sb.auth.signInWithPassword({email:id,password:pw});if(r.error)return am(/not confirmed/i.test(r.error.message)?'This account was never confirmed. The site owner can fix it (version 1.12 update).':/invalid login/i.test(r.error.message)?'Wrong email or password. If you signed up twice with this email, use the password from your FIRST sign-up.':r.error.message);am('');try{await enterApp(r.data.user)}catch(x){am('Logged in, but the app could not load: '+x.message)}return}
  const e=await sb.rpc('login_email',{p_username:id,p_password:pw});
@@ -373,10 +379,10 @@ async function openProfile(){if(me.guest||!db){alert('Create a free account to g
  $('pn').textContent=me.username;$('pav').src=me.avatar||AV;$('pbio').value=me.bio||'';$('fc').textContent=me.friend_code||'';$('pdp').classList.add('hidden');
  const fr=await sb.from('friendships').select('friend_id').eq('user_id',uid);const fids=(fr.data||[]).map(f=>f.friend_id);
  const[fl,wr,md]=await Promise.all([sb.from('leaderboard').select('*').in('id',[...fids,uid]),sb.rpc('world_rank',{u:uid}),sb.from('drafts').select('*').eq('created_by',uid).order('created_at',{ascending:false})]);
- const L=(fl.data||[]).sort((a,b)=>b.votes-a.votes||b.drafts-a.drafts),m=L.find(x=>x.id===uid)||{drafts:0,votes:0};
+ const L=(fl.data||[]).sort((a,b)=>(b.xp||0)-(a.xp||0)||b.drafts-a.drafts),m=L.find(x=>x.id===uid)||{drafts:0,votes:0};
  renderXp(m);$('pn').textContent='@'+me.username+' '+(m.badge||'🥉');$('pst').textContent=`${m.drafts} draft${m.drafts===1?'':'s'} posted, ${m.votes} vote${m.votes===1?'':'s'} received`;
  $('prk').textContent=`World rank #${wr.data||'-'}, friend rank #${L.findIndex(x=>x.id===uid)+1} of ${L.length}`;
- FR={};L.forEach(x=>{FR[x.id]=x});$('fl').innerHTML=L.map((x,i)=>`<button class="item" data-f="${x.id}"><span>#${i+1} <img src="${esc(x.avatar||AV)}" width="24" height="24" style="border-radius:50%;vertical-align:middle"> ${esc(x.username)} ${x.badge||'🥉'}${x.id===uid?' (you)':''}</span><i>Lv ${x.level||1}, ${x.votes} votes</i></button>`).join('');
+ FR={};L.forEach(x=>{FR[x.id]=x});$('fl').innerHTML=L.map((x,i)=>`<button class="item" data-f="${x.id}"><span>#${i+1} <img src="${esc(x.avatar||AV)}" width="24" height="24" style="border-radius:50%;vertical-align:middle"> ${esc(x.username)} ${x.badge||'🥉'}${x.id===uid?' (you)':''}</span><i>Lv ${x.level||1}, ${x.xp!=null?x.xp:x.votes} XP</i></button>`).join('');
  MD=md.data||[];drawMD()}
 $('md').onclick=async e=>{const v=e.target.closest('button[data-dv]');if(v){const r=await sb.from('drafts').update({visibility:v.dataset.to}).eq('id',v.dataset.dv);if(r.error){$('pm').textContent='Could not change visibility.';return}MD.find(x=>x.id===v.dataset.dv).visibility=v.dataset.to;drawMD();return}const b=e.target.closest('button[data-i]');if(!b)return;const d=MD[+b.dataset.i],n=d.players.length,pk=d.picks||[];let h='';
  for(let r=0;r<(d.rounds||0);r++){let l='';for(let p=0;p<n;p++){const i=r*n+p,pl=r%2?n-1-p:p;if(pk[i])l+=`<li>Pick ${i+1}: <b>${esc(d.players[pl])}</b> took ${esc(pk[i])}</li>`}h+=`<h3>Round ${r+1}</h3><ol style="list-style:none;padding:0">${l}</ol>`}
@@ -473,8 +479,8 @@ async function loadSocial(){const[rq,fo,fw]=await Promise.all([sb.from('friend_r
 $('frq').onclick=async e=>{const b=e.target.closest('button[data-ra]');if(!b)return;const r=await sb.rpc('respond_friend_request',{p_id:b.dataset.ra,p_accept:b.dataset.y==='1'});$('fm').textContent=r.error?r.error.message:(b.dataset.y==='1'?'Approved. They now follow you. Use Follow back to follow them too.':'Request denied.');loadSocial()};
 $('ffo').onclick=async e=>{const b=e.target.closest('button[data-fb]');if(!b)return;const r=await sb.rpc('follow_back',{p_user:b.dataset.fb});$('fm').textContent=r.error?r.error.message:'You are now following them back.';openProfile();tabTo('f')};
 $('fub').onclick=async()=>{const u=$('fu').value.trim();if(!u)return;const r=await sb.rpc('send_friend_request',{p_username:u});$('fm').textContent=r.error?r.error.message:({sent:'Request sent.',already:'You are already friends.',pending:'A request is already pending.',not_found:'No one has that username.',self:'That is your own username.'}[r.data]||'Done.');$('fu').value='';loadSocial()};
-function xpCalc(x){const lv=x.level||1,v=x.votes||0,a=x.level_min||0,b=x.next_min||5;return{lv,v,a,b,pc:Math.max(0,Math.min(100,Math.round(100*(v-a)/Math.max(1,b-a)))),badge:x.badge||'🥉',name:x.badge_name||'Bronze'}}
-function renderXp(m){const x=xpCalc(m),n=x.b-x.v;$('xp').innerHTML=`<div class="xpt" style="margin-top:10px"><span class="xpb">${x.badge}</span><b>LEVEL ${x.lv}</b><span class="msg">${esc(x.name)}</span></div><div class="bar xpbar"><i style="width:${x.pc}%"></i></div><p class="msg"><b>${x.v}</b> vote${x.v===1?'':'s'} so far, ${x.pc}% to the next level. <b>${n}</b> more vote${n===1?'':'s'} to reach Level ${x.lv+1} (at ${x.b} votes).</p>`}
+function xpCalc(x){const lv=x.level||1,v=(x.xp!=null?x.xp:x.votes)||0,a=x.level_min||0,b=x.next_min||5;return{lv,v,a,b,pc:Math.max(0,Math.min(100,Math.round(100*(v-a)/Math.max(1,b-a)))),badge:x.badge||'🥉',name:x.badge_name||'Bronze'}}
+function renderXp(m){const x=xpCalc(m),n=x.b-x.v;$('xp').innerHTML=`<div class="xpt" style="margin-top:10px"><span class="xpb">${x.badge}</span><b>LEVEL ${x.lv}</b><span class="msg">${esc(x.name)}</span></div><div class="bar xpbar"><i style="width:${x.pc}%"></i></div><p class="msg"><b>${x.v}</b> XP so far (votes on your drafts + votes you cast), ${x.pc}% to the next level. <b>${n}</b> more XP to reach Level ${x.lv+1} (at ${x.b} XP).</p>`}
 function friendXp(f){const x=xpCalc(f);return`<p style="margin:4px 0"><span style="font-size:22px">${x.badge}</span> <b>LEVEL ${x.lv}</b> <span class="msg">${esc(x.name)}</span></p><div class="bar"><i style="width:${x.pc}%"></i></div>`}
 function onMsg(ev,pl){if(!MP||!pl)return;
  if(MP.host){const H=MP.H;
@@ -501,7 +507,7 @@ async function loadBookmarks(){const r=await sb.from('topic_bookmarks').select('
  $('bk').innerHTML=BKT.length?BKT.map((x,i)=>`<div class="item" style="cursor:default;flex-wrap:wrap"><span>${esc(x.emoji||'')} ${esc(x.name)} <small class="msg">${x.items.length} items, ♥ ${LK[x.id]||0}</small></span><span><button class="btn" data-bp="${i}" style="${smb}">Play</button> <button class="btn alt" data-br="${esc(x.id)}" style="${smb}">Remove</button></span></div>`).join(''):'<p class="msg">No bookmarks yet. Tap 🔖 on a community topic to save it here.</p>'}
 $('bk').onclick=async e=>{const p=e.target.closest('button[data-bp]');if(p){const t=toT(BKT[+p.dataset.bp]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=topics.find(x=>x.id===t.id);renderTopics();show('setup');return}
  const d=e.target.closest('button[data-br]');if(d){await sb.from('topic_bookmarks').delete().eq('user_id',uid).eq('topic_id',d.dataset.br);MYB.delete(d.dataset.br);renderTopics();loadBookmarks()}};
-function toast(html,secs){const d=document.createElement('div');d.className='toast';d.innerHTML=(secs?'<div class="tb"></div>':'')+'<div class="tx">'+html+'</div>';$('toasts').appendChild(d);setTimeout(()=>d.remove(),(secs||6)*1000);return d}
+function toast(html,secs){const d=document.createElement('div');d.className='toast';d.innerHTML=(secs===20?'<div class="tb"></div>':'')+'<div class="tx">'+html+'</div>';$('toasts').appendChild(d);setTimeout(()=>d.remove(),(secs||6)*1000);return d}
 function startSocialRT(){if(me.guest||!sb)return;try{
  myPres=sb.channel('p-'+uid,{config:{private:true,presence:{key:uid}}});myPres.subscribe(s=>{if(s==='SUBSCRIBED')myPres.track({on:1})});
  inbox=sb.channel('i-'+uid,{config:{private:true}});inbox.on('broadcast',{event:'*'},m=>onInbox(m.event,m.payload)).subscribe()}catch(e){console.error(e)}}
@@ -524,5 +530,32 @@ $('invl').onclick=async e=>{const b=e.target.closest('button[data-iv]');if(!b||!
  if(!ok){delete INV[id];drawInvite();return}setTimeout(()=>{delete INV[id];drawInvite()},20000)};
 $('inb').onclick=openInvite;
 setInterval(()=>{if(!$('live').classList.contains('hidden'))drawLive()},20000);
+/* ---------- v1.13: popular + recent topics, play counts, public profiles ---------- */
+let UBACK='setup',UT=[],UN={},UNM={};
+function tileHtml(t){const n=PLAYS[t.id];return `<div class="tw"><button class="topic" data-i="${topics.indexOf(t)}" aria-pressed="${t===sel}"><span class="e">${esc(t.emoji)}</span><b>${esc(t.name)}</b><small>${t.items.length} items${t.vis==='private'?' · private 🔒':t.community?' · community':''}${n?' · ▶ '+Number(n).toLocaleString()+' plays':''}</small></button>${t.community&&t.vis!=='private'?`<div class="tact"><button data-lk="${esc(t.id)}" class="${MYL.has(t.id)?'on':''}">♥ ${LK[t.id]||0}</button><button data-bm="${esc(t.id)}" class="${MYB.has(t.id)?'on':''}">🔖</button></div>`:''}</div>`}
+function renderPanes(){const f=ids=>ids.map(id=>topics.find(t=>t.id===id)).filter(Boolean).slice(0,6);const r=f(RECENT),p=f(POPU);
+ $('prec').innerHTML=r.length?r.map(tileHtml).join(''):'<p class="msg">Nothing yet. Topics you play show up here.</p>';
+ $('ppop').innerHTML=p.length?p.map(tileHtml).join(''):'<p class="msg">Popular topics show up as people play.</p>'}
+async function loadPlays(){if(!db)return;
+ const top=await sb.from('topic_play_counts').select('*').order('plays',{ascending:false}).limit(10);POPU=(top.data||[]).map(x=>x.topic_id);(top.data||[]).forEach(x=>{PLAYS[x.topic_id]=x.plays});
+ if(!me.guest){const r=await sb.from('play_log').select('topic_id').eq('user_id',uid).order('at',{ascending:false}).limit(30);RECENT=[...new Set((r.data||[]).map(x=>x.topic_id))].slice(0,8)}
+ const need=[...new Set([...POPU,...RECENT])].filter(id=>!topics.some(t=>t.id===id));
+ if(need.length){const m=await sb.from('topics').select('*').in('id',need);(m.data||[]).filter(x=>Array.isArray(x.items)).forEach(x=>topics.push(toT(x)))}
+ const c=await sb.from('topic_play_counts').select('*').in('topic_id',topics.map(t=>t.id));(c.data||[]).forEach(x=>{PLAYS[x.topic_id]=x.plays});renderTopics()}
+function notePlay(t){if(!t)return;RECENT=[t.id,...RECENT.filter(x=>x!==t.id)].slice(0,8);try{localStorage.setItem('dbvs_recent',JSON.stringify(RECENT))}catch(e){}
+ if(db){PLAYS[t.id]=(PLAYS[t.id]||0)+1;sb.rpc('record_play',{p_topic:t.id})}renderTopics()}
+function topicsClick(e){const a=e.target.closest('button[data-lk],button[data-bm]');if(a){topicAct(a);return}const b=e.target.closest('.topic');if(b){sel=topics[b.dataset.i];renderTopics()}}
+['topics','prec','ppop'].forEach(i=>{$(i).onclick=topicsClick});
+async function openUser(id){UBACK=$('gallery').classList.contains('hidden')?'setup':'gallery';show('user');$('um').textContent='';$('ut').innerHTML='';
+ const[l,t]=await Promise.all([sb.from('leaderboard').select('*').eq('id',id),sb.from('topics').select('*').eq('created_by',id).eq('visibility','public').order('created_at',{ascending:false})]);
+ const u=(l.data||[])[0];if(!u){$('un').textContent='User not found';return}
+ $('un').textContent='@'+u.username+' '+(u.badge||'🥉');$('uav').src=u.avatar||AV;$('ubio').textContent=u.bio||'No bio yet.';
+ $('ust').textContent=`${u.drafts} draft${u.drafts===1?'':'s'} posted, ${u.votes} vote${u.votes===1?'':'s'} received`;$('uxp').innerHTML=friendXp(u);
+ $('uadd').classList.toggle('hidden',me.guest||id===uid);$('uadd').dataset.n=u.username;
+ UT=(t.data||[]).filter(x=>Array.isArray(x.items));$('ut').innerHTML=UT.length?UT.map((x,i)=>`<button class="item" data-p="${i}">${esc(x.emoji||'')} ${esc(x.name)}<i>Play</i></button>`).join(''):'<p class="msg">No public topics yet.</p>'}
+$('ut').onclick=e=>{const b=e.target.closest('button[data-p]');if(!b)return;const t=toT(UT[+b.dataset.p]);if(!topics.some(x=>x.id===t.id))topics.push(t);sel=topics.find(x=>x.id===t.id);renderTopics();show('setup')};
+$('uadd').onclick=async()=>{const r=await sb.rpc('send_friend_request',{p_username:$('uadd').dataset.n});$('um').textContent=r.error?r.error.message:({sent:'Friend request sent.',already:'You are already friends.',pending:'A request is already pending.',not_found:'No one has that username.',self:'That is you.'}[r.data]||'Done.')};
+$('ux').onclick=()=>show(UBACK);
+$('lo2').onclick=()=>$('lo').click();
 boot();
 </script></body></html>
