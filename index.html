@@ -285,7 +285,7 @@ img[width="24"]{width:24px;height:24px;aspect-ratio:1/1;object-fit:cover}
  <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
-<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.24<br>Created by Anthony, from New York</p></main><div id="inbox" class="hidden"><div class="ib-h"><b>My invites &amp; alerts</b><button class="btn alt" id="ibc" style="padding:2px 12px;min-height:0;font-size:15px">Clear alerts</button><button class="btn alt" id="ibx" style="padding:2px 12px;min-height:0;font-size:15px">Close</button></div><div id="ibl"></div></div>
+<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.25<br>Created by Anthony, from New York</p></main><div id="inbox" class="hidden"><div class="ib-h"><b>My invites &amp; alerts</b><button class="btn alt" id="ibc" style="padding:2px 12px;min-height:0;font-size:15px">Clear alerts</button><button class="btn alt" id="ibx" style="padding:2px 12px;min-height:0;font-size:15px">Close</button></div><div id="ibl"></div></div>
 <div id="rxfloat"></div><div id="wipe"></div><div id="toasts"></div>
 <div id="rpm" class="hidden" style="position:fixed;inset:0;z-index:60;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px"><div class="panel" style="max-width:440px;width:100%;margin:0"><h2>Report</h2><p class="msg" id="rpt"></p><label>Reason<select id="rpr"><option>Hate or harassment</option><option>Sexual or explicit content</option><option>Violence or threats</option><option>Spam or scam</option><option>Other</option></select></label><label style="margin-top:8px">Details (optional)<textarea id="rpd" maxlength="500"></textarea></label><div class="row" style="margin-top:12px"><button class="btn" id="rps">Send report</button><button class="btn alt" id="rpc">Cancel</button></div></div></div>
 <nav id="tabbar"><button data-n="home"><span>🏠</span><em>Home</em></button><button data-n="live"><span>📡</span><em>Live</em></button><button data-n="comm"><span>🏆</span><em>Community</em></button><button data-n="prof" id="tpb" class="hidden"><span>👤</span><em>Profile</em></button><button data-n="set"><span>⚙️</span><em>Settings</em></button></nav>
@@ -369,6 +369,7 @@ $('pub').onclick=async()=>{try{const id=S.topic.id||slug(S.topic.name);const ite
  await sb.from('topics').insert({id:slug(S.topic.name)+'-'+Math.random().toString(36).slice(2,5),name:S.topic.name+' (extended)',emoji:S.topic.emoji,items});$('dm').textContent=S.added.length+' items added to the community topic.';$('pub').classList.add('hidden')}catch(e){$('dm').textContent='Could not save to the community library.'}};
 $('again').onclick=()=>{leave();show('setup')};
 /* ---------- online ---------- */
+function fire(p){try{Promise.resolve(p).catch(()=>{})}catch(e){}}   // starts a Supabase request that nobody awaits (it would otherwise never be sent)
 let myId=Math.random().toString(36).slice(2,10);
 let roomApi=null,R=null,MP=null;
 const SECS=['splash','setup','lobby','draft','done','gallery','profile','live','settings','user','ctopics'];
@@ -378,7 +379,7 @@ const nick=()=>((db&&me&&me.username)||$('nick').value.trim()||'Player '+myId.sl
 const om=t=>{$('om').textContent=t};
 const rcode=()=>Array.from({length:5},()=>'ABCDEFGHJKMNPQRSTUVWXYZ'[Math.random()*23|0]).join('');
 const idxOf=(H,i)=>{const n=H.pl.length,p=i%n;return Math.floor(i/n)%2?n-1-p:p};
-function leave(){try{localStorage.removeItem('dbvs_room')}catch(e){}if(MP&&MP.code&&db&&!MP.spec)sb.rpc('leave_room',{p_code:MP.code});if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt);clearInterval(MP.helloT);clearInterval(MP.watch);clearInterval(MP.hb);clearInterval(MP.wt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
+function leave(){try{localStorage.removeItem('dbvs_room')}catch(e){}if(MP&&MP.code&&db&&!MP.spec)fire(sb.rpc('leave_room',{p_code:MP.code}));if(MP){clearInterval(MP.timer);clearTimeout(MP.qt);clearTimeout(MP.nt);clearInterval(MP.helloT);clearInterval(MP.watch);clearInterval(MP.hb);clearInterval(MP.wt)}try{R&&R.leave()}catch(e){}R=null;MP=null;S=null;clearInterval(tick)}
 async function enter(name,host,quick,spec){
  try{const api=roomApi;
   if(!api){om('Online play is not set up on this site yet.');return false}
@@ -403,18 +404,18 @@ function quickLogic(ps){const w=ps.filter(p=>p.q);
 function startOnline(){if(!MP||!MP.host||MP.on)return;const c=MP.cfg,t=topics.find(x=>x.id===c.t)||sel;
  const ps=[...MP.ps].sort(()=>Math.random()-.5).slice(0,12);if(ps.length<2){$('lt').textContent='Need at least 2 players.';return}
  const n=ps.length,r=Math.max(1,Math.min(c.r,Math.floor(t.items.length/n),Math.floor(48/n)));
- MP.on=1;MP.H={t:t.id,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,20),p.nc||'',p.ti||'']),pk:[],l:c.c,d:0};if(MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'live'});publish();MP.timer=setInterval(hostTick,1000)}
+ MP.on=1;MP.H={t:t.id,r,c:c.c,pl:ps.map(p=>[p.id,String(p.name||'Player').slice(0,20),p.nc||'',p.ti||'']),pk:[],l:c.c,d:0};if(MP.cfg.code)fire(sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'live'}));publish();MP.timer=setInterval(hostTick,1000)}
 function publish(){const H=MP.H;R.send('st',H);const j=JSON.stringify(H);MP.last=j;applyState(JSON.parse(j))}
 function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const cid=H.pl[idxOf(H,H.pk.length)][0];const here=MP.ps.some(x=>x.id===cid)||Date.now()-((MP.seen2||{})[cid]||0)<25000;
  if(H.c)H.l--;if(!here||(H.c&&H.l<=0))return autoPick();publish()}
 async function addCustom(v){if(!(await clean(v)))return;const H=MP.H;if(!H||H.d)return;const t=topics.find(x=>x.id===H.t);H.x=H.x||[];const all=[...t.items,...H.x,...H.pk].map(nrm);if(all.includes(nrm(v))||H.x.length>=20)return;H.x.push(v);publish()}
 function hostCheck(ps){const H=MP.H;if(!H||H.d)return;MP.seen=MP.seen||{};ps.forEach(p=>{if(p.add&&p.aseq!==MP.seen[p.id]){MP.seen[p.id]=p.aseq;addCustom(String(p.add).slice(0,40))}});const i=H.pk.length,x=ps.find(q=>q.id===H.pl[idxOf(H,i)][0]);if(x&&x.want&&x.seq===i)commit(x.want)}
-function commit(name){const H=MP.H,t=topics.find(x=>x.id===H.t);if(!t||!(t.items.includes(name)||(H.x||[]).includes(name))||H.pk.includes(name))return;H.pk.push(name);H.l=H.c;if(H.pk.length>=H.pl.length*H.r){H.d=1;if(MP.cfg&&MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'done'})}publish()}
+function commit(name){const H=MP.H,t=topics.find(x=>x.id===H.t);if(!t||!(t.items.includes(name)||(H.x||[]).includes(name))||H.pk.includes(name))return;H.pk.push(name);H.l=H.c;if(H.pk.length>=H.pl.length*H.r){H.d=1;if(MP.cfg&&MP.cfg.code)fire(sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'done'}))}publish()}
 function autoPick(){const H=MP.H,t=topics.find(x=>x.id===H.t),a=t.items.concat(H.x||[]).filter(x=>!H.pk.includes(x));if(a.length)commit(a[Math.random()*a.length|0])}
 function applyState(st){const t=topics.find(x=>x.id===st.t)||(MP.pt&&MP.pt.id===st.t?MP.pt:null);if(!t){$('lt').textContent='Loading topic…';return}
  const n=st.pl.length,prev=S?S.picks.length:-1;
  S={topic:t,players:st.pl.map(x=>x[1]),ids:st.pl.map(x=>x[0]),sty:st.pl.map(x=>({nc:x[2],ti:x[3]})),rounds:st.r,clock:st.c,pool:t.items.concat(st.x||[]).filter(x=>!st.pk.includes(x)).map(x=>({n:x})),picks:st.pk.map((x,i)=>{const r=Math.floor(i/n),p=i%n;return{n:x,r,p:r%2?n-1-p:p}}),added:[],i:st.pk.length,left:st.l,online:true};
- if(prev<0){MP.on=1;if(!MP.spec)notePlay(t);loadAvs(S.ids);if(!MP.spec&&db&&!me.guest)sb.rpc('record_played_with',{p_room:MP.code});show('draft');$('lrx').classList.toggle('hidden',!!MP.spec);buildRxBar();$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
+ if(prev<0){MP.on=1;if(!MP.spec)notePlay(t);loadAvs(S.ids);if(!MP.spec&&db&&!me.guest)fire(sb.rpc('record_played_with',{p_room:MP.code}));show('draft');$('lrx').classList.toggle('hidden',!!MP.spec);buildRxBar();$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
  if(st.c&&st.l<=5&&st.l>0)sfx.tick();startTurn()}
 function mpPick(name){const t=turn(S.i);if(S.ids[t.p]!==myId){$('sm').textContent='Wait for your turn.';return}
  fx(prefs.pickfx);if(MP.host)commit(name);else{R.send('want',{id:myId,want:name,seq:S.i});$('q').value=''}}
@@ -587,7 +588,7 @@ $('mk').onclick=async()=>{if(!db){om('Online play is not set up on this site yet
  const nm=nick();if(!(await clean(nm+' '+sel.name))){om('That name is not allowed.');return}
  const code=rcode(),r=await sb.rpc('create_room',{p_code:code,p_topic:sel.name,p_emoji:sel.emoji,p_vis:$('rv').value,p_name:nm});
  if(r.error){om(r.error.message);return}
- if(await enter('d-'+code.toLowerCase(),true)){MP.cfg={t:sel.id,r:+$('rd').value,c:+$('tm').value,code};fillLobbyCfg();MP.hb=setInterval(()=>sb.rpc('room_heartbeat',{p_code:MP.code}),30000)}};
+ if(await enter('d-'+code.toLowerCase(),true)){MP.cfg={t:sel.id,r:+$('rd').value,c:+$('tm').value,code};fillLobbyCfg();MP.hb=setInterval(()=>fire(sb.rpc('room_heartbeat',{p_code:MP.code})),30000)}};
 $('join').onclick=()=>{const c=$('jc').value.toUpperCase().replace(/[^A-Z]/g,'');if(c.length!==5){om('Enter the 5-letter room code.');return}joinRoom(c,false)};
 applyPrefs();
 /* ---------- password reset, friend requests ---------- */
@@ -620,7 +621,7 @@ function onMsg(ev,pl){if(!MP||!pl)return;
  else if(ev==='cfg'){MP.hostSeen=Date.now();if(pl.w)MP.world=true;if(pl.pv)MP.pt={id:pl.id,name:pl.n,emoji:pl.e,items:pl.pv,vis:'private'};$('lti').textContent=`${pl.e||''} ${pl.n} · ${pl.r} rounds · ${pl.c?pl.c+'s clock':'no clock'}`}}
 function sendCfg(force){if(!MP||!MP.host||!MP.cfg||(MP.on&&!force))return;const c=MP.cfg,t=topics.find(x=>x.id===c.t)||sel;R.send('cfg',{id:t.id,n:t.name,e:t.emoji,r:c.r,c:c.c,w:MP.world?1:undefined,pv:t.vis==='private'?t.items:undefined})}
 function fillLobbyCfg(){$('inb').classList.toggle('hidden',!!me.guest);$('lcfg').classList.remove('hidden');$('lti').classList.add('hidden');$('lts').innerHTML=topics.map(t=>`<option value="${esc(t.id)}">${esc(t.emoji)} ${esc(t.name)}</option>`).join('');$('lts').value=MP.cfg.t;$('lrd').value=MP.cfg.r;$('ltm').value=MP.cfg.c;sendCfg()}
-function lobbyCfgChanged(){if(!MP||!MP.host)return;const t=topics.find(x=>x.id===$('lts').value);if(!t)return;MP.cfg.t=t.id;MP.cfg.r=+$('lrd').value;MP.cfg.c=+$('ltm').value;if(db)sb.rpc('set_room_topic',{p_code:MP.code,p_topic:t.name,p_emoji:t.emoji});sendCfg()}
+function lobbyCfgChanged(){if(!MP||!MP.host)return;const t=topics.find(x=>x.id===$('lts').value);if(!t)return;MP.cfg.t=t.id;MP.cfg.r=+$('lrd').value;MP.cfg.c=+$('ltm').value;if(db)fire(sb.rpc('set_room_topic',{p_code:MP.code,p_topic:t.name,p_emoji:t.emoji}));sendCfg()}
 ['lts','lrd','ltm'].forEach(i=>{$(i).onchange=lobbyCfgChanged});
 /* ---------- v1.10: likes, bookmarks, status, invites ---------- */
 let BKT=[],INV={},IFR=[],myPres=null,inbox=null,watchers=[],ONL={};
@@ -672,7 +673,7 @@ async function loadPlays(){if(!db)return;
  if(need.length){const m=await sb.from('topics').select('*').in('id',need);(m.data||[]).filter(x=>Array.isArray(x.items)).forEach(x=>topics.push(toT(x)))}
  const c=await sb.from('topic_play_counts').select('*').in('topic_id',topics.map(t=>t.id));(c.data||[]).forEach(x=>{PLAYS[x.topic_id]=x.plays});renderTopics()}
 function notePlay(t){if(!t)return;RECENT=[t.id,...RECENT.filter(x=>x!==t.id)].slice(0,8);try{localStorage.setItem('dbvs_recent',JSON.stringify(RECENT))}catch(e){}
- if(db){PLAYS[t.id]=(PLAYS[t.id]||0)+1;sb.rpc('record_play',{p_topic:t.id})}renderTopics()}
+ if(db){PLAYS[t.id]=(PLAYS[t.id]||0)+1;fire(sb.rpc('record_play',{p_topic:t.id}))}renderTopics()}
 function topicsClick(e){const rp=e.target.closest('button[data-rp]');if(rp){openReport('topic',rp.dataset.rp,'this topic');return}const a=e.target.closest('button[data-lk],button[data-bm]');if(a){topicAct(a);return}const b=e.target.closest('.topic');if(b){sel=topics[b.dataset.i];renderTopics()}}
 ['topics','prec','ppop'].forEach(i=>{$(i).onclick=topicsClick});
 async function openUser(id){UVIEW=id;UBACK=SECS.find(s=>s!=='user'&&!$(s).classList.contains('hidden'))||'setup';show('user');$('um').textContent='';$('ut').innerHTML='';
@@ -848,7 +849,7 @@ async function worldPlay(){if(!db){om('Online play is not set up on this site ye
  const f=await sb.rpc('find_world_room');if(f.data){return joinRoom(f.data,false)}
  const t=worldTopic(),c=rcode(),nm=nick(),r=await sb.rpc('create_world_room',{p_code:c,p_topic:t.name,p_emoji:t.emoji,p_name:nm});if(r.error){alert(r.error.message);return}
  if(await enter('d-'+c.toLowerCase(),true)){MP.world=true;MP.cfg={t:t.id,r:3,c:30,code:c};fillLobbyCfg();$('ls').classList.add('hidden');$('lcfg').classList.add('hidden');$('lti').classList.remove('hidden');$('lti').textContent=`🌍 ${t.emoji||''} ${t.name}`;
-  MP.hb=setInterval(()=>sb.rpc('room_heartbeat',{p_code:MP.code}),30000);MP.wt=setInterval(worldTick,1000);sendCfg()}}
+  MP.hb=setInterval(()=>fire(sb.rpc('room_heartbeat',{p_code:MP.code})),30000);MP.wt=setInterval(worldTick,1000);sendCfg()}}
 function worldTick(){if(!MP||!MP.host||!MP.world||MP.on)return;const n=MP.ps.length;
  if(n<2)MP.wcd=null;else{const want=n>=12?0:n>=6?10:30;if(MP.wcd==null)MP.wcd=want;else if(MP.wcd>want)MP.wcd=want;else MP.wcd--}
  if(MP.wcd!=null&&MP.wcd<=0){startOnline();return}
