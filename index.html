@@ -185,6 +185,16 @@ html[data-tx=flash] #wipe{left:0;width:100vw;transform:none;background:#fff}html
 .row>img,.row img.av,#pav,#uav{flex:none!important;max-width:none;aspect-ratio:1/1;object-fit:cover;border-radius:50%}
 #pav,#uav{width:80px!important;height:80px!important}#fv .row>img{width:64px!important;height:64px!important}
 img[width="24"]{width:24px;height:24px;aspect-ratio:1/1;object-fit:cover}
+/* phones: nothing may be wider than the screen (the file chooser and some inputs were overflowing and making the page look stretched) */
+@media(max-width:860px){
+ .row>*,label{min-width:0}input,select,textarea{max-width:100%;min-width:0}input[type=file]{width:100%;font-size:14px}
+ .nav{flex-wrap:nowrap;gap:8px}.nav b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px}
+ .nav .logo{flex:none}.nav .btn{flex:none}#lo2{padding:4px 10px;font-size:13px;min-height:0}#bell{padding:4px 10px;min-height:0}
+ #tab-a>.panel>.row:first-child,#user>.panel>.row:first-child{align-items:flex-start!important}
+}
+@media(max-width:860px){.pool:not(#pool){min-height:0}.hero h1{font-size:clamp(32px,10.5vw,50px)}}
+@media(max-width:480px){.nav b{display:none}.nav #bell{margin-left:auto}}
+.who img{vertical-align:middle;margin-right:8px}.board th img{border-radius:50%;margin-bottom:2px}.team h3 img{vertical-align:middle;margin-right:6px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style></head><body><div class="nav"><span class="logo">VS</span><b>Draft Battle VS</b><button id="hb" aria-label="Menu">☰</button><nav class="links" id="navl"><button data-n="home">Home</button><button data-n="live">Live Drafts</button><button data-n="comm" id="gb">Community</button><button data-n="fr" id="nfr" class="hidden">Friends</button><button data-n="prof" id="pb" class="hidden">Profile</button><button data-n="set">Settings</button></nav><button class="btn alt hidden" id="bell" aria-label="My invites and alerts" style="position:relative;padding:4px 12px;font-size:18px;color:#fff;border-color:#555">🔔<i id="bdot" class="hidden"></i></button><button class="btn alt" id="lo2" style="margin-left:8px;padding:4px 14px;font-size:15px;color:#fff;border-color:#555">Log out</button></div><div class="tick">Draft Battle VS · snake order · pick clock</div><main>
 
@@ -237,9 +247,9 @@ img[width="24"]{width:24px;height:24px;aspect-ratio:1/1;object-fit:cover}
 
 <section id="profile" class="hidden">
 <div class="row" style="margin-bottom:12px"><button class="btn" data-pt="a">Profile</button><button class="btn alt" data-pt="f">Friends</button><button class="btn alt" data-pt="t">My topics</button><button class="btn alt" data-pt="b">Bookmarks</button><button class="btn alt" data-pt="d">My drafts</button></div>
-<div class="ptab" id="tab-a"><div class="panel"><div class="row" style="align-items:center"><img id="pav" alt="" width="80" height="80" style="border-radius:50%;background:#000;object-fit:cover"><div style="flex:1"><h2 id="pn" style="border:0;padding:0;margin:0"></h2><p class="msg" id="pst"></p><p class="msg" id="prk"></p><div id="xp"></div></div></div><label style="margin-top:10px">Bio<textarea id="pbio" maxlength="200"></textarea></label><div class="row" style="margin-top:8px"><label>Profile picture<input type="file" id="pimg" accept="image/*"></label><button class="btn" id="psv">Save profile</button></div><p class="msg" id="pm"></p></div></div>
+<div class="ptab" id="tab-a"><div class="panel"><div class="row" style="align-items:center"><img id="pav" alt="" width="80" height="80" style="border-radius:50%;background:#000;object-fit:cover"><div style="flex:1"><h2 id="pn" style="border:0;padding:0;margin:0"></h2><p class="msg" id="pst"></p><p class="msg" id="prk"></p><div id="xp"></div></div></div><label style="margin-top:10px">Bio<textarea id="pbio" maxlength="200"></textarea></label><div class="row" style="margin-top:8px"><label>Profile picture<input type="file" id="pimg" accept="image/*"></label><button class="btn" id="psv">Save profile</button></div><p class="msg" id="pm"></p><h3 style="margin:16px 0 4px">Username</h3><p class="msg" id="unm"></p><div class="row"><input id="unew" maxlength="20" placeholder="New username"><button class="btn alt" id="unb">Change username</button></div></div></div>
 <div class="ptab hidden" id="tab-f"><div id="fp"><div class="panel"><h2>Friends</h2><p class="msg">Your friend code: <b id="fc" style="color:var(--gold);font-size:20px"></b></p><div class="row"><input id="fadd" placeholder="Friend code" maxlength="6" style="text-transform:uppercase"><button class="btn alt" id="fb">Add friend</button></div><div class="row" style="margin-top:8px"><input id="fu" placeholder="Add by username" maxlength="20"><button class="btn alt" id="fub">Send request</button></div><p class="msg" id="fm"></p>
-<h3 style="margin:14px 0 4px">Requests</h3><div id="frq" class="pool"></div><h3 style="margin:14px 0 4px">Followers</h3><div id="ffo" class="pool"></div>
+<h3 style="margin:14px 0 4px">Recently played with</h3><div id="rpw" class="pool"></div><h3 style="margin:14px 0 4px">Requests</h3><div id="frq" class="pool"></div><h3 style="margin:14px 0 4px">Followers</h3><div id="ffo" class="pool"></div>
 <h3 style="margin:14px 0 4px">Following</h3><p class="msg">Tap a friend to see their profile and public topics.</p><div id="fl" class="pool" style="margin-top:6px"></div></div></div><div class="panel hidden" id="fv"></div></div>
 <div class="ptab hidden" id="tab-t"><div class="panel"><h2>My topics</h2><p class="msg">Switch a topic between public (shown in the community) and private (only you).</p><div class="pool" id="mt"></div></div></div>
 <div class="ptab hidden" id="tab-b"><div class="panel"><h2>Bookmarks</h2><div class="pool" id="bk"></div></div></div>
@@ -275,7 +285,7 @@ img[width="24"]{width:24px;height:24px;aspect-ratio:1/1;object-fit:cover}
  <div class="row" style="margin-top:18px"><button class="btn" id="copy">Copy results</button><button class="btn alt" id="pub">Add new items to community topic</button><label id="pvw" style="flex-direction:row;align-items:center;gap:8px">Visibility<select id="pv"><option value="public">Public</option><option value="private">Private (only me)</option></select></label><button class="btn alt" id="post">Post to gallery</button><button class="btn alt" id="gv">View gallery</button><button class="btn alt" id="again">New draft</button></div>
  <p class="msg" id="dm"></p>
 </section>
-<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.22<br>Created by Anthony, from New York</p></main><div id="inbox" class="hidden"><div class="ib-h"><b>My invites &amp; alerts</b><button class="btn alt" id="ibx" style="padding:2px 12px;min-height:0;font-size:15px">Close</button></div><div id="ibl"></div></div>
+<p class="msg" style="margin-top:30px"><a href="terms.html" style="color:var(--gold)">Terms of Use</a> · <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a> · Version 1.24<br>Created by Anthony, from New York</p></main><div id="inbox" class="hidden"><div class="ib-h"><b>My invites &amp; alerts</b><button class="btn alt" id="ibc" style="padding:2px 12px;min-height:0;font-size:15px">Clear alerts</button><button class="btn alt" id="ibx" style="padding:2px 12px;min-height:0;font-size:15px">Close</button></div><div id="ibl"></div></div>
 <div id="rxfloat"></div><div id="wipe"></div><div id="toasts"></div>
 <div id="rpm" class="hidden" style="position:fixed;inset:0;z-index:60;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px"><div class="panel" style="max-width:440px;width:100%;margin:0"><h2>Report</h2><p class="msg" id="rpt"></p><label>Reason<select id="rpr"><option>Hate or harassment</option><option>Sexual or explicit content</option><option>Violence or threats</option><option>Spam or scam</option><option>Other</option></select></label><label style="margin-top:8px">Details (optional)<textarea id="rpd" maxlength="500"></textarea></label><div class="row" style="margin-top:12px"><button class="btn" id="rps">Send report</button><button class="btn alt" id="rpc">Cancel</button></div></div></div>
 <nav id="tabbar"><button data-n="home"><span>🏠</span><em>Home</em></button><button data-n="live"><span>📡</span><em>Live</em></button><button data-n="comm"><span>🏆</span><em>Community</em></button><button data-n="prof" id="tpb" class="hidden"><span>👤</span><em>Profile</em></button><button data-n="set"><span>⚙️</span><em>Settings</em></button></nav>
@@ -323,24 +333,24 @@ $('go').onclick=async()=>{let ps=[...$('pl').children].map((x,i)=>x.value.trim()
 function startTurn(){clearInterval(tick);const total=S.players.length*S.rounds;
  if(S.i>=total)return finish();
  const t=turn(S.i);$('who').textContent=S.players[t.p]+' '+tr('onClock');$('rnd').textContent=`${tr('round')} ${t.r+1} / ${S.rounds} · ${tr('pick')} ${S.i+1} / ${total}`;
- if(MP){$('who').textContent=S.players[t.p]+(S.ids[t.p]===myId?' (you)':'')+' '+tr('onClock');drawTime();return render()}
+ if(MP){$('who').innerHTML=avImg(S.ids[t.p],34)+esc(S.players[t.p])+(S.ids[t.p]===myId?' (you)':'')+' '+esc(tr('onClock'));drawTime();return render()}
  S.left=S.clock;drawTime();if(S.clock)tick=setInterval(()=>{S.left--;drawTime();if(S.left<=5&&S.left>0)sfx.tick();if(S.left<=0){clearInterval(tick);sfx.buzz();const a=S.pool[Math.random()*S.pool.length|0];if(a)pick(a.n,true)}},1000);
  render()}
 function drawTime(){const e=$('time');e.textContent=S.clock?S.left:'∞';e.classList.toggle('low',S.clock&&S.left<=5)}
 function pick(name){if(MP)return mpPick(name);const k=S.pool.findIndex(x=>x.n===name);if(k<0)return;const t=turn(S.i);S.pool.splice(k,1);S.picks.push({n:name,p:t.p,r:t.r});S.i++;sfx.pick();fx(prefs.pickfx);$('q').value='';$('sm').textContent='';startTurn()}
 function render(){const q=$('q').value.trim().toLowerCase();
- const list=S.pool.filter(x=>x.n.toLowerCase().includes(q)).slice(0,60);
- $('pool').innerHTML=list.map(x=>`<button class="item" data-n="${esc(x.n)}">${esc(x.n)}<i>${x.new?'new':'draft'}</i></button>`).join('')||'<p class="msg">No matches. Try Find with Claude or add it as custom.</p>';
+ const list=S.pool.filter(x=>x.n.toLowerCase().includes(q)||nrm(x.n).includes(nrm(q))).slice(0,60);
+ $('pool').innerHTML=addRowHtml()+list.map(x=>`<button class="item" data-n="${esc(x.n)}">${esc(x.n)}<i>${x.new?'new':'draft'}</i></button>`).join('')||'<p class="msg">No matches. Try Find with Claude or add it as custom.</p>';
  $('ask').classList.toggle('hidden',!sample||!!MP);
- const n=S.players.length,cur=turn(S.i);let h='<table><tr>'+S.players.map((p,i)=>`<th class="${i===cur.p?'on':''}">${nameHtml(p,(S.sty&&S.sty[i]||{}).nc)}</th>`).join('')+'</tr>';
+ const n=S.players.length,cur=turn(S.i);let h='<table><tr>'+S.players.map((p,i)=>`<th class="${i===cur.p?'on':''}">${S.ids?avImg(S.ids[i],26)+'<br>':''}${nameHtml(p,(S.sty&&S.sty[i]||{}).nc)}</th>`).join('')+'</tr>';
  for(let r=0;r<S.rounds;r++){h+='<tr>';for(let p=0;p<n;p++){const k=S.picks.find(x=>x.r===r&&x.p===p);h+=k?`<td class="f">${esc(k.n)}</td>`:`<td class="${r===cur.r&&p===cur.p?'cur':''}"><small>${r%2?'←':'→'}</small></td>`}h+='</tr>'}
  $('board').innerHTML=h+'</table>'}
 $('q').oninput=render;
 $('pool').onclick=e=>{const b=e.target.closest('.item');if(b)pick(b.dataset.n)};
 $('q').onkeydown=e=>{if(e.key==='Enter'){const f=S.pool.find(x=>x.n.toLowerCase().includes($('q').value.trim().toLowerCase()));if(f&&$('q').value.trim())pick(f.n)}};
-function addItems(arr){let c=0;arr.forEach(n=>{n=String(n).trim();if(n&&!S.pool.some(x=>x.n.toLowerCase()===n.toLowerCase())&&!S.picks.some(x=>x.n.toLowerCase()===n.toLowerCase())){S.pool.push({n,new:1});S.added.push(n);c++}});return c}
+function addItems(arr){let c=0;arr.forEach(n=>{n=String(n).trim();if(n&&!S.pool.some(x=>nrm(x.n)===nrm(n))&&!S.picks.some(x=>nrm(x.n)===nrm(n))){S.pool.push({n,new:1});S.added.push(n);c++}});return c}
 $('addc').onclick=async()=>{const v=$('q').value.trim().slice(0,40);if(!v){$('sm').textContent='Type an item name first.';return}
- if(MP){if(MP.host)addCustom(v);else R.send('add',{id:myId,add:v});$('sm').textContent='Added "'+v+'". Click it in the list to draft it.';return}
+ if(MP){if(dupItem(v)){$('sm').textContent='"'+v+'" is already in the list.';return}if(MP.host)addCustom(v);else R.send('add',{id:myId,add:v});$('sm').textContent='Added "'+v+'". Click it in the list to draft it.';return}
  if(db&&!(await clean(v))){$('sm').textContent='That entry is not allowed.';return}const c=addItems([v]);$('sm').textContent=c?'Added "'+v+'". Click it in the list to draft it.':'That item is already in the list.';render()};
 $('ask').onclick=async()=>{const v=$('q').value.trim();if(v.length<2){$('sm').textContent='Type a few letters first, like "hersh".';return}
  $('sm').textContent='Asking Claude…';
@@ -351,7 +361,7 @@ $('quit').onclick=()=>{if(confirm(MP?'Leave the draft?':'End the draft now?')){i
 
 /* ---------- results ---------- */
 function finish(){clearInterval(tick);sfx.horn();$('draft').classList.add('hidden');$('done').classList.remove('hidden');
- $('teams').innerHTML=S.players.map((p,i)=>`<div class="team"><h3>${esc(p)}</h3><ol>${S.picks.filter(k=>k.p===i).map(k=>`<li>${esc(k.n)}</li>`).join('')}</ol></div>`).join('');
+ $('teams').innerHTML=S.players.map((p,i)=>`<div class="team"><h3>${S.ids?avImg(S.ids[i],34):''}${esc(p)}</h3><ol>${S.picks.filter(k=>k.p===i).map(k=>`<li>${esc(k.n)}</li>`).join('')}</ol></div>`).join('');
  $('pub').classList.toggle('hidden',!(db&&S.added.length));const canPost=!!(db&&MP&&S.online&&!me.guest);$('post').classList.toggle('hidden',!canPost);$('pvw').classList.toggle('hidden',!canPost)}
 $('copy').onclick=async()=>{const t=S.topic.emoji+' '+S.topic.name+'\n\n'+S.players.map((p,i)=>p+': '+S.picks.filter(k=>k.p===i).map(k=>k.n).join(', ')).join('\n');
  try{await navigator.clipboard.writeText(t);$('dm').textContent='Copied.'}catch(e){$('dm').textContent='Copy failed. Select and copy the teams manually.'}};
@@ -377,8 +387,8 @@ async function enter(name,host,quick,spec){
   R.onPeers(c=>{MP.peers=c.peers;peersChanged()});R.onMsg(onMsg);if(!host&&!spec){R.send('hello',{});MP.helloT=setInterval(()=>{if(MP&&!MP.on)R.send('hello',{})},3000)}MP.watch=setInterval(()=>{if(MP&&MP.on&&!MP.host&&Date.now()-(MP.hostSeen||0)>20000)$('who').textContent='Lost contact with the host. Trying to reconnect…';if(MP&&MP.world&&!MP.host&&!MP.on&&!MP.spec&&MP.hostSeen&&Date.now()-MP.hostSeen>25000)$('lt').textContent='The host seems to have left. Leave and tap World Play again.'},5000);
   if(!spec)try{localStorage.setItem('dbvs_room',MP.code)}catch(e){}show('lobby');$('inb').classList.add('hidden');$('invp').classList.add('hidden');$('lcfg').classList.add('hidden');$('lti').classList.toggle('hidden',!!host);$('ln').value=nick();$('lc').textContent=quick?'Quick match':name.replace(/^d-/,'').toUpperCase();$('lt').textContent='Connecting…';return true}
  catch(e){om('Could not join that room.');return false}}
-function peersChanged(){if(!MP)return;const ps=MP.peers.map(p=>p.presence).filter(p=>p&&p.id);MP.ps=ps;MP.seen2=MP.seen2||{};ps.forEach(p=>{MP.seen2[p.id]=Date.now()});joinWatch(ps);
- $('lp').innerHTML=ps.map(p=>`<div class="team"><b>${nameHtml(p.name||'Player',p.nc,p.ti)}</b>${p.id===myId?' (you)':`<div style="margin-top:6px;font-size:13px"><span class="ulink" data-rpu="${esc(p.id)}">Report</span> · <span class="ulink" data-blk="${esc(p.id)}" data-nm="${esc(p.name||'player')}">Block</span></div>`}</div>`).join('');
+function peersChanged(){if(!MP)return;const ps=MP.peers.map(p=>p.presence).filter(p=>p&&p.id);MP.ps=ps;MP.seen2=MP.seen2||{};ps.forEach(p=>{MP.seen2[p.id]=Date.now()});joinWatch(ps);loadAvs(ps.map(p=>p.id));
+ $('lp').innerHTML=ps.map(p=>`<div class="team"><div style="display:flex;align-items:center;gap:8px">${avImg(p.id,36)}<b>${nameHtml(p.name||'Player',p.nc,p.ti)}</b></div>${p.id===myId?' (you)':`<div style="margin-top:6px;font-size:13px"><span class="ulink" data-rpu="${esc(p.id)}">Report</span> · <span class="ulink" data-blk="${esc(p.id)}" data-nm="${esc(p.name||'player')}">Block</span></div>`}</div>`).join('');
  if(MP.quick){$('ls').classList.add('hidden');const go=ps.find(p=>p.go&&p.ids&&p.ids.includes(myId));
   if(go&&!MP.moving){const lead=go.id===myId;MP.moving=1;(async()=>{if(lead)await new Promise(r=>setTimeout(r,2500));
    if(await enter(go.go,lead)&&lead){MP.cfg={t:topics[Math.random()*topics.length|0].id,r:3,c:30};setTimeout(startOnline,6000)}})();return}
@@ -397,14 +407,14 @@ function startOnline(){if(!MP||!MP.host||MP.on)return;const c=MP.cfg,t=topics.fi
 function publish(){const H=MP.H;R.send('st',H);const j=JSON.stringify(H);MP.last=j;applyState(JSON.parse(j))}
 function hostTick(){const H=MP&&MP.H;if(!H||H.d)return;const cid=H.pl[idxOf(H,H.pk.length)][0];const here=MP.ps.some(x=>x.id===cid)||Date.now()-((MP.seen2||{})[cid]||0)<25000;
  if(H.c)H.l--;if(!here||(H.c&&H.l<=0))return autoPick();publish()}
-async function addCustom(v){if(!(await clean(v)))return;const H=MP.H;if(!H||H.d)return;const t=topics.find(x=>x.id===H.t);H.x=H.x||[];const all=[...t.items,...H.x,...H.pk].map(s=>s.toLowerCase());if(all.includes(v.toLowerCase())||H.x.length>=20)return;H.x.push(v);publish()}
+async function addCustom(v){if(!(await clean(v)))return;const H=MP.H;if(!H||H.d)return;const t=topics.find(x=>x.id===H.t);H.x=H.x||[];const all=[...t.items,...H.x,...H.pk].map(nrm);if(all.includes(nrm(v))||H.x.length>=20)return;H.x.push(v);publish()}
 function hostCheck(ps){const H=MP.H;if(!H||H.d)return;MP.seen=MP.seen||{};ps.forEach(p=>{if(p.add&&p.aseq!==MP.seen[p.id]){MP.seen[p.id]=p.aseq;addCustom(String(p.add).slice(0,40))}});const i=H.pk.length,x=ps.find(q=>q.id===H.pl[idxOf(H,i)][0]);if(x&&x.want&&x.seq===i)commit(x.want)}
 function commit(name){const H=MP.H,t=topics.find(x=>x.id===H.t);if(!t||!(t.items.includes(name)||(H.x||[]).includes(name))||H.pk.includes(name))return;H.pk.push(name);H.l=H.c;if(H.pk.length>=H.pl.length*H.r){H.d=1;if(MP.cfg&&MP.cfg.code)sb.rpc('set_room_status',{p_code:MP.cfg.code,p_status:'done'})}publish()}
 function autoPick(){const H=MP.H,t=topics.find(x=>x.id===H.t),a=t.items.concat(H.x||[]).filter(x=>!H.pk.includes(x));if(a.length)commit(a[Math.random()*a.length|0])}
 function applyState(st){const t=topics.find(x=>x.id===st.t)||(MP.pt&&MP.pt.id===st.t?MP.pt:null);if(!t){$('lt').textContent='Loading topic…';return}
  const n=st.pl.length,prev=S?S.picks.length:-1;
  S={topic:t,players:st.pl.map(x=>x[1]),ids:st.pl.map(x=>x[0]),sty:st.pl.map(x=>({nc:x[2],ti:x[3]})),rounds:st.r,clock:st.c,pool:t.items.concat(st.x||[]).filter(x=>!st.pk.includes(x)).map(x=>({n:x})),picks:st.pk.map((x,i)=>{const r=Math.floor(i/n),p=i%n;return{n:x,r,p:r%2?n-1-p:p}}),added:[],i:st.pk.length,left:st.l,online:true};
- if(prev<0){MP.on=1;if(!MP.spec)notePlay(t);show('draft');$('lrx').classList.toggle('hidden',!!MP.spec);buildRxBar();$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
+ if(prev<0){MP.on=1;if(!MP.spec)notePlay(t);loadAvs(S.ids);if(!MP.spec&&db&&!me.guest)sb.rpc('record_played_with',{p_room:MP.code});show('draft');$('lrx').classList.toggle('hidden',!!MP.spec);buildRxBar();$('tt').textContent=t.emoji+' '+t.name;sfx.horn()}else if(S.picks.length>prev)sfx.pick();
  if(st.c&&st.l<=5&&st.l>0)sfx.tick();startTurn()}
 function mpPick(name){const t=turn(S.i);if(S.ids[t.p]!==myId){$('sm').textContent='Wait for your turn.';return}
  fx(prefs.pickfx);if(MP.host)commit(name);else{R.send('want',{id:myId,want:name,seq:S.i});$('q').value=''}}
@@ -443,7 +453,7 @@ $('gl').onclick=async e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.
  const r=await sb.from('votes').upsert({draft_id:id,user_id:uid,team:i});$('gm').textContent=r.error?'Could not save your vote.':'';if(!r.error&&!had)toast('+1 XP for voting!',4);loadG()};
 $('gv').onclick=openGallery;$('gx').onclick=()=>show('setup');
 $('post').onclick=async()=>{let r=await sb.rpc('post_draft',{p_room:(MP&&MP.code)||'',p_id:dId(),p_topic:S.topic.name,p_emoji:S.topic.emoji,p_topic_id:S.topic.id,p_rounds:S.rounds,p_picks:S.picks.map(k=>k.n),p_players:S.players,p_teams:S.players.map((p,i)=>S.picks.filter(k=>k.p===i).map(k=>k.n)),p_vis:$('pv').value});if(!r.error&&r.data==='duplicate')r={error:{code:'23505'}};
- $('dm').textContent=!r.error?($('pv').value==='private'?'Saved as private. Only you can see it, in your profile.':'Posted. Find it in the Gallery and share it so people can vote.'):r.error.code==='23505'?'This draft is already in the gallery.':'Could not post this draft.';
+ $('dm').textContent=!r.error?($('pv').value==='private'?'Saved as private. Only you can see it, in your profile.':'Posted. Find it in the Gallery and share it so people can vote.'):r.error.code==='23505'?'This draft is already in the gallery.':'Could not post this draft. '+((r.error&&r.error.message)||'');
  if(!r.error||r.error.code==='23505'){$('post').classList.add('hidden');$('pvw').classList.add('hidden')}};
 /* ---------- accounts ---------- */
 const AV='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" fill="#2e2e31"/><circle cx="48" cy="38" r="16" fill="#9a9aa1"/><rect x="20" y="60" width="56" height="30" rx="14" fill="#9a9aa1"/></svg>');
@@ -489,7 +499,7 @@ $('nb').onclick=async()=>{if(!db||me.guest){alert('Create a free account to make
 
 /* ---------- profile ---------- */
 let MD=[],FR={},FT=[],FVID=null;
-async function openProfile(){if(me.guest||!db){alert('Create a free account to get a profile.');return}show('profile');tabTo('a');loadMyTopics();loadSocial();loadBookmarks();
+async function openProfile(){if(me.guest||!db){alert('Create a free account to get a profile.');return}show('profile');tabTo('a');loadMyTopics();loadSocial();loadBookmarks();loadRecentWith();paintUsername();
  $('pn').textContent=me.username;$('pav').src=me.avatar||AV;$('pbio').value=me.bio||'';$('fc').textContent=me.friend_code||'';$('pdp').classList.add('hidden');
  const fr=await sb.from('friendships').select('friend_id').eq('user_id',uid);const fids=(fr.data||[]).map(f=>f.friend_id);
  const[fl,wr,md]=await Promise.all([sb.from('leaderboard').select('*').in('id',[...fids,uid]),sb.rpc('world_rank',{u:uid}),sb.from('drafts').select('*').eq('created_by',uid).order('created_at',{ascending:false})]);
@@ -783,11 +793,11 @@ const ntText=x=>{const d=x.data||{};return x.kind==='friend_request'?`<b>@${esc(
 async function loadNotifs(){if(!db||me.guest)return;const[n,i]=await Promise.all([sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(25),sb.from('game_invites').select('*').eq('to_id',uid).eq('status','pending').gt('expires_at',new Date().toISOString())]);NT=n.data||[];IV=i.data||[];paintInbox()}
 function paintInbox(){const unread=NT.filter(x=>!x.read&&x.kind!=='invite').length;$('bdot').classList.toggle('hidden',!(unread||IV.length));
  const inv=IV.map(v=>`<div class="ib-i"><b>@${esc(v.from_name)}</b> invited you to a draft<br><span class="msg">${esc(v.topic_emoji||'')} ${esc(v.topic_name||'')}</span><div class="row" style="margin-top:8px"><button class="btn" data-iy="${v.id}" style="${smb}">Join</button><button class="btn alt" data-in="${v.id}" style="${smb}">Deny</button></div></div>`).join('');
- const rest=NT.filter(x=>x.kind!=='invite').map(x=>`<div class="ib-i" ${x.kind==='friend_request'?'data-go="fr" style="cursor:pointer"':''}>${x.read?'':'● '}${ntText(x)}<br><span class="msg">${new Date(x.created_at).toLocaleString()}</span></div>`).join('');
+ const rest=NT.filter(x=>x.kind!=='invite').map(x=>`<div class="ib-i" ${x.kind==='friend_request'?'data-go="fr" style="cursor:pointer"':''}><span class="ulink" data-cn="${x.id}" style="float:right;padding-left:10px">✕</span>${x.read?'':'● '}${ntText(x)}<br><span class="msg">${new Date(x.created_at).toLocaleString()}</span></div>`).join('');
  $('ibl').innerHTML=((inv?'<h3 style="margin:4px 0 6px">Game invites</h3>'+inv:'')+(rest?'<h3 style="margin:10px 0 6px">Alerts</h3>'+rest:''))||'<p class="msg">Nothing new.</p>'}
 async function answerInvite(id,yes){const r=await sb.rpc('respond_invite',{p_id:id,p_accept:yes});IV=IV.filter(v=>v.id!==id);paintInbox();
  if(r.error){toast(r.error.message,4);return}if(yes&&r.data){if(MP&&MP.on&&!confirm('Leave your current draft?'))return;joinRoom(r.data,false)}}
-$('ibl').onclick=e=>{const y=e.target.closest('[data-iy]');if(y){$('inbox').classList.add('hidden');answerInvite(y.dataset.iy,true);return}const n=e.target.closest('[data-in]');if(n){answerInvite(n.dataset.in,false);return}
+$('ibl').onclick=async e=>{const cn=e.target.closest('[data-cn]');if(cn){await sb.rpc('clear_notifications',{p_id:cn.dataset.cn});NT=NT.filter(x=>x.id!==cn.dataset.cn);paintInbox();return}const y=e.target.closest('[data-iy]');if(y){$('inbox').classList.add('hidden');answerInvite(y.dataset.iy,true);return}const n=e.target.closest('[data-in]');if(n){answerInvite(n.dataset.in,false);return}
  if(e.target.closest('[data-go]')){$('inbox').classList.add('hidden');openProfile();tabTo('f')}};
 async function closeInbox(){$('inbox').classList.add('hidden');if(NT.some(x=>!x.read)){await sb.rpc('mark_notifications_read');NT.forEach(x=>{x.read=true});paintInbox()}}
 $('bell').onclick=async()=>{if($('inbox').classList.contains('hidden')){await loadNotifs();$('inbox').classList.remove('hidden')}else closeInbox()};$('ibx').onclick=closeInbox;
@@ -895,5 +905,32 @@ function showRx(n,e){const f=document.createElement('div');f.className='rxf';f.s
 $('lrx').onclick=e=>{const b=e.target.closest('[data-lr]');if(!b||!MP||MP.spec||!R)return;const now=Date.now();if(now-lastRx<700)return;lastRx=now;const em=b.dataset.lr;showRx(nick(),em);R.send('rx',{id:myId,n:nick(),e:em})};
 const rxExtra=()=>(COSM.reaction||[]).filter(x=>cNeed('reaction',x)<=MYLV&&!EMO.includes(x[0])).map(x=>x[0]);
 function rxList(id){const have=rxExtra(),seen=Object.keys(RX[id]||{}).filter(e=>!EMO.includes(e)&&!have.includes(e));return [...EMO,...have,...seen]}
+/* ---------- v1.24: easier custom items, avatars in drafts, recently played with, username change, clear alerts ---------- */
+let AVC={};
+const nrm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const dupItem=v=>!!S&&(S.pool.some(x=>nrm(x.n)===nrm(v))||S.picks.some(x=>nrm(x.n)===nrm(v)));
+function addRowHtml(){const raw=(($('q')||{}).value||'').trim(),n=nrm(raw);if(raw.length<2||!n||!S)return'';
+ if(S.picks.some(x=>nrm(x.n)===n))return`<p class="msg">"${esc(raw)}" was already drafted.</p>`;if(S.pool.some(x=>nrm(x.n)===n))return'';
+ return `<button class="item" data-add="1" style="color:var(--gold)">➕ Add “${esc(raw)}” as a new item<i>new</i></button>`}
+$('pool').onclick=e=>{const b=e.target.closest('.item');if(!b)return;if(b.dataset.add){$('addc').click();return}pick(b.dataset.n)};
+$('q').onkeydown=e=>{if(e.key!=='Enter')return;const v=$('q').value.trim();if(!v)return;const f=S.pool.find(x=>x.n.toLowerCase().includes(v.toLowerCase())||nrm(x.n).includes(nrm(v)));if(f)pick(f.n);else $('addc').click()};
+const avImg=(id,sz)=>{const a=AVC[id]||{};return `<img class="${frCls(a.frame)}" src="${esc(a.avatar||AV)}" width="${sz}" height="${sz}" alt="">`};
+async function loadAvs(ids){if(!db)return;const need=[...new Set((ids||[]).filter(i=>i&&!AVC[i]))];if(!need.length)return;need.forEach(i=>{AVC[i]={}});
+ const r=await sb.from('leaderboard').select('id,avatar,frame').in('id',need);(r.data||[]).forEach(x=>{AVC[x.id]=x});
+ if(S&&!$('draft').classList.contains('hidden'))render();if(MP&&MP.peers&&!$('lobby').classList.contains('hidden'))peersChanged()}
+async function loadRecentWith(){if(!db||me.guest||!$('rpw'))return;const r=await sb.from('played_with').select('other_id,last_played,times').eq('user_id',uid).order('last_played',{ascending:false}).limit(20);
+ const rows=(r.data||[]).filter(x=>!BLK.has(x.other_id)),ids=rows.map(x=>x.other_id),none='<p class="msg">People you draft with will show up here.</p>';if(!ids.length){$('rpw').innerHTML=none;return}
+ const[u,f]=await Promise.all([sb.from('leaderboard').select('id,username,badge,avatar,frame,name_color,title').in('id',ids),sb.from('friendships').select('friend_id').eq('user_id',uid)]);
+ const U={};(u.data||[]).forEach(x=>{U[x.id]=x});const fr=new Set((f.data||[]).map(x=>x.friend_id));
+ $('rpw').innerHTML=rows.filter(x=>U[x.other_id]).map(x=>{const p=U[x.other_id];return `<div class="item" style="cursor:default;flex-wrap:wrap"><span><img class="${frCls(p.frame)}" src="${esc(p.avatar||AV)}" width="28" height="28" style="vertical-align:middle"> <span class="ulink" data-u="${p.id}">${nameHtml(p.username,p.name_color,p.title)}</span> ${p.badge||''} <small class="msg">${x.times}x</small></span>${fr.has(p.id)?'<i>friends</i>':`<button class="btn alt" data-rw="${esc(p.username)}" style="${smb}">Add friend</button>`}</div>`}).join('')||none}
+$('rpw').onclick=async e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.dataset.u);return}const b=e.target.closest('[data-rw]');if(!b)return;
+ const r=await sb.rpc('send_friend_request',{p_username:b.dataset.rw});toast(r.error?r.error.message:({sent:'Friend request sent.',already:'You are already friends.',pending:'A request is already pending.'}[r.data]||'Done.'),4);loadRecentWith()};
+function paintUsername(){if(!$('unm'))return;const last=me.username_changed_at?new Date(me.username_changed_at).getTime():0,next=last+30*864e5,locked=Date.now()<next;
+ $('unm').textContent=locked?`You can change your username again on ${new Date(next).toLocaleDateString()}.`:'You can change your username once every 30 days.';$('unb').disabled=locked}
+$('unb').onclick=async()=>{const v=$('unew').value.trim();if(!/^[A-Za-z0-9_]{3,20}$/.test(v)){$('unm').textContent='Usernames are 3 to 20 letters, numbers or underscores.';return}
+ if(!(await clean(v))){$('unm').textContent='That username is not allowed.';return}if(!confirm('Change your username to @'+v+'? You can only do this once every 30 days.'))return;
+ const r=await sb.rpc('change_username',{p_new:v});if(r.error){$('unm').textContent=r.error.message;return}
+ me.username=v;me.username_changed_at=new Date().toISOString();$('nick').value=v;$('unew').value='';toast('Username changed to @'+v,4);openProfile()};
+$('ibc').onclick=async()=>{await sb.rpc('clear_notifications',{});NT=[];paintInbox()};
 boot();
 </script></body></html>
